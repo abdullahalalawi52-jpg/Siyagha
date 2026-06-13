@@ -1,0 +1,31 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 60
+      arrivalRate: 5
+      rampTo: 50
+      name: "Ramp up load"
+    - duration: 60
+      arrivalRate: 50
+      name: "Sustained load"
+scenarios:
+  - name: "Generate a letter"
+    flow:
+      - get:
+          url: "/"
+      - post:
+          url: "/api/generate-letter"
+          json:
+            type: "خطاب رسمي"
+            subType: "طلب إجازة"
+            senderName: "موظف مجهول"
+            recipientName: "المدير العام"
+            recipientRole: "المدير العام"
+            subject: "طلب إجازة اعتيادية"
+            details: "أرجو الموافقة على منحي إجازة لمدة 5 أيام."
+            tone: "رسمية ومهنية"
+            formality: "رسمي"
+            language: "ar"
+            date: "2026-06-13"
+          expect:
+            - statusCode: 200

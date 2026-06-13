@@ -1,0 +1,6 @@
+{
+  "name": "منشئ الخطابات الرسمية",
+  "description": "تطبيق لإنشاء خطابات إدارية ورسمية وشخصية مخصصة باستخدام الذكاء الاصطناعي",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
