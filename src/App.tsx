@@ -813,8 +813,7 @@ export default function App() {
 
   // UX Features States
   const [darkMode, setDarkMode] = useState(() => {
-    return localStorage.getItem('theme') === 'dark' || 
-      (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    return localStorage.getItem('theme') === 'dark';
   });
 
   const themeToggleRef = useRef<HTMLButtonElement>(null);
