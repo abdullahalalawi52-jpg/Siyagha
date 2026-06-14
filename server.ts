@@ -16,20 +16,36 @@ const SAFETY_SETTINGS = [
   { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
 ];
 
-// Wrapper that always includes safety_settings to satisfy IDE lint rules
-const safeGenerate = (ai: GoogleGenAI, params: {
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+// Wrapper that always includes safety_settings to satisfy IDE lint rules and auto-retries on rate limits
+const safeGenerate = async (ai: GoogleGenAI, params: {
   model: string;
   contents: any;
   config?: Record<string, any>;
-}) => {
-  return ai.models.generateContent({
-    model: params.model,
-    contents: params.contents,
-    config: { 
-      safetySettings: SAFETY_SETTINGS, 
-      ...(params.config || {}) 
-    },
-  });
+}, maxRetries = 2) => {
+  let attempt = 0;
+  while (true) {
+    try {
+      return await ai.models.generateContent({
+        model: params.model,
+        contents: params.contents,
+        config: { 
+          safetySettings: SAFETY_SETTINGS, 
+          ...(params.config || {}) 
+        },
+      });
+    } catch (error: any) {
+      const isRateLimit = error.status === 429 || error.message?.includes('429') || error.message?.includes('Quota') || error.message?.includes('RESOURCE_EXHAUSTED');
+      if (isRateLimit && attempt < maxRetries) {
+        attempt++;
+        console.warn(`[Rate Limit] Waiting 12 seconds to retry (Attempt ${attempt}/${maxRetries})...`);
+        await sleep(12000);
+        continue;
+      }
+      throw error;
+    }
+  }
 };
 
 // HTML-escape helper for server-side rendered pages
@@ -142,7 +158,7 @@ async function startServer() {
 يجب أن يكون الرد هو العنوان فقط وبدون أي إضافات، ويجب أن يكون مناسباً ليسبق نص الخطاب.
 `;
 
-      const response = await ai.models.generateContent({
+      const response = await safeGenerate(ai, {
         model: "gemini-2.5-flash",
         contents: prompt,
         config: {
@@ -183,7 +199,7 @@ ${text}
 2. لا تقم بإضافة أي ردود أو مقدمات، فقط قم بإرجاع النص المصحح مباشرة.
       `;
 
-      const response = await ai.models.generateContent({
+      const response = await safeGenerate(ai, {
         model: "gemini-2.0-flash",
         contents: prompt,
         config: {
@@ -220,7 +236,7 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
 4. "suggestions": An array of 3 suggestions in Arabic to make the communication more professional or effective.
       `;
 
-      const response = await ai.models.generateContent({
+      const response = await safeGenerate(ai, {
         model: "gemini-2.0-flash",
         contents: prompt,
         config: {
@@ -262,7 +278,7 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
 2. أرجع النص المصحح والمنسق مباشرة بدون أي مقدمات أو شروحات.
       `;
 
-      const response = await ai.models.generateContent({
+      const response = await safeGenerate(ai, {
         model: "gemini-2.0-flash",
         contents: prompt,
         config: {
