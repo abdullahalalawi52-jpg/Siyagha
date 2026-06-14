@@ -75,7 +75,6 @@ body {
     radial-gradient(ellipse 70% 60% at 90% 100%, rgba(200, 82, 13, 0.08) 0%, transparent 60%),
     linear-gradient(160deg, #fdf7f0 0%, #fdf2e5 40%, #fdf8f2 100%);
   color: #2d1a08;
-  transition: background-color 0.3s ease, color 0.3s ease;
   font-feature-settings: "kern" 1, "liga" 1;
   overflow-x: hidden;
 }
@@ -332,8 +331,11 @@ hr.border-dashed {
     linear-gradient(160deg, #0a1018 0%, #0e1822 40%, #0a1218 100%);
   z-index: -1;
   opacity: 0;
-  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
+}
+
+.theme-transition #root::before {
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dark #root::before {
