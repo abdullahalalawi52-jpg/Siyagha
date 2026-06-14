@@ -5,7 +5,7 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig(() => {
   return {
-    base: '/Siyagha/',
+    base: process.env.GITHUB_ACTIONS ? '/Siyagha/' : '/',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
