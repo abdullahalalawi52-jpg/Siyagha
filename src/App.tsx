@@ -2084,7 +2084,7 @@ export default function App() {
                       </label>
                       <input 
                         type="text" 
-                        placeholder="مثال: أحمد محمد"
+                        placeholder="المؤسسة أو الشخص متلقي الخطاب"
                         className="w-full rounded-xl border-gray-200 border px-3 py-2.5 text-sm focus:ring-2 focus:ring-brown-500 focus:border-brown-500 outline-none transition-all"
                         value={form.recipientName}
                         onChange={e => setForm({...form, recipientName: e.target.value})}
