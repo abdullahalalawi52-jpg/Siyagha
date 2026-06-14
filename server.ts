@@ -43,6 +43,15 @@ const esc = (s: unknown): string => {
     .replace(/'/g,  '&#039;');
 };
 
+// Helper for sending friendly Arabic errors on API limits
+const handleApiError = (error: any, res: express.Response, defaultMessage: string) => {
+  console.error(defaultMessage, error.message || error);
+  if (error.status === 429 || error.message?.includes('429') || error.message?.includes('Quota') || error.message?.includes('RESOURCE_EXHAUSTED')) {
+    return res.status(429).json({ error: "لقد وصلت للحد الأقصى للطلبات المجانية في الدقيقة. يرجى الانتظار 10 ثوانٍ والمحاولة مجدداً." });
+  }
+  res.status(500).json({ error: defaultMessage });
+};
+
 async function startServer() {
   const app = express();
   const PORT = 3000;
@@ -185,9 +194,8 @@ ${text}
       });
 
       res.json({ letter: response.text });
-    } catch (error) {
-      console.error("Proofreading Error:", error);
-      res.status(500).json({ error: "Failed to proofread the letter" });
+    } catch (error: any) {
+      handleApiError(error, res, "فشل التدقيق الإملائي");
     }
   });
 
@@ -227,8 +235,7 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
       
       res.json(JSON.parse(jsonStr));
     } catch (error: any) {
-      console.error("Tone Analysis Error:", error);
-      res.status(500).json({ error: "Failed to analyze tone" });
+      handleApiError(error, res, "فشل تحليل النبرة");
     }
   });
 
@@ -362,8 +369,7 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
 
       res.json({ text: response.text });
     } catch (error: any) {
-      console.error(error);
-      res.status(500).json({ error: error.message });
+      handleApiError(error, res, "حدث خطأ أثناء صياغة الخطاب");
     }
   });
 
