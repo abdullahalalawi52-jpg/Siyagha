@@ -4,6 +4,7 @@ import { createServer as createViteServer } from "vite";
 import { GoogleGenAI, HarmCategory, HarmBlockThreshold } from "@google/genai";
 import dotenv from "dotenv";
 import nodemailer from "nodemailer";
+import helmet from "helmet";
 
 dotenv.config();
 
@@ -57,6 +58,10 @@ async function startServer() {
     createdAt: number;
   }>();
 
+  // Basic Security Middleware
+  app.use(helmet({
+    contentSecurityPolicy: false // Disabled CSP for now to allow inline scripts/styles for React
+  }));
   app.use(express.json({ limit: "50mb" })); // Increased limit to handle PDF base64 payloads
 
   // API routes

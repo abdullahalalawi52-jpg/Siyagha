@@ -29,3 +29,10 @@ scenarios:
             date: "2026-06-13"
           expect:
             - statusCode: 200
+      - post:
+          url: "/api/analyze-tone"
+          json:
+            text: "نرجو الموافقة"
+            language: "ar"
+          expect:
+            - statusCode: 200

@@ -811,6 +811,15 @@ export default function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
 
+  // A/B Testing State
+  const [abTestVariant] = useState<'A' | 'B'>(() => {
+    const saved = localStorage.getItem('ab_test_variant');
+    if (saved === 'A' || saved === 'B') return saved;
+    const variant = Math.random() > 0.5 ? 'A' : 'B';
+    localStorage.setItem('ab_test_variant', variant);
+    return variant;
+  });
+
   // UX Features States
   const [darkMode, setDarkMode] = useState(() => {
     return localStorage.getItem('theme') === 'dark';
