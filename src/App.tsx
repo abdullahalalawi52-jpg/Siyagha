@@ -1040,8 +1040,8 @@ export default function App() {
 
   // Dark Mode Effect
   useEffect(() => {
-    document.documentElement.classList.add('theme-transition');
-    
+    // We do NOT add 'theme-transition' here anymore to avoid FOUC.
+    // CSS transitions on initial mount cause the background to animate from light to dark.
     if (darkMode) {
       document.documentElement.classList.add('dark');
       localStorage.setItem('theme', 'dark');
@@ -1049,12 +1049,6 @@ export default function App() {
       document.documentElement.classList.remove('dark');
       localStorage.setItem('theme', 'light');
     }
-    
-    const timer = setTimeout(() => {
-      document.documentElement.classList.remove('theme-transition');
-    }, 500);
-    
-    return () => clearTimeout(timer);
   }, [darkMode]);
 
   // Offline Mode Effect
