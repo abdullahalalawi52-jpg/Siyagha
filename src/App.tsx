@@ -1637,7 +1637,7 @@ export default function App() {
             </div>
             <div>
               <h1 className="text-lg font-black tracking-tight text-gray-900 leading-none" style={{letterSpacing: '-0.02em'}}>
-                {t('منشئ الخطابات', 'Letter Generator')}
+                {t('صياغة', 'Siyagha')}
               </h1>
               <p className="text-[10px] font-semibold text-brown-500 opacity-80 hidden sm:block">{t('بالذكاء الاصطناعي', 'Powered by AI')}</p>
             </div>
