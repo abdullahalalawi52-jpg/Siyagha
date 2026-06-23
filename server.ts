@@ -67,6 +67,58 @@ const handleApiError = (error: any, res: express.Response, defaultMessage: strin
   res.status(500).json({ error: defaultMessage });
 };
 
+const ipCache = new Map<string, { count: number; resetTime: number }>();
+
+const rateLimiter = (options: { windowMs: number; max: number; message: string }) => {
+  return (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const ip = (req.headers["x-forwarded-for"] as string)?.split(',')[0].trim() || req.socket.remoteAddress || "unknown";
+    const now = Date.now();
+    
+    // Cleanup expired entries
+    for (const [key, value] of ipCache.entries()) {
+      if (value.resetTime < now) {
+        ipCache.delete(key);
+      }
+    }
+    
+    const record = ipCache.get(ip);
+    if (!record) {
+      ipCache.set(ip, { count: 1, resetTime: now + options.windowMs });
+      return next();
+    }
+    
+    if (record.resetTime < now) {
+      ipCache.set(ip, { count: 1, resetTime: now + options.windowMs });
+      return next();
+    }
+    
+    if (record.count >= options.max) {
+      return res.status(429).json({ error: options.message });
+    }
+    
+    record.count++;
+    next();
+  };
+};
+
+const geminiLimiter = rateLimiter({
+  windowMs: 60 * 1000,
+  max: 30,
+  message: "لقد تجاوزت الحد المسموح به من الطلبات (30 طلب في الدقيقة). يرجى المحاولة لاحقاً."
+});
+
+const emailLimiter = rateLimiter({
+  windowMs: 60 * 1000,
+  max: 3,
+  message: "لقد تجاوزت الحد المسموح به لإرسال الرسائل (3 رسائل في الدقيقة). يرجى المحاولة لاحقاً."
+});
+
+const shareLimiter = rateLimiter({
+  windowMs: 60 * 1000,
+  max: 10,
+  message: "لقد تجاوزت الحد المسموح به لإنشاء الروابط (10 روابط في الدقيقة). يرجى المحاولة لاحقاً."
+});
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -88,7 +140,7 @@ const sharedLetters = new Map<string, {
   app.use(express.json({ limit: "50mb" })); // Increased limit to handle PDF base64 payloads
 
   // API routes
-  app.post("/api/send-email", async (req, res) => {
+  app.post("/api/send-email", emailLimiter, async (req, res) => {
     try {
       const { to, subject, text, pdfAttachment } = req.body;
       
@@ -136,7 +188,7 @@ const sharedLetters = new Map<string, {
     }
   });
 
-  app.post("/api/suggest-title", async (req, res) => {
+  app.post("/api/suggest-title", geminiLimiter, async (req, res) => {
     try {
       const { type, subType, details, language } = req.body;
       
@@ -173,7 +225,7 @@ const sharedLetters = new Map<string, {
     }
   });
 
-  app.post("/api/proofread-letter", async (req, res) => {
+  app.post("/api/proofread-letter", geminiLimiter, async (req, res) => {
     try {
       const { text, language } = req.body;
       
@@ -213,7 +265,7 @@ ${text}
     }
   });
 
-  app.post("/api/analyze-tone", async (req, res) => {
+  app.post("/api/analyze-tone", geminiLimiter, async (req, res) => {
     try {
       const { text, language } = req.body;
       const apiKey = process.env.GEMINI_API_KEY;
@@ -253,7 +305,7 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
     }
   });
 
-  app.post("/api/polish-letter", async (req, res) => {
+  app.post("/api/polish-letter", geminiLimiter, async (req, res) => {
     try {
       const { text, language } = req.body;
       const apiKey = process.env.GEMINI_API_KEY;
@@ -293,7 +345,7 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
     }
   });
 
-  app.post("/api/ocr", async (req, res) => {
+  app.post("/api/ocr", geminiLimiter, async (req, res) => {
     try {
       const { image } = req.body;
       if (!image) {
@@ -332,7 +384,7 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
     }
   });
 
-  app.post("/api/generate-letter", async (req, res) => {
+  app.post("/api/generate-letter", geminiLimiter, async (req, res) => {
     try {
       const { type, subType, senderName, recipientName, recipientRole, subject, details, tone, formality, language, date } = req.body;
       
@@ -387,7 +439,7 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
     }
   });
 
-  app.post("/api/share", async (req, res) => {
+  app.post("/api/share", shareLimiter, async (req, res) => {
     try {
       const { subject, content, branding, signatureImage, sealImage, language, password } = req.body;
       const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
