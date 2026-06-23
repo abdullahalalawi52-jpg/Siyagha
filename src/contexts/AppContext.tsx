@@ -5,6 +5,30 @@ import { SavedLetter, PrintElementOptions } from '../types';
 import { letterTypes, toneOptions, formalityOptions, predefinedTemplates, fontFamilies, fontSizes, getLetterTypeData } from '../data/templates';
 import { escapeHtml, sanitizeUrl, buildPrintElement } from '../utils/helpers';
 
+const handleResponse = async (res: Response, defaultError: string) => {
+  let responseText = '';
+  try {
+    responseText = await res.text();
+  } catch {}
+
+  if (!res.ok) {
+    let errorMsg = defaultError;
+    try {
+      const errData = JSON.parse(responseText);
+      errorMsg = errData.error || errData.message || errorMsg;
+    } catch {
+      if (responseText) errorMsg = responseText;
+    }
+    throw new Error(errorMsg);
+  }
+
+  try {
+    return JSON.parse(responseText);
+  } catch (e: any) {
+    throw new Error(`Invalid JSON response: ${e.message}`);
+  }
+};
+
 interface AppContextType {
   // App settings
   appLang: 'ar' | 'en';
@@ -645,8 +669,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         body: JSON.stringify({ text: generatedLetter, language: form.language }),
       });
 
-      if (!response.ok) throw new Error('فشل تحسين الصياغة');
-      const data = await response.json();
+      const data = await handleResponse(response, 'فشل تحسين الصياغة');
       updateLetterContent(data.letter);
     } catch (err: any) {
       alert(err.message || 'حدث خطأ أثناء تحسين الصياغة');
@@ -671,8 +694,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         body: JSON.stringify({ text: generatedLetter, language: form.language }),
       });
 
-      if (!response.ok) throw new Error('فشل تحليل النبرة');
-      const data = await response.json();
+      const data = await handleResponse(response, 'فشل تحليل النبرة');
       setToneResult(data);
       setIsAiModalOpen(true);
     } catch (err: any) {
@@ -702,8 +724,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }),
       });
 
-      if (!response.ok) throw new Error('فشل إنشاء رابط المشاركة');
-      const data = await response.json();
+      const data = await handleResponse(response, 'فشل إنشاء رابط المشاركة');
       setShareUrl(data.url);
     } catch (err: any) {
       alert(err.message || 'حدث خطأ غير متوقع');
@@ -736,8 +757,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             body: JSON.stringify({ image: reader.result }),
           });
 
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.error || 'فشل استخراج النصوص');
+          const data = await handleResponse(res, 'فشل استخراج النصوص');
 
           if (data.text) {
             setForm((prev: any) => ({ ...prev, details: data.text }));
@@ -898,9 +918,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }),
       });
 
-      if (!response.ok) throw new Error('فشل في اقتراح العنوان');
-
-      const data = await response.json();
+      const data = await handleResponse(response, 'فشل في اقتراح العنوان');
       if (data.title) {
         setForm((prev: any) => ({ ...prev, subject: data.title }));
       }
@@ -933,11 +951,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }),
       });
 
-      if (!response.ok) {
-        throw new Error('حدث خطأ أثناء التدقيق اللغوي');
-      }
-
-      const data = await response.json();
+      const data = await handleResponse(response, 'حدث خطأ أثناء التدقيق اللغوي');
       updateLetterContent(data.letter);
     } catch (err) {
       console.error(err);
@@ -1002,8 +1016,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }),
       });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to send email');
+      const data = await handleResponse(res, 'Failed to send email');
 
       if (data.previewUrl) {
         setEmailSuccess(`تم الإرسال بنجاح (Ethereal test email). رابط المعاينة: ${data.previewUrl}`);
@@ -1045,10 +1058,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         },
         body: JSON.stringify(form),
       });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || 'حدث خطأ أثناء الإنشاء');
-      }
+      const data = await handleResponse(res, 'حدث خطأ أثناء الإنشاء');
       updateLetterContent(data.text);
     } catch (err: any) {
       setError(err.message);
