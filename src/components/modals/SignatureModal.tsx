@@ -2,6 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { PenLine, X } from 'lucide-react';
 import { useApp } from '../../contexts/AppContext';
+import { useModalAccessibility } from '../../hooks/useModalAccessibility';
 
 export const SignatureModal: React.FC = () => {
   const {
@@ -15,6 +16,10 @@ export const SignatureModal: React.FC = () => {
     saveSignature,
   } = useApp();
 
+  const handleClose = () => setIsSigningOpen(false);
+
+  const modalRef = useModalAccessibility(isSigningOpen, handleClose);
+
   return (
     <AnimatePresence>
       {isSigningOpen && (
@@ -23,10 +28,14 @@ export const SignatureModal: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setIsSigningOpen(false)}
+            onClick={handleClose}
             className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-40 transition-opacity"
           />
           <motion.div
+            ref={modalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="signature-modal-title"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
@@ -35,14 +44,15 @@ export const SignatureModal: React.FC = () => {
           >
             <div className="p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                <h3 id="signature-modal-title" className="text-lg font-bold text-gray-900 flex items-center gap-2">
                   <PenLine className="w-5 h-5 text-brown-600" />
                   رسم توقيعك الإلكتروني
                 </h3>
                 <button
-                  onClick={() => setIsSigningOpen(false)}
+                  onClick={handleClose}
                   className="text-gray-400 hover:bg-gray-100 p-1.5 rounded-lg transition-colors cursor-pointer"
                   type="button"
+                  aria-label="إغلاق النافذة"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -61,6 +71,7 @@ export const SignatureModal: React.FC = () => {
                   onTouchMove={draw}
                   onTouchEnd={stopDrawing}
                   className="cursor-crosshair bg-white"
+                  aria-label="منطقة رسم التوقيع"
                 />
               </div>
 

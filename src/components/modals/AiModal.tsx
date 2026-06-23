@@ -2,6 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Sparkles, X, Loader2, Check, SpellCheck, MessageSquare, AlertCircle } from 'lucide-react';
 import { useApp } from '../../contexts/AppContext';
+import { useModalAccessibility } from '../../hooks/useModalAccessibility';
 
 export const AiModal: React.FC = () => {
   const {
@@ -18,6 +19,10 @@ export const AiModal: React.FC = () => {
     t,
   } = useApp();
 
+  const handleClose = () => setIsAiModalOpen(false);
+
+  const modalRef = useModalAccessibility(isAiModalOpen, handleClose);
+
   return (
     <AnimatePresence>
       {isAiModalOpen && (
@@ -26,10 +31,14 @@ export const AiModal: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setIsAiModalOpen(false)}
+            onClick={handleClose}
             className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-40 transition-opacity"
           />
           <motion.div
+            ref={modalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="ai-modal-title"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
@@ -39,14 +48,15 @@ export const AiModal: React.FC = () => {
             <div className="p-6">
               {/* Header */}
               <div className="flex items-center justify-between mb-6 pb-2 border-b border-gray-100">
-                <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                <h3 id="ai-modal-title" className="text-lg font-bold text-gray-900 flex items-center gap-2">
                   <Sparkles className="w-5 h-5 text-brown-600 animate-pulse" />
                   مساعد الذكاء الاصطناعي (AI Assistant)
                 </h3>
                 <button
-                  onClick={() => setIsAiModalOpen(false)}
+                  onClick={handleClose}
                   className="text-gray-400 hover:bg-gray-100 p-1.5 rounded-lg transition-colors cursor-pointer"
                   type="button"
+                  aria-label="إغلاق النافذة"
                 >
                   <X className="w-5 h-5" />
                 </button>
