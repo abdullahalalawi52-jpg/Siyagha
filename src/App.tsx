@@ -16,7 +16,21 @@ import SignatureModal from './components/modals/SignatureModal';
 import AiModal from './components/modals/AiModal';
 
 function MainAppContent() {
-  const { appLang } = useApp();
+  const { appLang, form } = useApp();
+
+  React.useEffect(() => {
+    const baseTitle = appLang === 'ar'
+      ? 'صياغة - منشئ الخطابات الرسمية'
+      : 'Siyagha - Official Letters Generator';
+
+    if (form.subject) {
+      document.title = `${form.subject} | ${baseTitle}`;
+    } else if (form.type) {
+      document.title = `${form.type} | ${baseTitle}`;
+    } else {
+      document.title = baseTitle;
+    }
+  }, [form.subject, form.type, appLang]);
 
   return (
     <div className="min-h-screen bg-transparent text-gray-900 font-sans pb-20" dir={appLang === 'ar' ? 'rtl' : 'ltr'}>
