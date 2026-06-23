@@ -4,8 +4,6 @@ import { GoogleGenAI, HarmCategory, HarmBlockThreshold } from "@google/genai";
 import dotenv from "dotenv";
 import nodemailer from "nodemailer";
 import helmet from "helmet";
-import { initializeApp } from "firebase/app";
-import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore/lite";
 import crypto from "crypto";
 
 dotenv.config();
@@ -136,17 +134,11 @@ const firebaseConfig = {
   measurementId: process.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
-let db: any = null;
-if (firebaseConfig.apiKey) {
-  try {
-    const firebaseApp = initializeApp(firebaseConfig);
-    db = getFirestore(firebaseApp);
-    console.log("Firebase Firestore successfully initialized on the server");
-  } catch (error) {
-    console.error("Failed to initialize Firebase on the server:", error);
-  }
+const isFirebaseConfigured = !!firebaseConfig.projectId;
+if (isFirebaseConfigured) {
+  console.log("Firebase Firestore REST API configured on the server");
 } else {
-  console.warn("VITE_FIREBASE_API_KEY is missing. Firestore sharing is disabled.");
+  console.warn("VITE_FIREBASE_PROJECT_ID is missing. Firestore sharing is disabled.");
 }
 
 // Secure PBKDF2 hashing helper for shared links passwords
@@ -454,18 +446,45 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
       
       const passwordHash = password ? hashPassword(password) : undefined;
       
-      if (db) {
-        const docRef = doc(db, "shared_letters", token);
-        await setDoc(docRef, {
-          subject,
-          content,
-          branding,
-          signatureImage,
-          sealImage,
-          language,
-          passwordHash: passwordHash || null,
-          createdAt: Date.now()
+      if (isFirebaseConfigured) {
+        const projectId = firebaseConfig.projectId;
+        const firestoreUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/shared_letters/${token}`;
+        
+        const docData = {
+          fields: {
+            subject: { stringValue: subject || "" },
+            content: { stringValue: content || "" },
+            branding: {
+              mapValue: {
+                fields: {
+                  enableHeader: { booleanValue: !!branding?.enableHeader },
+                  theme: { stringValue: branding?.theme || "classic" },
+                  companyName: { stringValue: branding?.companyName || "" },
+                  companyDetails: { stringValue: branding?.companyDetails || "" },
+                  logoUrl: { stringValue: branding?.logoUrl || "" },
+                  enableFooter: { booleanValue: !!branding?.enableFooter },
+                  footerText: { stringValue: branding?.footerText || "" }
+                }
+              }
+            },
+            signatureImage: { stringValue: signatureImage || "" },
+            sealImage: { stringValue: sealImage || "" },
+            language: { stringValue: language || "ar" },
+            passwordHash: passwordHash ? { stringValue: passwordHash } : { nullValue: null },
+            createdAt: { integerValue: String(Date.now()) }
+          }
+        };
+
+        const fsResponse = await fetch(firestoreUrl, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(docData)
         });
+
+        if (!fsResponse.ok) {
+          const errText = await fsResponse.text();
+          throw new Error(`Firestore REST Write Error: ${errText}`);
+        }
       } else {
         // Fallback to local memory if Firebase is not configured
         console.warn("Firebase not configured, falling back to temporary in-memory map");
@@ -495,12 +514,32 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
     const { token } = req.params;
     let letter: any = null;
 
-    if (db) {
+    if (isFirebaseConfigured) {
       try {
-        const docRef = doc(db, "shared_letters", token);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          letter = docSnap.data();
+        const projectId = firebaseConfig.projectId;
+        const firestoreUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/shared_letters/${token}`;
+        const fsResponse = await fetch(firestoreUrl);
+        if (fsResponse.ok) {
+          const docData = await fsResponse.json();
+          const fields = docData.fields || {};
+          letter = {
+            subject: fields.subject?.stringValue || "",
+            content: fields.content?.stringValue || "",
+            branding: {
+              enableHeader: fields.branding?.mapValue?.fields?.enableHeader?.booleanValue || false,
+              theme: fields.branding?.mapValue?.fields?.theme?.stringValue || "classic",
+              companyName: fields.branding?.mapValue?.fields?.companyName?.stringValue || "",
+              companyDetails: fields.branding?.mapValue?.fields?.companyDetails?.stringValue || "",
+              logoUrl: fields.branding?.mapValue?.fields?.logoUrl?.stringValue || "",
+              enableFooter: fields.branding?.mapValue?.fields?.enableFooter?.booleanValue || false,
+              footerText: fields.branding?.mapValue?.fields?.footerText?.stringValue || ""
+            },
+            signatureImage: fields.signatureImage?.stringValue || "",
+            sealImage: fields.sealImage?.stringValue || "",
+            language: fields.language?.stringValue || "ar",
+            passwordHash: fields.passwordHash?.stringValue || null,
+            createdAt: fields.createdAt?.integerValue ? Number(fields.createdAt.integerValue) : null
+          };
         }
       } catch (err) {
         console.error("Error reading from Firestore:", err);
