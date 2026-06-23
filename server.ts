@@ -4,6 +4,9 @@ import { GoogleGenAI, HarmCategory, HarmBlockThreshold } from "@google/genai";
 import dotenv from "dotenv";
 import nodemailer from "nodemailer";
 import helmet from "helmet";
+import { initializeApp } from "firebase/app";
+import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
+import crypto from "crypto";
 
 dotenv.config();
 
@@ -122,16 +125,56 @@ const shareLimiter = rateLimiter({
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const sharedLetters = new Map<string, {
-  subject: string;
-  content: string;
-  branding: any;
-  signatureImage: string | null;
-  sealImage: string | null;
-  language: string;
-  passwordHash?: string;
-  createdAt: number;
-}>();
+const firebaseConfig = {
+  apiKey: process.env.VITE_FIREBASE_API_KEY,
+  authDomain: process.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.VITE_FIREBASE_APP_ID,
+  measurementId: process.env.VITE_FIREBASE_MEASUREMENT_ID
+};
+
+let db: any = null;
+if (firebaseConfig.apiKey) {
+  try {
+    const firebaseApp = initializeApp(firebaseConfig);
+    db = getFirestore(firebaseApp);
+    console.log("Firebase Firestore successfully initialized on the server");
+  } catch (error) {
+    console.error("Failed to initialize Firebase on the server:", error);
+  }
+} else {
+  console.warn("VITE_FIREBASE_API_KEY is missing. Firestore sharing is disabled.");
+}
+
+// Secure PBKDF2 hashing helper for shared links passwords
+const hashPassword = (password: string): string => {
+  const salt = crypto.randomBytes(16).toString("hex");
+  const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, "sha512").toString("hex");
+  return `${salt}:${hash}`;
+};
+
+const verifyPassword = (password: string, storedHash: string): boolean => {
+  const parts = storedHash.split(":");
+  if (parts.length !== 2) return storedHash === password; // Backwards compatible fallback for plain text
+  const [salt, hash] = parts;
+  const checkHash = crypto.pbkdf2Sync(password, salt, 1000, 64, "sha512").toString("hex");
+  return hash === checkHash;
+};
+
+// Middleware to validate Gemini API Key and attach the client instance to the request
+const checkGeminiKey = (req: any, res: express.Response, next: express.NextFunction) => {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    return res.status(500).json({ error: "API key is not configured" });
+  }
+  req.ai = new GoogleGenAI({
+    apiKey,
+    httpOptions: { headers: { 'User-Agent': 'aistudio-build' } }
+  });
+  next();
+};
 
 // Basic Security Middleware
   app.use(helmet({
@@ -188,16 +231,10 @@ const sharedLetters = new Map<string, {
     }
   });
 
-  app.post("/api/suggest-title", geminiLimiter, async (req, res) => {
+  app.post("/api/suggest-title", geminiLimiter, checkGeminiKey, async (req: any, res) => {
     try {
       const { type, subType, details, language } = req.body;
-      
-      const apiKey = process.env.GEMINI_API_KEY;
-      if (!apiKey) {
-        return res.status(500).json({ error: "API key is not configured" });
-      }
-
-      const ai = new GoogleGenAI({ apiKey });
+      const ai = req.ai;
 
       const prompt = `
 أنت خبير في كتابة الخطابات. اقترح عنواناً رئيسياً (موضوع الخطاب) واحداً قاطعاً وواضحاً ومختصراً جداً للخطاب التالي.
@@ -225,16 +262,10 @@ const sharedLetters = new Map<string, {
     }
   });
 
-  app.post("/api/proofread-letter", geminiLimiter, async (req, res) => {
+  app.post("/api/proofread-letter", geminiLimiter, checkGeminiKey, async (req: any, res) => {
     try {
       const { text, language } = req.body;
-      
-      const apiKey = process.env.GEMINI_API_KEY;
-      if (!apiKey) {
-        return res.status(500).json({ error: "API key is not configured" });
-      }
-
-      const ai = new GoogleGenAI({ apiKey });
+      const ai = req.ai;
 
       const prompt = `
 أنت خبير لغوي ومدقق نحوي.
@@ -265,15 +296,10 @@ ${text}
     }
   });
 
-  app.post("/api/analyze-tone", geminiLimiter, async (req, res) => {
+  app.post("/api/analyze-tone", geminiLimiter, checkGeminiKey, async (req: any, res) => {
     try {
       const { text, language } = req.body;
-      const apiKey = process.env.GEMINI_API_KEY;
-      if (!apiKey) {
-        return res.status(500).json({ error: "API key is not configured" });
-      }
-
-      const ai = new GoogleGenAI({ apiKey });
+      const ai = req.ai;
 
       const prompt = `
 You are an expert communications analyzer. Analyze the tone of the following letter:
@@ -305,15 +331,10 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
     }
   });
 
-  app.post("/api/polish-letter", geminiLimiter, async (req, res) => {
+  app.post("/api/polish-letter", geminiLimiter, checkGeminiKey, async (req: any, res) => {
     try {
       const { text, language } = req.body;
-      const apiKey = process.env.GEMINI_API_KEY;
-      if (!apiKey) {
-        return res.status(500).json({ error: "API key is not configured" });
-      }
-
-      const ai = new GoogleGenAI({ apiKey });
+      const ai = req.ai;
 
       const prompt = `
 أنت خبير صياغة رسائل وخطابات رسمية.
@@ -345,19 +366,14 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
     }
   });
 
-  app.post("/api/ocr", geminiLimiter, async (req, res) => {
+  app.post("/api/ocr", geminiLimiter, checkGeminiKey, async (req: any, res) => {
     try {
       const { image } = req.body;
       if (!image) {
         return res.status(400).json({ error: "Image data is required" });
       }
 
-      const apiKey = process.env.GEMINI_API_KEY;
-      if (!apiKey) {
-        return res.status(500).json({ error: "API key is not configured" });
-      }
-
-      const ai = new GoogleGenAI({ apiKey });
+      const ai = req.ai;
 
       const matches = image.match(/^data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+);base64,(.+)$/);
       if (!matches || matches.length !== 3) {
@@ -384,19 +400,10 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
     }
   });
 
-  app.post("/api/generate-letter", geminiLimiter, async (req, res) => {
+  app.post("/api/generate-letter", geminiLimiter, checkGeminiKey, async (req: any, res) => {
     try {
       const { type, subType, senderName, recipientName, recipientRole, subject, details, tone, formality, language, date } = req.body;
-      
-      const apiKey = process.env.GEMINI_API_KEY;
-      if (!apiKey) {
-        return res.status(500).json({ error: "API key is not configured" });
-      }
-
-      const ai = new GoogleGenAI({ 
-        apiKey,
-        httpOptions: { headers: { 'User-Agent': 'aistudio-build' } }
-      });
+      const ai = req.ai;
 
       const prompt = `
 أنت خبير متمرس ومحترف في صياغة الخطابات الرسمية، الإدارية، والتجارية. 
@@ -444,19 +451,35 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
       const { subject, content, branding, signatureImage, sealImage, language, password } = req.body;
       const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
       
-      sharedLetters.set(token, {
-        subject,
-        content,
-        branding,
-        signatureImage,
-        sealImage,
-        language,
-        passwordHash: password || undefined,
-        createdAt: Date.now()
-      });
-
-      // Expire after 24 hours
-      setTimeout(() => sharedLetters.delete(token), 24 * 60 * 60 * 1000);
+      const passwordHash = password ? hashPassword(password) : undefined;
+      
+      if (db) {
+        const docRef = doc(db, "shared_letters", token);
+        await setDoc(docRef, {
+          subject,
+          content,
+          branding,
+          signatureImage,
+          sealImage,
+          language,
+          passwordHash: passwordHash || null,
+          createdAt: Date.now()
+        });
+      } else {
+        // Fallback to local memory if Firebase is not configured
+        console.warn("Firebase not configured, falling back to temporary in-memory map");
+        (global as any).fallbackSharedLetters = (global as any).fallbackSharedLetters || new Map();
+        (global as any).fallbackSharedLetters.set(token, {
+          subject,
+          content,
+          branding,
+          signatureImage,
+          sealImage,
+          language,
+          passwordHash: passwordHash || null,
+          createdAt: Date.now()
+        });
+      }
 
       const host = req.get('host') || 'localhost:3000';
       const protocol = req.protocol;
@@ -467,10 +490,28 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
     }
   });
 
-  app.get("/share/:token", (req, res) => {
+  app.get("/share/:token", async (req, res) => {
     const { token } = req.params;
-    const letter = sharedLetters.get(token);
-    if (!letter) {
+    let letter: any = null;
+
+    if (db) {
+      try {
+        const docRef = doc(db, "shared_letters", token);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          letter = docSnap.data();
+        }
+      } catch (err) {
+        console.error("Error reading from Firestore:", err);
+      }
+    } else {
+      const fallbackMap = (global as any).fallbackSharedLetters;
+      if (fallbackMap) {
+        letter = fallbackMap.get(token);
+      }
+    }
+
+    if (!letter || (letter.createdAt && Date.now() - letter.createdAt > 24 * 60 * 60 * 1000)) {
       return res.status(404).send(`
         <html dir="rtl">
         <head>
@@ -494,7 +535,7 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
     }
 
     const { password } = req.query;
-    if (letter.passwordHash && letter.passwordHash !== password) {
+    if (letter.passwordHash && (!password || !verifyPassword(password as string, letter.passwordHash))) {
       return res.send(`
         <html dir="rtl">
         <head>
