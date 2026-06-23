@@ -7,8 +7,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { flushSync } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { FileText, Loader2, Copy, Check, PenLine, Building2, User, MessageSquare, Send, Save, Archive, X, Clock, Briefcase, AlertCircle, Heart, Calendar, Download, SpellCheck, Search, Filter, Undo as UndoIcon, Redo as RedoIcon, Mail, Sparkles, Library, Plus, Bookmark, Sun, Moon, Wifi, WifiOff, Camera, Upload, Mic, MicOff, Pin, PinOff, Star } from 'lucide-react';
-// @ts-ignore
-import html2pdf from 'html2pdf.js';
 import { useAuth } from './contexts/AuthContext';
 import { syncUserDataToCloud, listenToCloudData } from './lib/sync';
 
@@ -1444,7 +1442,7 @@ export default function App() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleExportPDF = () => {
+  const handleExportPDF = async () => {
     if (!generatedLetter) return;
 
     let parsedFontSize = parseInt(fontSize);
@@ -1469,6 +1467,8 @@ export default function App() {
       jsPDF:       { unit: 'mm', format: 'a4', orientation: 'portrait' },
     };
 
+    // @ts-ignore
+    const html2pdf = (await import('html2pdf.js')).default;
     html2pdf().set(opt).from(printElement).save();
   };
 
@@ -1504,6 +1504,8 @@ export default function App() {
           jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
 
+        // @ts-ignore
+        const html2pdf = (await import('html2pdf.js')).default;
         pdfAttachmentBase64 = await html2pdf().set(opt).from(printElement).outputPdf('datauristring');
       }
 
@@ -1601,14 +1603,14 @@ export default function App() {
     .sort((a, b) => (b.isPinned ? 1 : 0) - (a.isPinned ? 1 : 0));
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 font-sans pb-20" dir={appLang === 'ar' ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-transparent text-gray-900 font-sans pb-20" dir={appLang === 'ar' ? 'rtl' : 'ltr'}>
       {/* Header */}
-      <header className="h-[68px] sticky top-0 z-40 flex items-center transition-colors">
+      <header className="h-[72px] sticky top-0 z-40 flex items-center transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex items-center justify-between">
           {/* Logo + Title */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <div className="relative">
-              <div className="w-9 h-9 rounded-[12px] flex items-center justify-center shadow-lg transition-all" style={{ backgroundColor: 'var(--color-logo-bg)', borderColor: 'var(--color-logo-border)', borderWidth: '1px', borderStyle: 'solid' }}>
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-white/40 dark:bg-black/20 backdrop-blur-md border border-white/50 dark:border-white/10 shadow-sm transition-all">
                 <svg viewBox="0 0 100 100" className="w-6 h-6 select-none" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <defs>
                     <linearGradient id="nibGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -1633,62 +1635,35 @@ export default function App() {
                   <circle cx="50" cy="56" r="4.5" fill="var(--color-logo-bg)" />
                 </svg>
               </div>
-              <div className="absolute -inset-0.5 rounded-[12px] opacity-20 blur-sm" style={{ backgroundColor: 'var(--color-logo-start)' }} />
             </div>
             <div>
-              <h1 className="text-lg font-black tracking-tight text-gray-900 leading-none" style={{letterSpacing: '-0.02em'}}>
+              <h1 className="text-xl font-bold tracking-tight text-gray-800 dark:text-white leading-none px-4 py-2 bg-white/40 dark:bg-black/20 backdrop-blur-md border border-white/50 dark:border-white/10 rounded-xl shadow-sm">
                 {t('صياغة', 'Siyagha')}
               </h1>
-              <p className="text-[10px] font-semibold text-brown-500 opacity-80 hidden sm:block">{t('بالذكاء الاصطناعي', 'Powered by AI')}</p>
             </div>
             {/* Online/Offline indicator */}
-            <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold transition-all border ${
+            <div className={`hidden sm:flex ms-1 items-center gap-1.5 px-3 py-2 rounded-xl text-[10px] font-bold transition-all border backdrop-blur-md shadow-sm ${
               isOnline
-                ? 'bg-emerald-50 text-emerald-700 border-emerald-100'
-                : 'bg-amber-50 text-amber-700 border-amber-100'
+                ? 'bg-emerald-50/50 text-emerald-600 border-emerald-100/50 dark:bg-emerald-500/10 dark:border-emerald-500/20'
+                : 'bg-amber-50/50 text-amber-600 border-amber-100/50 dark:bg-amber-500/10 dark:border-amber-500/20'
             }`}>
               {isOnline
-                ? <Wifi className="w-3 h-3" />
-                : <WifiOff className="w-3 h-3" />}
-              <span className="hidden sm:inline">{isOnline ? t('متصل', 'Online') : t('أوفلاين', 'Offline')}</span>
+                ? <Wifi className="w-3.5 h-3.5" />
+                : <WifiOff className="w-3.5 h-3.5" />}
+              <span>{isOnline ? t('متصل', 'Online') : t('أوفلاين', 'Offline')}</span>
             </div>
           </div>
 
           {/* Actions */}
-          <div className="flex items-center gap-2">
-            <p className="text-xs font-medium text-gray-400 hidden lg:block border border-gray-100 bg-gray-50/80 px-3 py-1.5 rounded-full">
-              {t('خطابات رسمية واحترافية بلمسة واحدة', 'Professional letters in one click')}
+          <div className="flex items-center gap-2 sm:gap-3">
+            <p className="text-xs font-bold text-gray-600 dark:text-gray-300 hidden lg:block px-4 py-2 bg-white/40 dark:bg-black/20 backdrop-blur-md border border-white/50 dark:border-white/10 rounded-xl shadow-sm">
+              {t('خطابات رسمية واحترافية', 'Professional letters')}
             </p>
-
-            {/* Auth Button */}
-            {user ? (
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] font-bold text-gray-600 dark:text-gray-300 hidden sm:block truncate max-w-[100px]">{user.displayName || user.email}</span>
-                <button
-                  onClick={signOut}
-                  className="px-3 py-1.5 text-xs font-bold rounded-xl text-red-600 dark:text-red-400 hover:text-white border border-red-200/80 dark:border-red-500/20 bg-red-50/80 dark:bg-red-500/10 hover:bg-red-500 dark:hover:bg-red-500 hover:border-red-600 transition-all"
-                  title="تسجيل الخروج"
-                  type="button"
-                >
-                  خروج
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={signInWithGoogle}
-                className="px-3 py-1.5 text-xs font-bold rounded-xl text-brown-600 dark:text-brown-400 hover:text-white border border-brown-200/80 dark:border-brown-500/20 bg-brown-50/80 dark:bg-brown-500/10 hover:bg-brown-600 dark:hover:bg-brown-600 hover:border-brown-600 transition-all flex items-center gap-1.5"
-                title="تسجيل الدخول باستخدام جوجل"
-                type="button"
-              >
-                <User className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">دخول</span>
-              </button>
-            )}
 
             {/* Language Toggle */}
             <button
               onClick={() => setAppLang(appLang === 'ar' ? 'en' : 'ar')}
-              className="px-3 py-1.5 text-xs font-bold rounded-xl text-gray-600 hover:text-brown-600 border border-gray-200/80 bg-gray-50/80 hover:bg-brown-50 hover:border-brown-200 transition-all"
+              className="px-4 py-2 text-xs font-bold text-gray-700 dark:text-gray-200 bg-white/40 dark:bg-black/20 backdrop-blur-md border border-white/50 dark:border-white/10 rounded-xl shadow-sm hover:bg-white/60 dark:hover:bg-white/10 transition-all"
               title={t('تغيير اللغة', 'Change Language')}
               type="button"
             >
@@ -1699,7 +1674,7 @@ export default function App() {
             <button
               ref={themeToggleRef}
               onClick={toggleDarkMode}
-              className="w-9 h-9 rounded-xl flex items-center justify-center border border-gray-200/80 bg-gray-50/80 text-gray-500 hover:text-brown-600 hover:border-brown-200 hover:bg-brown-50 transition-all cursor-pointer overflow-hidden"
+              className="w-9 h-9 flex items-center justify-center text-gray-700 dark:text-gray-200 bg-white/40 dark:bg-black/20 backdrop-blur-md border border-white/50 dark:border-white/10 rounded-xl shadow-sm hover:bg-white/60 dark:hover:bg-white/10 transition-all cursor-pointer overflow-hidden"
               title={darkMode ? t('الوضع المضيء', 'Light Mode') : t('الوضع الداكن', 'Dark Mode')}
               type="button"
             >
@@ -1713,7 +1688,7 @@ export default function App() {
                     transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
                     className="flex items-center justify-center"
                   >
-                    <Sun className="w-4 h-4 text-amber-500" />
+                    <Sun className="w-4 h-4 text-yellow-500" />
                   </motion.div>
                 ) : (
                   <motion.div
@@ -1733,16 +1708,41 @@ export default function App() {
             {/* Archive */}
             <button
               onClick={() => setIsArchiveOpen(true)}
-              className="relative flex items-center gap-1.5 text-xs font-bold text-gray-600 hover:text-brown-600 border border-gray-200/80 bg-gray-50/80 hover:bg-brown-50 hover:border-brown-200 px-3 py-1.5 rounded-xl transition-all"
+              className="relative flex items-center gap-1.5 text-xs font-bold text-gray-700 dark:text-gray-200 px-4 py-2 bg-white/40 dark:bg-black/20 backdrop-blur-md border border-white/50 dark:border-white/10 rounded-xl shadow-sm hover:bg-white/60 dark:hover:bg-white/10 transition-all"
             >
               <Archive className="w-4 h-4" />
               <span className="hidden sm:inline">{t('الأرشيف', 'Archive')}</span>
               {savedLetters.length > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 text-white text-[10px] rounded-full flex items-center justify-center font-black" style={{background: 'linear-gradient(135deg,#e86c1a,#c8520d)'}}>
+                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-orange-500 text-white text-[10px] rounded-full flex items-center justify-center font-bold shadow-sm">
                   {savedLetters.length}
                 </span>
               )}
             </button>
+
+            {/* Auth Button */}
+            {user ? (
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-bold text-gray-600 dark:text-gray-300 hidden sm:block truncate max-w-[100px] px-3 py-1.5 bg-white/40 dark:bg-black/20 backdrop-blur-md border border-white/50 dark:border-white/10 rounded-xl">{user.displayName || user.email}</span>
+                <button
+                  onClick={signOut}
+                  className="px-4 py-2 text-xs font-bold rounded-xl text-red-600 dark:text-red-400 bg-red-50/50 dark:bg-red-500/10 backdrop-blur-md border border-red-200 dark:border-red-500/20 shadow-sm hover:bg-red-100 dark:hover:bg-red-500/20 transition-all"
+                  title="تسجيل الخروج"
+                  type="button"
+                >
+                  خروج
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={signInWithGoogle}
+                className="px-4 py-2 text-xs font-bold rounded-xl text-brown-600 dark:text-orange-400 bg-orange-50/50 dark:bg-orange-500/10 backdrop-blur-md border border-orange-200 dark:border-orange-500/20 shadow-sm hover:bg-orange-100 dark:hover:bg-orange-500/20 transition-all flex items-center gap-1.5"
+                title="تسجيل الدخول باستخدام جوجل"
+                type="button"
+              >
+                <User className="w-3.5 h-3.5 hidden sm:block" />
+                <span>دخول</span>
+              </button>
+            )}
           </div>
         </div>
       </header>
@@ -3106,45 +3106,48 @@ export default function App() {
                 animate={{ x: 0 }}
                 exit={{ x: '-100%' }}
                 transition={{ type: 'tween', duration: 0.25, ease: 'easeOut' }}
-                className="fixed top-0 left-0 bottom-0 w-full sm:max-w-2xl md:max-w-3xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-7xl bg-gray-50 shadow-2xl z-50 flex flex-col overflow-hidden border-r border-gray-200"
+                className="fixed top-0 left-0 bottom-0 w-full sm:max-w-2xl md:max-w-3xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-7xl bg-white/50 dark:bg-slate-900/60 backdrop-blur-2xl shadow-2xl z-50 flex flex-col overflow-hidden border-r border-white/50 dark:border-white/10"
               >
-                <div className="bg-white p-4 border-b border-gray-100 flex items-center justify-between shrink-0">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-brown-100 rounded-xl flex items-center justify-center text-brown-600">
-                      <Library className="w-5 h-5" />
+                {/* Header */}
+                <div className="bg-white/40 dark:bg-black/20 p-6 sm:p-8 border-b border-white/50 dark:border-white/10 flex items-center justify-between shrink-0">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-brown-50/80 dark:bg-brown-500/20 backdrop-blur-sm rounded-2xl flex items-center justify-center text-brown-600 dark:text-brown-400 shadow-sm border border-brown-100/50 dark:border-brown-500/20">
+                      <Library className="w-6 h-6" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-gray-900">مكتبة القوالب</h3>
-                      <p className="text-xs text-gray-500">اختر قالباً جاهزاً أو من قوالبك المخصصة</p>
+                      <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1">مكتبة القوالب</h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">اختر قالباً جاهزاً أو من قوالبك المخصصة</p>
                     </div>
                   </div>
                   <button 
                     onClick={() => setIsLibraryOpen(false)}
-                    className="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-500 transition-colors"
+                    className="w-10 h-10 rounded-full hover:bg-white/60 dark:hover:bg-white/10 flex items-center justify-center text-gray-500 dark:text-gray-400 transition-colors shadow-sm border border-transparent hover:border-white/40 dark:hover:border-white/10"
                   >
                     <X className="w-5 h-5" />
                   </button>
                 </div>
 
-                <div className="flex border-b border-gray-200 bg-white px-4 shrink-0">
+                {/* Tabs */}
+                <div className="flex border-b border-white/50 dark:border-white/10 bg-white/20 dark:bg-black/10 px-6 sm:px-8 shrink-0 gap-6">
                   <button
-                    className={`py-3 px-4 font-bold text-sm border-b-2 transition-colors ${libraryTab === 'system' ? 'border-brown-600 text-brown-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                    className={`py-4 font-bold text-sm border-b-2 transition-colors ${libraryTab === 'system' ? 'border-brown-600 text-brown-700 dark:border-brown-400 dark:text-brown-400' : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'}`}
                     onClick={() => setLibraryTab('system')}
                   >
                     القوالب الجاهزة
                   </button>
                   <button
-                    className={`py-3 px-4 font-bold text-sm border-b-2 transition-colors flex items-center gap-2 ${libraryTab === 'custom' ? 'border-brown-600 text-brown-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                    className={`py-4 font-bold text-sm border-b-2 transition-colors flex items-center gap-2 ${libraryTab === 'custom' ? 'border-brown-600 text-brown-700 dark:border-brown-400 dark:text-brown-400' : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'}`}
                     onClick={() => setLibraryTab('custom')}
                   >
                     قوالبي المخصصة
                     {customTemplates.length > 0 && (
-                      <span className="bg-brown-100 text-brown-800 text-[10px] px-2 py-0.5 rounded-full">{customTemplates.length}</span>
+                      <span className="bg-brown-100/80 dark:bg-brown-500/20 backdrop-blur-sm text-brown-800 dark:text-brown-300 text-[10px] px-2 py-0.5 rounded-full">{customTemplates.length}</span>
                     )}
                   </button>
                 </div>
 
-                <div className="flex-1 overflow-y-auto p-6 bg-gray-50">
+                {/* Content */}
+                <div className="flex-1 overflow-y-auto p-6 sm:p-8">
                   {libraryTab === 'system' ? (
                     <div className="space-y-8">
                       {favoritePredefined.length > 0 && (
