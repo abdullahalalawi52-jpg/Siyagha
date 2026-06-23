@@ -1,6 +1,5 @@
 import express from "express";
 import path from "path";
-import { createServer as createViteServer } from "vite";
 import { GoogleGenAI, HarmCategory, HarmBlockThreshold } from "@google/genai";
 import dotenv from "dotenv";
 import nodemailer from "nodemailer";
@@ -68,22 +67,21 @@ const handleApiError = (error: any, res: express.Response, defaultMessage: strin
   res.status(500).json({ error: defaultMessage });
 };
 
-async function startServer() {
-  const app = express();
-  const PORT = 3000;
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-  const sharedLetters = new Map<string, {
-    subject: string;
-    content: string;
-    branding: any;
-    signatureImage: string | null;
-    sealImage: string | null;
-    language: string;
-    passwordHash?: string;
-    createdAt: number;
-  }>();
+const sharedLetters = new Map<string, {
+  subject: string;
+  content: string;
+  branding: any;
+  signatureImage: string | null;
+  sealImage: string | null;
+  language: string;
+  passwordHash?: string;
+  createdAt: number;
+}>();
 
-  // Basic Security Middleware
+// Basic Security Middleware
   app.use(helmet({
     contentSecurityPolicy: false // Disabled CSP for now to allow inline scripts/styles for React
   }));
@@ -568,8 +566,10 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
     `);
   });
 
+async function configureStaticAndListen() {
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
+    const { createServer: createViteServer } = await import("vite");
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
@@ -583,9 +583,13 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
     });
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
+  app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
 }
 
-startServer();
+if (!process.env.VERCEL) {
+  configureStaticAndListen();
+}
+
+export default app;
