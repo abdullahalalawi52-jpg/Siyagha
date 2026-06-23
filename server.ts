@@ -67,7 +67,8 @@ const handleApiError = (error: any, res: express.Response, defaultMessage: strin
   if (error.status === 429 || error.message?.includes('429') || error.message?.includes('Quota') || error.message?.includes('RESOURCE_EXHAUSTED')) {
     return res.status(429).json({ error: "لقد وصلت للحد الأقصى للطلبات المجانية في الدقيقة. يرجى الانتظار 10 ثوانٍ والمحاولة مجدداً." });
   }
-  res.status(500).json({ error: defaultMessage });
+  const errorDetails = error.message || String(error);
+  res.status(500).json({ error: `${defaultMessage}: ${errorDetails}` });
 };
 
 const ipCache = new Map<string, { count: number; resetTime: number }>();
@@ -225,9 +226,9 @@ const checkGeminiKey = (req: any, res: express.Response, next: express.NextFunct
       const previewUrl = nodemailer.getTestMessageUrl(info);
 
       res.json({ success: true, previewUrl });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Email Error:", error);
-      res.status(500).json({ error: "Failed to send email" });
+      res.status(500).json({ error: `Failed to send email: ${error.message || error}` });
     }
   });
 
@@ -256,9 +257,9 @@ const checkGeminiKey = (req: any, res: express.Response, next: express.NextFunct
       });
 
       res.json({ title: response.text?.trim() });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Suggest Title Error:", error);
-      res.status(500).json({ error: "Failed to suggest title" });
+      res.status(500).json({ error: `Failed to suggest title: ${error.message || error}` });
     }
   });
 
@@ -362,7 +363,7 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
       res.json({ letter: response.text });
     } catch (error: any) {
       console.error("Polish Error:", error);
-      res.status(500).json({ error: "Failed to polish letter" });
+      res.status(500).json({ error: `Failed to polish letter: ${error.message || error}` });
     }
   });
 
@@ -394,9 +395,9 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
       });
 
       res.json({ text: response.text });
-    } catch (error) {
+    } catch (error: any) {
       console.error("OCR Error:", error);
-      res.status(500).json({ error: "Failed to perform OCR" });
+      res.status(500).json({ error: `Failed to perform OCR: ${error.message || error}` });
     }
   });
 
@@ -484,9 +485,9 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
       const host = req.get('host') || 'localhost:3000';
       const protocol = req.protocol;
       res.json({ token, url: `${protocol}://${host}/share/${token}`, hasPassword: !!password });
-    } catch (err) {
+    } catch (err: any) {
       console.error("Share Error:", err);
-      res.status(500).json({ error: "Failed to create share link" });
+      res.status(500).json({ error: `Failed to create share link: ${err.message || err}` });
     }
   });
 
