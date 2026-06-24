@@ -439,6 +439,29 @@ hr.border-dashed {
     radial-gradient(ellipse 80% 50% at 10% 0%, rgba(232, 108, 26, 0.07) 0%, transparent 60%),
     radial-gradient(ellipse 70% 60% at 90% 100%, rgba(200, 82, 13, 0.05) 0%, transparent 60%),
     linear-gradient(160deg, #0a1018 0%, #0e1822 40%, #0a1218 100%) !important;
+
+  /* Redefine CSS variables for theme palette in dark mode */
+  --color-brown-50: rgba(20, 34, 48, 0.6) !important;
+  --color-brown-100: rgba(232, 108, 26, 0.15) !important;
+  --color-brown-200: rgba(232, 108, 26, 0.3) !important;
+  --color-brown-300: #e86c1a !important;
+  --color-brown-400: #f9883a !important;
+  --color-brown-500: #ffad5c !important;
+  --color-brown-600: #e86c1a !important;
+  --color-brown-700: #ffbc75 !important;
+  --color-brown-800: #ffd3a8 !important;
+  --color-brown-900: #ffffff !important;
+
+  --color-gray-50: rgba(13, 21, 32, 0.45) !important;
+  --color-gray-100: rgba(13, 21, 32, 0.6) !important;
+  --color-gray-200: rgba(255, 255, 255, 0.08) !important;
+  --color-gray-300: rgba(255, 255, 255, 0.15) !important;
+  --color-gray-400: rgba(255, 255, 255, 0.3) !important;
+  --color-gray-500: rgba(255, 255, 255, 0.5) !important;
+  --color-gray-600: rgba(255, 255, 255, 0.7) !important;
+  --color-gray-700: rgba(255, 255, 255, 0.8) !important;
+  --color-gray-800: rgba(255, 255, 255, 0.9) !important;
+  --color-gray-900: #ffffff !important;
 }
 
 /* Removed #root::before to fix FOUC. The background is now directly on .dark body */
@@ -539,7 +562,7 @@ hr.border-dashed {
 }
 
 /* Dark bg-brown variants */
-.dark .bg-brown-50  { background-color: rgba(35, 55, 75, 0.85) !important; }
+.dark .bg-brown-50  { background-color: var(--color-brown-50) !important; }
 .dark .bg-brown-600 {
   background: linear-gradient(135deg, #e86c1a 0%, #c8520d 100%) !important;
   box-shadow: 0 4px 16px rgba(232, 108, 26, 0.3) !important;
