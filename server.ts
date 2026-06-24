@@ -240,7 +240,7 @@ const checkGeminiKey = (req: any, res: express.Response, next: express.NextFunct
 `;
 
       const response = await safeGenerate(ai, {
-        model: "gemini-2.5-flash",
+        model: "gemini-flash-lite-latest",
         contents: prompt,
         config: {
           safetySettings: SAFETY_SETTINGS,
@@ -274,7 +274,7 @@ ${text}
       `;
 
       const response = await safeGenerate(ai, {
-        model: "gemini-2.0-flash",
+        model: "gemini-flash-lite-latest",
         contents: prompt,
         config: {
           safetySettings: SAFETY_SETTINGS,
@@ -306,7 +306,7 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
       `;
 
       const response = await safeGenerate(ai, {
-        model: "gemini-2.0-flash",
+        model: "gemini-flash-lite-latest",
         contents: prompt,
         config: {
           safetySettings: SAFETY_SETTINGS,
@@ -343,7 +343,7 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
       `;
 
       const response = await safeGenerate(ai, {
-        model: "gemini-2.0-flash",
+        model: "gemini-flash-lite-latest",
         contents: prompt,
         config: {
           safetySettings: SAFETY_SETTINGS,
@@ -378,7 +378,7 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
       const prompt = "Extract all the text from this image representing a document/letter. Return ONLY the extracted text. Keep its logical paragraphs, formatting and lists. Do not add any chat explanations, markdown wraps, introduction, or conversational text. Preserve the original language (Arabic or English).";
 
       const response = await safeGenerate(ai, {
-        model: "gemini-2.5-flash",
+        model: "gemini-flash-lite-latest",
         contents: [
           { inlineData: { data: base64Data, mimeType: mimeType } },
           prompt
@@ -427,7 +427,7 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
       `;
 
       const response = await safeGenerate(ai, {
-        model: "gemini-2.0-flash",
+        model: "gemini-flash-lite-latest",
         contents: prompt,
       });
 
