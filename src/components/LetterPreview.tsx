@@ -132,7 +132,7 @@ export const LetterPreview: React.FC = () => {
                     setTagInput('');
                   }
                 }}
-                className="text-xs px-1 py-1.5 outline-none bg-transparent w-14 placeholder-gray-400 min-w-0 dark:text-white"
+                className="text-xs px-1 py-1.5 outline-none bg-transparent w-28 placeholder-gray-400 min-w-0 dark:text-white"
               />
               <button
                 onClick={handleSave}
