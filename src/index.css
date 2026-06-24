@@ -207,6 +207,39 @@ button:active:not(:disabled) {
   transform: translateY(0) scale(0.98) !important;
 }
 
+/* Premium Glassmorphic buttons */
+.glass-btn {
+  background: rgba(255, 255, 255, 0.18) !important;
+  backdrop-filter: blur(12px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(160%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  color: #4a3025 !important;
+  box-shadow: 0 4px 15px rgba(200, 82, 13, 0.03), inset 0 0 0 1px rgba(255, 255, 255, 0.25) !important;
+}
+
+.glass-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.3) !important;
+  border-color: rgba(232, 108, 26, 0.35) !important;
+  color: #c8520d !important;
+  box-shadow: 0 6px 20px rgba(200, 82, 13, 0.06), inset 0 0 0 1px rgba(255, 255, 255, 0.3) !important;
+}
+
+.dark .glass-btn {
+  background: rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(12px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(160%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #e0d8cc !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.02) !important;
+}
+
+.dark .glass-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(232, 108, 26, 0.3) !important;
+  color: #ffad5c !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
+}
+
 /* Primary CTA buttons */
 button.bg-brown-600,
 .bg-brown-600 {

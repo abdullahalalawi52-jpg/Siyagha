@@ -97,17 +97,17 @@ export const LetterPreview: React.FC = () => {
             </button>
             <button
               onClick={handleSaveDraft}
-              className="text-xs font-semibold text-gray-600 hover:text-brown-600 flex items-center gap-1.5 px-3 py-2 rounded border border-gray-200 hover:border-brown-200 hover:bg-brown-50 bg-white transition-all shadow-sm cursor-pointer"
+              className="text-xs font-semibold flex items-center gap-1.5 px-3 py-2 rounded shadow-sm glass-btn cursor-pointer"
               type="button"
             >
               {draftStatus ? <Check className="w-4 h-4 text-green-500" /> : <Save className="w-4 h-4" />}
               {draftStatus ? 'تم الحفظ' : 'حفظ كمسودة (مؤقتاً)'}
             </button>
             {/* Tags + Save button group */}
-            <div className="flex items-center gap-1 bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+            <div className="flex items-center gap-1 rounded-lg shadow-sm overflow-hidden glass-btn py-0 px-2.5 h-[36px]">
               {/* Pending tags */}
               {pendingTags.map((tag) => (
-                <span key={tag} className="flex items-center gap-0.5 bg-brown-100 text-brown-700 text-[10px] font-bold px-2 py-1.5 rounded-sm">
+                <span key={tag} className="flex items-center gap-0.5 bg-brown-100/20 text-brown-700 dark:text-brown-300 text-[10px] font-bold px-2 py-1 rounded-sm">
                   #{tag}
                   <button
                     type="button"
@@ -132,12 +132,12 @@ export const LetterPreview: React.FC = () => {
                     setTagInput('');
                   }
                 }}
-                className="text-xs px-2 py-1.5 outline-none bg-transparent w-14 placeholder-gray-400 min-w-0"
+                className="text-xs px-1 py-1.5 outline-none bg-transparent w-14 placeholder-gray-400 min-w-0 dark:text-white"
               />
               <button
                 onClick={handleSave}
                 disabled={!generatedLetter}
-                className="text-xs font-semibold text-gray-600 hover:text-brown-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5 px-3 py-2 border-r border-gray-200 hover:bg-brown-50 transition-all cursor-pointer"
+                className="text-xs font-semibold text-gray-600 dark:text-gray-200 hover:text-brown-600 dark:hover:text-brown-400 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5 px-3 py-2 border-r border-gray-200/40 dark:border-gray-700/50 transition-all cursor-pointer bg-transparent"
                 type="button"
               >
                 {savedStatus ? <Check className="w-4 h-4 text-green-500" /> : <Save className="w-4 h-4" />}
@@ -147,7 +147,7 @@ export const LetterPreview: React.FC = () => {
             <button
               onClick={handleCopy}
               disabled={!generatedLetter}
-              className="text-xs font-semibold text-gray-600 hover:text-brown-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5 px-3 py-2 rounded border border-gray-200 hover:border-brown-200 hover:bg-brown-50 bg-white transition-all shadow-sm cursor-pointer"
+              className="text-xs font-semibold flex items-center gap-1.5 px-3 py-2 rounded shadow-sm glass-btn cursor-pointer"
               type="button"
             >
               {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
@@ -156,7 +156,7 @@ export const LetterPreview: React.FC = () => {
             <button
               onClick={handleExportDOCX}
               disabled={!generatedLetter}
-              className="text-xs font-semibold text-gray-600 hover:text-brown-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5 px-3 py-2 rounded border border-gray-200 hover:border-brown-200 hover:bg-brown-50 bg-white transition-all shadow-sm cursor-pointer"
+              className="text-xs font-semibold flex items-center gap-1.5 px-3 py-2 rounded shadow-sm glass-btn cursor-pointer"
               type="button"
             >
               <FileText className="w-4 h-4" />
@@ -165,7 +165,7 @@ export const LetterPreview: React.FC = () => {
             <button
               onClick={handleExportPDF}
               disabled={!generatedLetter}
-              className="text-xs font-semibold text-gray-600 hover:text-brown-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5 px-3 py-2 rounded border border-gray-200 hover:border-brown-200 hover:bg-brown-50 bg-white transition-all shadow-sm cursor-pointer"
+              className="text-xs font-semibold flex items-center gap-1.5 px-3 py-2 rounded shadow-sm glass-btn cursor-pointer"
               type="button"
             >
               <Download className="w-4 h-4" />
@@ -174,7 +174,7 @@ export const LetterPreview: React.FC = () => {
             <button
               onClick={() => setIsShareModalOpen(true)}
               disabled={!generatedLetter}
-              className="text-xs font-semibold text-gray-600 hover:text-brown-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5 px-3 py-2 rounded border border-gray-200 hover:border-brown-200 hover:bg-brown-50 bg-white transition-all shadow-sm cursor-pointer"
+              className="text-xs font-semibold flex items-center gap-1.5 px-3 py-2 rounded shadow-sm glass-btn cursor-pointer"
               type="button"
             >
               <Send className="w-4 h-4" />
@@ -186,10 +186,8 @@ export const LetterPreview: React.FC = () => {
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => !generatedLetter && e.preventDefault()}
-              className={`text-xs font-semibold flex items-center gap-1.5 px-3 py-2 rounded border transition-all shadow-sm ${
-                generatedLetter
-                  ? 'text-green-700 border-green-200 hover:bg-green-50 bg-white hover:border-green-400'
-                  : 'text-gray-400 border-gray-200 bg-white opacity-50 cursor-not-allowed'
+              className={`text-xs font-semibold flex items-center gap-1.5 px-3 py-2 rounded shadow-sm glass-btn ${
+                !generatedLetter ? 'opacity-40 pointer-events-none' : ''
               }`}
               title="مشاركة الخطاب مباشرة عبر واتساب"
             >
@@ -199,7 +197,7 @@ export const LetterPreview: React.FC = () => {
             <button
               onClick={() => setIsEmailModalOpen(true)}
               disabled={!generatedLetter}
-              className="text-xs font-semibold text-gray-600 hover:text-brown-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5 px-3 py-2 rounded border border-gray-200 hover:border-brown-200 hover:bg-brown-50 bg-white transition-all shadow-sm cursor-pointer"
+              className="text-xs font-semibold flex items-center gap-1.5 px-3 py-2 rounded shadow-sm glass-btn cursor-pointer"
               type="button"
             >
               <Mail className="w-4 h-4" />
