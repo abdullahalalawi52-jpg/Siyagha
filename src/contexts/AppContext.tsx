@@ -184,6 +184,8 @@ interface AppContextType {
   setNewTemplateName: (name: string) => void;
   isSavingTemplate: boolean;
   setIsSavingTemplate: (open: boolean) => void;
+  libraryTab: 'system' | 'custom';
+  setLibraryTab: (tab: 'system' | 'custom') => void;
   applyTemplate: (id: string, isCustom?: boolean) => void;
   handleSave: () => void;
   handleSaveDraft: () => void;
@@ -1280,6 +1282,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setNewTemplateName,
         isSavingTemplate,
         setIsSavingTemplate,
+        libraryTab,
+        setLibraryTab,
         applyTemplate,
         handleSave,
         handleSaveDraft,
