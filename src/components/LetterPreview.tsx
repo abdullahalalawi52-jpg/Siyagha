@@ -209,7 +209,7 @@ export const LetterPreview: React.FC = () => {
         </div>
 
         {generatedLetter && !loading && (
-          <div className="flex items-center gap-4 bg-gray-50/80 p-3 rounded-lg border border-gray-100 mb-6 flex-wrap">
+          <div className="flex items-center gap-4 mb-6 flex-wrap">
             <div className="flex items-center gap-2 relative z-20">
               <label className="text-xs font-bold text-gray-500">الخط:</label>
               <div className="w-48">
