@@ -251,8 +251,7 @@ const checkGeminiKey = (req: any, res: express.Response, next: express.NextFunct
 
       res.json({ title: response.text?.trim() });
     } catch (error: any) {
-      console.error("Suggest Title Error:", error);
-      res.status(500).json({ error: `Failed to suggest title: ${error.message || error}` });
+      handleApiError(error, res, "فشل اقتراح العنوان");
     }
   });
 
@@ -355,8 +354,7 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
 
       res.json({ letter: response.text });
     } catch (error: any) {
-      console.error("Polish Error:", error);
-      res.status(500).json({ error: `Failed to polish letter: ${error.message || error}` });
+      handleApiError(error, res, "فشل تحسين صياغة الخطاب");
     }
   });
 
@@ -389,8 +387,7 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
 
       res.json({ text: response.text });
     } catch (error: any) {
-      console.error("OCR Error:", error);
-      res.status(500).json({ error: `Failed to perform OCR: ${error.message || error}` });
+      handleApiError(error, res, "فشل استخراج النصوص من الصورة");
     }
   });
 
