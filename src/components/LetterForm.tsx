@@ -82,6 +82,7 @@ export const LetterForm: React.FC = () => {
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <CustomSelect
+                id="type-select"
                 label="نوع الخطاب"
                 value={form.type}
                 onChange={(val) => setForm({ ...form, type: val, subType: getLetterTypeData(val).subTypes[0].name })}
@@ -93,6 +94,7 @@ export const LetterForm: React.FC = () => {
               />
 
               <CustomSelect
+                id="subtype-select"
                 label={
                   <div className="flex items-center justify-between">
                     <span>التصنيف</span>
@@ -141,8 +143,9 @@ export const LetterForm: React.FC = () => {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider block">تاريخ الخطاب</label>
+                <label htmlFor="letter-date" className="text-xs font-semibold text-gray-500 uppercase tracking-wider block">تاريخ الخطاب</label>
                 <input
+                  id="letter-date"
                   type="date"
                   className="w-full rounded-xl border-gray-200 border px-3 py-2.5 text-sm focus:ring-2 focus:ring-brown-500 focus:border-brown-500 outline-none transition-all bg-white font-medium text-gray-700"
                   value={form.date}
@@ -151,6 +154,7 @@ export const LetterForm: React.FC = () => {
               </div>
               <div className="space-y-1.5 relative z-10">
                 <CustomSelect
+                  id="language-select"
                   label="لغة الخطاب (Language)"
                   value={form.language}
                   onChange={(val) => setForm({ ...form, language: val })}
@@ -165,10 +169,11 @@ export const LetterForm: React.FC = () => {
             <hr className="border-gray-100 my-4 border-dashed" />
 
             <div className="space-y-1.5">
-              <label className="text-sm font-bold text-gray-800 flex items-center gap-2">
+              <label htmlFor="sender-name" className="text-sm font-bold text-gray-800 flex items-center gap-2">
                 اسم المرسل <span className="text-red-500">*</span>
               </label>
               <input
+                id="sender-name"
                 type="text"
                 placeholder="اسمك أو اسم المؤسسة"
                 className="w-full rounded-xl border-gray-200 border px-3 py-2.5 text-sm focus:ring-2 focus:ring-brown-500 focus:border-brown-500 outline-none transition-all"
@@ -179,10 +184,11 @@ export const LetterForm: React.FC = () => {
 
             <div className="grid grid-cols-2 gap-4 mt-4">
               <div className="space-y-1.5">
-                <label className="text-sm font-bold text-gray-800 flex items-center gap-2">
+                <label htmlFor="recipient-name" className="text-sm font-bold text-gray-800 flex items-center gap-2">
                   اسم الموجه إليه <span className="text-red-500">*</span>
                 </label>
                 <input
+                  id="recipient-name"
                   type="text"
                   placeholder="المؤسسة أو الشخص المتلقي"
                   className="w-full rounded-xl border-gray-200 border px-3 py-2.5 text-sm focus:ring-2 focus:ring-brown-500 focus:border-brown-500 outline-none transition-all"
@@ -192,10 +198,11 @@ export const LetterForm: React.FC = () => {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-sm font-bold text-gray-800 flex items-center gap-2">
+                <label htmlFor="recipient-role" className="text-sm font-bold text-gray-800 flex items-center gap-2">
                   صفة الموجه إليه
                 </label>
                 <input
+                  id="recipient-role"
                   type="text"
                   placeholder="مدير الموارد البشرية"
                   className="w-full rounded-xl border-gray-200 border px-3 py-2.5 text-sm focus:ring-2 focus:ring-brown-500 focus:border-brown-500 outline-none transition-all"
@@ -209,14 +216,14 @@ export const LetterForm: React.FC = () => {
 
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <label className="text-sm font-bold text-gray-800 flex items-center gap-2">
+                <label htmlFor="letter-subject" className="text-sm font-bold text-gray-800 flex items-center gap-2">
                   موضوع الخطاب / عنوانه <span className="text-red-500">*</span>
                 </label>
                 <button
                   type="button"
                   onClick={handleSuggestTitle}
                   disabled={isSuggestingTitle}
-                  className="text-xs text-brown-600 hover:text-brown-700 bg-brown-50 hover:bg-brown-100 flex items-center gap-1.5 px-2 py-1 rounded transition-colors disabled:opacity-50 cursor-pointer"
+                  className="text-xs text-brown-700 hover:text-brown-800 bg-brown-50 hover:bg-brown-100 flex items-center gap-1.5 px-2 py-1 rounded transition-colors disabled:opacity-50 cursor-pointer"
                   title="الذكاء الاصطناعي سيقوم باقتراح عنوان مناسب بناءً على التفاصيل"
                 >
                   {isSuggestingTitle ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
@@ -224,6 +231,7 @@ export const LetterForm: React.FC = () => {
                 </button>
               </div>
               <input
+                id="letter-subject"
                 type="text"
                 placeholder="اتركه فارغاً، أو ادخل مثال: طلب الموافقة على رصيد إجازة"
                 className="w-full rounded-xl border-gray-200 border px-3 py-2.5 text-sm focus:ring-2 focus:ring-brown-500 focus:border-brown-500 outline-none transition-all"
@@ -259,6 +267,7 @@ export const LetterForm: React.FC = () => {
             <div className="grid grid-cols-1 gap-4 mt-4">
               <div className="space-y-1.5 relative z-10">
                 <CustomSelect
+                  id="formality-select"
                   label="مستوى الرسمية"
                   value={form.formality}
                   onChange={(val) => setForm({ ...form, formality: val })}
@@ -269,7 +278,7 @@ export const LetterForm: React.FC = () => {
 
             <div className="space-y-1.5 mt-4">
               <div className="flex items-center justify-between">
-                <label className="text-sm font-bold text-gray-800">الصياغة الذكية: تفاصيل الخطاب / المبررات</label>
+                <label htmlFor="details-textarea" className="text-sm font-bold text-gray-800">الصياغة الذكية: تفاصيل الخطاب / المبررات</label>
                 <div className="flex items-center gap-1.5">
                   <button
                     type="button"
@@ -277,7 +286,7 @@ export const LetterForm: React.FC = () => {
                     className={`text-xs flex items-center gap-1.5 px-2 py-1 rounded transition-all cursor-pointer ${
                       isListening
                         ? 'bg-red-500 text-white animate-pulse'
-                        : 'text-brown-600 hover:text-brown-700 bg-brown-50 hover:bg-brown-100'
+                        : 'text-brown-700 hover:text-brown-800 bg-brown-50 hover:bg-brown-100'
                     }`}
                     title={isListening ? 'إيقاف الإدخال الصوتي' : 'إدخال صوتي'}
                   >
@@ -287,7 +296,7 @@ export const LetterForm: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setIsOcrOpen(true)}
-                    className="text-xs text-brown-600 hover:text-brown-700 bg-brown-50 hover:bg-brown-100 flex items-center gap-1.5 px-2 py-1 rounded transition-colors cursor-pointer"
+                    className="text-xs text-brown-700 hover:text-brown-800 bg-brown-50 hover:bg-brown-100 flex items-center gap-1.5 px-2 py-1 rounded transition-colors cursor-pointer"
                     title="قم بتحميل صورة لخطاب ورقي قديم لاستخراج النص منه بالذكاء الاصطناعي"
                   >
                     <Camera className="w-3.5 h-3.5" />
@@ -296,6 +305,7 @@ export const LetterForm: React.FC = () => {
                 </div>
               </div>
               <textarea
+                id="details-textarea"
                 rows={4}
                 placeholder="اكتب الغرض، وبعض نقاط القوة أو المبررات ليقوم الذكاء الاصطناعي بكتابة وتنسيق الخطاب بالكامل لك..."
                 className={`w-full rounded-xl border px-3 py-2.5 text-sm focus:ring-2 focus:ring-brown-500 focus:border-brown-500 outline-none transition-all resize-none ${
@@ -321,8 +331,11 @@ export const LetterForm: React.FC = () => {
             <div className="mt-6 space-y-4">
               {/* Auto generate toggle */}
               <div className="flex items-center justify-between text-xs text-gray-500 bg-gray-50/70 p-3 rounded-xl border border-gray-100">
-                <span className="font-semibold">{t('توليد الخطاب تلقائياً أثناء الكتابة', 'Auto-generate letter while typing')}</span>
+                <label htmlFor="auto-generate-checkbox" className="font-semibold cursor-pointer">
+                  {t('توليد الخطاب تلقائياً أثناء الكتابة', 'Auto-generate letter while typing')}
+                </label>
                 <input
+                  id="auto-generate-checkbox"
                   type="checkbox"
                   checked={autoGenerate}
                   onChange={(e) => setAutoGenerate(e.target.checked)}

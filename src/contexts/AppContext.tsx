@@ -405,9 +405,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [autoGenerate, setAutoGenerateState] = useState(() => {
     try {
       const saved = localStorage.getItem('auto_generate');
-      return saved !== 'false';
+      return saved === 'true';
     } catch (e) {
-      return true;
+      return false;
     }
   });
 
@@ -1074,7 +1074,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     const timer = setTimeout(() => {
       generateLetter();
-    }, 3000); // Increased debounce to 3 seconds for better performance and API conservation
+    }, 5000); // Increased debounce to 5 seconds for better performance and API conservation
 
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps

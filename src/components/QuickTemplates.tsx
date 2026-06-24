@@ -35,7 +35,7 @@ export const QuickTemplates: React.FC = () => {
             className={`text-xs font-bold flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
               isStatsOpen
                 ? 'bg-brown-600 text-white'
-                : 'text-brown-600 hover:text-brown-700 bg-brown-50 hover:bg-brown-100'
+                : 'text-brown-700 hover:text-brown-800 bg-brown-50 hover:bg-brown-100'
             }`}
             type="button"
           >
@@ -44,7 +44,7 @@ export const QuickTemplates: React.FC = () => {
           </button>
           <button 
             onClick={() => setIsLibraryOpen(true)}
-            className="text-xs font-bold text-brown-600 hover:text-brown-700 flex items-center gap-1.5 bg-brown-50 hover:bg-brown-100 px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
+            className="text-xs font-bold text-brown-700 hover:text-brown-800 flex items-center gap-1.5 bg-brown-50 hover:bg-brown-100 px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
             type="button"
           >
             <Library className="w-4 h-4" />

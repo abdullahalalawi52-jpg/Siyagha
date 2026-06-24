@@ -12,9 +12,10 @@ interface CustomSelectProps {
   value: string;
   onChange: (val: string) => void;
   label?: React.ReactNode;
+  id?: string;
 }
 
-export const CustomSelect: React.FC<CustomSelectProps> = ({ options, value, onChange, label }) => {
+export const CustomSelect: React.FC<CustomSelectProps> = ({ options, value, onChange, label, id }) => {
   const [isOpen, setIsOpen] = useState(false);
   const selectedOption = options.find((o) => o.value === value) || options[0];
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -33,6 +34,7 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({ options, value, onCh
     <div className="space-y-1.5 relative text-right" ref={wrapperRef}>
       {label && <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider block">{label}</div>}
       <button
+        id={id}
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between rounded-xl border-gray-200 border px-3 py-2.5 text-sm focus:ring-2 focus:ring-brown-500 bg-white font-medium text-gray-700 outline-none transition-all"

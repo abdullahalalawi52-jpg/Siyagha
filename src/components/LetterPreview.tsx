@@ -299,6 +299,7 @@ export const LetterPreview: React.FC = () => {
                   <h2 className="text-center text-xl font-bold text-gray-900" style={{ fontFamily }}>{form.subject}</h2>
 
                   <motion.textarea
+                    id="preview-textarea"
                     key="content"
                     ref={textareaRef}
                     value={generatedLetter}

@@ -117,6 +117,7 @@ export const Header: React.FC = () => {
           <button
             onClick={() => setIsArchiveOpen(true)}
             className="relative flex items-center gap-1.5 text-xs font-bold text-gray-700 dark:text-gray-200 px-4 py-2 bg-white/40 dark:bg-black/20 backdrop-blur-md border border-white/50 dark:border-white/10 rounded-xl shadow-sm hover:bg-white/60 dark:hover:bg-white/10 transition-all cursor-pointer"
+            aria-label={t('الأرشيف', 'Archive')}
             type="button"
           >
             <Archive className="w-4 h-4" />

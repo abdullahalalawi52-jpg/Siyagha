@@ -37,7 +37,8 @@ const safeGenerate = async (ai: GoogleGenAI, params: {
       });
     } catch (error: any) {
       const isRateLimit = error.status === 429 || error.message?.includes('429') || error.message?.includes('Quota') || error.message?.includes('RESOURCE_EXHAUSTED');
-      if (isRateLimit && attempt < maxRetries) {
+      // Skip sleeping/retrying on Vercel serverless environment to prevent function timeout
+      if (isRateLimit && attempt < maxRetries && !process.env.VERCEL) {
         attempt++;
         console.warn(`[Rate Limit] Waiting 12 seconds to retry (Attempt ${attempt}/${maxRetries})...`);
         await sleep(12000);
