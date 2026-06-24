@@ -88,7 +88,7 @@ export const LetterPreview: React.FC = () => {
             <button
               onClick={() => setIsAiModalOpen(true)}
               disabled={!generatedLetter}
-              className="text-xs font-bold text-white bg-brown-600 hover:bg-brown-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5 px-3 py-2 rounded shadow-sm transition-all cursor-pointer"
+              className="text-xs font-bold text-white bg-brown-600 hover:bg-brown-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5 px-3 py-2 rounded-xl shadow-sm transition-all cursor-pointer"
               title="المساعد الذكي: صياغة، تدقيق، وتحليل النبرة"
               type="button"
             >
@@ -97,14 +97,14 @@ export const LetterPreview: React.FC = () => {
             </button>
             <button
               onClick={handleSaveDraft}
-              className="text-xs font-semibold flex items-center gap-1.5 px-3 py-2 rounded shadow-sm glass-btn cursor-pointer"
+              className="text-xs font-semibold flex items-center gap-1.5 px-3 py-2 rounded-xl shadow-sm glass-btn cursor-pointer"
               type="button"
             >
               {draftStatus ? <Check className="w-4 h-4 text-green-500" /> : <Save className="w-4 h-4" />}
               {draftStatus ? 'تم الحفظ' : 'حفظ كمسودة (مؤقتاً)'}
             </button>
             {/* Tags + Save button group */}
-            <div className="flex items-center gap-1 rounded-lg shadow-sm overflow-hidden glass-btn py-0 px-2.5 h-[36px]">
+            <div className="flex items-center gap-1 rounded-xl shadow-sm overflow-hidden glass-btn py-0 px-2.5 h-[36px]">
               {/* Pending tags */}
               {pendingTags.map((tag) => (
                 <span key={tag} className="flex items-center gap-0.5 bg-brown-100/20 text-brown-700 dark:text-brown-300 text-[10px] font-bold px-2 py-1 rounded-sm">
@@ -147,7 +147,7 @@ export const LetterPreview: React.FC = () => {
             <button
               onClick={handleCopy}
               disabled={!generatedLetter}
-              className="text-xs font-semibold flex items-center gap-1.5 px-3 py-2 rounded shadow-sm glass-btn cursor-pointer"
+              className="text-xs font-semibold flex items-center gap-1.5 px-3 py-2 rounded-xl shadow-sm glass-btn cursor-pointer"
               type="button"
             >
               {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
@@ -156,7 +156,7 @@ export const LetterPreview: React.FC = () => {
             <button
               onClick={handleExportDOCX}
               disabled={!generatedLetter}
-              className="text-xs font-semibold flex items-center gap-1.5 px-3 py-2 rounded shadow-sm glass-btn cursor-pointer"
+              className="text-xs font-semibold flex items-center gap-1.5 px-3 py-2 rounded-xl shadow-sm glass-btn cursor-pointer"
               type="button"
             >
               <FileText className="w-4 h-4" />
@@ -165,7 +165,7 @@ export const LetterPreview: React.FC = () => {
             <button
               onClick={handleExportPDF}
               disabled={!generatedLetter}
-              className="text-xs font-semibold flex items-center gap-1.5 px-3 py-2 rounded shadow-sm glass-btn cursor-pointer"
+              className="text-xs font-semibold flex items-center gap-1.5 px-3 py-2 rounded-xl shadow-sm glass-btn cursor-pointer"
               type="button"
             >
               <Download className="w-4 h-4" />
@@ -174,7 +174,7 @@ export const LetterPreview: React.FC = () => {
             <button
               onClick={() => setIsShareModalOpen(true)}
               disabled={!generatedLetter}
-              className="text-xs font-semibold flex items-center gap-1.5 px-3 py-2 rounded shadow-sm glass-btn cursor-pointer"
+              className="text-xs font-semibold flex items-center gap-1.5 px-3 py-2 rounded-xl shadow-sm glass-btn cursor-pointer"
               type="button"
             >
               <Send className="w-4 h-4" />
@@ -186,7 +186,7 @@ export const LetterPreview: React.FC = () => {
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => !generatedLetter && e.preventDefault()}
-              className={`text-xs font-semibold flex items-center gap-1.5 px-3 py-2 rounded shadow-sm glass-btn ${
+              className={`text-xs font-semibold flex items-center gap-1.5 px-3 py-2 rounded-xl shadow-sm glass-btn ${
                 !generatedLetter ? 'opacity-40 pointer-events-none' : ''
               }`}
               title="مشاركة الخطاب مباشرة عبر واتساب"
@@ -197,7 +197,7 @@ export const LetterPreview: React.FC = () => {
             <button
               onClick={() => setIsEmailModalOpen(true)}
               disabled={!generatedLetter}
-              className="text-xs font-semibold flex items-center gap-1.5 px-3 py-2 rounded shadow-sm glass-btn cursor-pointer"
+              className="text-xs font-semibold flex items-center gap-1.5 px-3 py-2 rounded-xl shadow-sm glass-btn cursor-pointer"
               type="button"
             >
               <Mail className="w-4 h-4" />
