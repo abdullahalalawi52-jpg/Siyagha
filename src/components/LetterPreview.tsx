@@ -107,7 +107,7 @@ export const LetterPreview: React.FC = () => {
             <div className="flex items-center gap-1 rounded-xl shadow-sm overflow-hidden glass-btn py-0 px-2.5 h-[36px] shrink-0">
               {/* Pending tags */}
               {pendingTags.map((tag) => (
-                <span key={tag} className="flex items-center gap-0.5 bg-brown-100/20 text-brown-700 dark:text-brown-300 text-[10px] font-bold px-2 py-1 rounded-sm">
+                <span key={tag} className="flex items-center gap-0.5 bg-brown-100/30 text-brown-700 dark:text-brown-300 text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-brown-200/10">
                   #{tag}
                   <button
                     type="button"
