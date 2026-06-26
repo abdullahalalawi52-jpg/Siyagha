@@ -17,12 +17,12 @@
       }
     </style>
     <linearGradient id="nibGradFav" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stopColor="var(--color-logo-start)" />
-      <stop offset="100%" stopColor="var(--color-logo-end)" />
+      <stop offset="0%" stopColor="#e86c1a" />
+      <stop offset="100%" stopColor="#c8520d" />
     </linearGradient>
     <linearGradient id="nibGradAccentFav" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stopColor="var(--color-logo-accent-start)" />
-      <stop offset="100%" stopColor="var(--color-logo-accent-end)" />
+      <stop offset="0%" stopColor="#2d1a08" />
+      <stop offset="100%" stopColor="#1e1105" />
     </linearGradient>
     <mask id="nibMask">
       <rect width="100" height="100" fill="white" />
