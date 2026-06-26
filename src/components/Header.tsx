@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Wifi, WifiOff, Archive, User, Sun, Moon } from 'lucide-react';
+import { Wifi, WifiOff, Archive, User, Sun, Moon, Info, LogOut, LogIn } from 'lucide-react';
 import { useApp } from '../contexts/AppContext';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -65,7 +65,7 @@ export const Header: React.FC = () => {
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-1.5 sm:gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-2.5">
           <p className="text-xs font-bold text-brown-700 dark:text-brown-300 hidden lg:block px-4 py-2 bg-white/60 dark:bg-teal-950/40 backdrop-blur-md border border-brown-100/50 dark:border-teal-800/80 rounded-xl shadow-sm">
             {t('خطابات رسمية واحترافية', 'Professional letters')}
           </p>
@@ -73,16 +73,18 @@ export const Header: React.FC = () => {
           {/* About Us Link */}
           <button
             onClick={() => setIsAboutOpen(true)}
-            className="px-2.5 py-1.5 sm:px-4 sm:py-2 text-[10px] sm:text-xs font-bold text-brown-700 dark:text-brown-300 bg-white/60 dark:bg-teal-950/40 backdrop-blur-md border border-brown-100/50 dark:border-teal-800/80 rounded-xl shadow-sm hover:bg-brown-50 dark:hover:bg-teal-900/40 transition-all cursor-pointer"
+            className="h-8 sm:h-9 px-2 sm:px-3 text-xs font-bold text-brown-700 dark:text-brown-300 bg-white/60 dark:bg-teal-950/40 backdrop-blur-md border border-brown-100/50 dark:border-teal-800/80 rounded-xl shadow-sm hover:bg-brown-50 dark:hover:bg-teal-900/40 transition-all cursor-pointer flex items-center gap-1"
+            title={t('من نحن', 'About Us')}
             type="button"
           >
-            {t('من نحن', 'About Us')}
+            <Info className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <span className="hidden sm:inline">{t('من نحن', 'About Us')}</span>
           </button>
 
           {/* Language Toggle */}
           <button
             onClick={() => setAppLang(appLang === 'ar' ? 'en' : 'ar')}
-            className="px-2.5 py-1.5 sm:px-4 sm:py-2 text-[10px] sm:text-xs font-bold text-brown-700 dark:text-brown-300 bg-white/60 dark:bg-teal-950/40 backdrop-blur-md border border-brown-100/50 dark:border-teal-800/80 rounded-xl shadow-sm hover:bg-brown-50 dark:hover:bg-teal-900/40 transition-all cursor-pointer"
+            className="h-8 sm:h-9 px-2 sm:px-3 text-[10px] sm:text-xs font-bold text-brown-700 dark:text-brown-300 bg-white/60 dark:bg-teal-950/40 backdrop-blur-md border border-brown-100/50 dark:border-teal-800/80 rounded-xl shadow-sm hover:bg-brown-50 dark:hover:bg-teal-900/40 transition-all cursor-pointer flex items-center justify-center"
             title={t('تغيير اللغة', 'Change Language')}
             type="button"
           >
@@ -126,14 +128,14 @@ export const Header: React.FC = () => {
           {/* Archive */}
           <button
             onClick={() => setIsArchiveOpen(true)}
-            className="relative flex items-center gap-1 sm:gap-1.5 text-[10px] sm:text-xs font-bold text-brown-700 dark:text-brown-300 px-2.5 py-1.5 sm:px-4 sm:py-2 bg-white/60 dark:bg-teal-950/40 backdrop-blur-md border border-brown-100/50 dark:border-teal-800/80 rounded-xl shadow-sm hover:bg-brown-50 dark:hover:bg-teal-900/40 transition-all cursor-pointer"
+            className="relative h-8 sm:h-9 px-2 sm:px-3 flex items-center gap-1 sm:gap-1.5 text-[10px] sm:text-xs font-bold text-brown-700 dark:text-brown-300 bg-white/60 dark:bg-teal-950/40 backdrop-blur-md border border-brown-100/50 dark:border-teal-800/80 rounded-xl shadow-sm hover:bg-brown-50 dark:hover:bg-teal-900/40 transition-all cursor-pointer"
             aria-label={t('الأرشيف', 'Archive')}
             type="button"
           >
             <Archive className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span className="hidden sm:inline">{t('الأرشيف', 'Archive')}</span>
             {savedLetters.length > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-orange-500 text-white text-[10px] rounded-full flex items-center justify-center font-bold shadow-sm">
+              <span className="absolute -top-1 -right-1 w-4 h-4 bg-orange-500 text-white text-[9px] rounded-full flex items-center justify-center font-bold shadow-sm">
                 {savedLetters.length}
               </span>
             )}
@@ -147,22 +149,23 @@ export const Header: React.FC = () => {
               </span>
               <button
                 onClick={signOut}
-                className="px-2.5 py-1.5 sm:px-4 sm:py-2 text-[10px] sm:text-xs font-bold rounded-xl text-red-600 dark:text-red-400 bg-red-50/60 dark:bg-red-500/10 backdrop-blur-md border border-red-200 dark:border-red-500/20 shadow-sm hover:bg-red-100 dark:hover:bg-red-500/20 transition-all cursor-pointer"
+                className="h-8 sm:h-9 px-2 sm:px-3 text-[10px] sm:text-xs font-bold rounded-xl text-red-600 dark:text-red-400 bg-red-50/60 dark:bg-red-500/10 backdrop-blur-md border border-red-200 dark:border-red-500/20 shadow-sm hover:bg-red-100 dark:hover:bg-red-500/20 transition-all cursor-pointer flex items-center gap-1"
                 title={t('تسجيل الخروج', 'Log Out')}
                 type="button"
               >
-                {t('خروج', 'Log Out')}
+                <LogOut className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline">{t('خروج', 'Log Out')}</span>
               </button>
             </div>
           ) : (
             <button
               onClick={signInWithGoogle}
-              className="px-2.5 py-1.5 sm:px-4 sm:py-2 text-[10px] sm:text-xs font-bold rounded-xl text-brown-700 dark:text-orange-400 bg-orange-50/60 dark:bg-orange-950/40 backdrop-blur-md border border-orange-200/60 dark:border-orange-900/40 shadow-sm hover:bg-orange-100/80 dark:hover:bg-orange-900/60 transition-all flex items-center gap-1 cursor-pointer"
+              className="h-8 sm:h-9 px-2 sm:px-3 text-[10px] sm:text-xs font-bold rounded-xl text-brown-700 dark:text-orange-400 bg-orange-50/60 dark:bg-orange-950/40 backdrop-blur-md border border-orange-200/60 dark:border-orange-900/40 shadow-sm hover:bg-orange-100/80 dark:hover:bg-orange-900/60 transition-all flex items-center gap-1.5 cursor-pointer"
               title={t('تسجيل الدخول باستخدام جوجل', 'Sign In with Google')}
               type="button"
             >
-              <User className="w-3.5 h-3.5 hidden sm:block" />
-              <span>{t('دخول', 'Sign In')}</span>
+              <LogIn className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline">{t('دخول', 'Sign In')}</span>
             </button>
           )}
         </div>
