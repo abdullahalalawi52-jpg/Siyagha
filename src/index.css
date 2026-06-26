@@ -136,14 +136,7 @@ body::after {
 }
 ::-webkit-scrollbar-thumb:hover { background: rgba(200, 82, 13, 0.60) !important; }
 
-/* ============================================
- * Header – Seamless integration
- * ============================================ */
-header {
-  background: transparent !important;
-  border-bottom: none !important;
-  box-shadow: none !important;
-}
+/* Header styling is managed directly via Tailwind in Header.tsx */
 
 /* ============================================
  * Cards / Panels - Premium Glassmorphism
@@ -487,30 +480,7 @@ hr.border-dashed {
 
 /* Removed #root::before to fix FOUC. The background is now directly on .dark body */
 
-/* Dark header */
-.dark header {
-  background: transparent !important;
-  border-bottom: none !important;
-  box-shadow: none !important;
-}
-
-/* Premium Header contrast improvement in Dark Mode */
-.dark header h1,
-.dark header p,
-.dark header button {
-  background-color: rgba(13, 21, 32, 0.8) !important;
-  border-color: rgba(232, 108, 26, 0.25) !important;
-}
-
-.dark header h1 {
-  color: #ffffff !important;
-}
-
-.dark header button:hover {
-  background-color: rgba(232, 108, 26, 0.15) !important;
-  border-color: rgba(232, 108, 26, 0.45) !important;
-  color: #ffffff !important;
-}
+/* Dark header overrides removed to allow direct Tailwind styling in Header.tsx */
 
 /* Dark cards - Premium Glassmorphism */
 .dark .bg-white,
