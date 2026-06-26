@@ -1,7 +1,7 @@
 import React from 'react';
 import { Library, Star } from 'lucide-react';
 import { useApp } from '../contexts/AppContext';
-import { predefinedTemplates } from '../data/templates';
+import { predefinedTemplates, templateNameTranslations, categoryTranslations } from '../data/templates';
 
 export const QuickTemplates: React.FC = () => {
   const {
@@ -60,7 +60,7 @@ export const QuickTemplates: React.FC = () => {
             type="button"
             key={template.id}
             onClick={() => applyTemplate(template.id)}
-            className={`group relative flex items-center gap-3 p-4 rounded-2xl border text-right transition-all hover:-translate-y-0.5 active:scale-[0.97] cursor-pointer ${
+            className={`group relative flex items-center gap-3 p-4 rounded-2xl border text-start transition-all hover:-translate-y-0.5 active:scale-[0.97] cursor-pointer ${
               activeTemplate === template.id
                 ? 'border-brown-400 bg-gradient-to-br from-brown-50 to-orange-50 text-brown-700 shadow-lg ring-2 ring-brown-400/25'
                 : 'border-gray-200/80 bg-white/80 hover:border-brown-300/70 text-gray-700 shadow-sm'
@@ -78,14 +78,14 @@ export const QuickTemplates: React.FC = () => {
                 type="button"
                 onClick={(e) => toggleFavoritePredefined(template.id, e)}
                 className="absolute top-2 left-2 p-1 transition-transform hover:scale-110 z-10 cursor-pointer"
-                title="إزالة من المفضلة"
+                title={t('إزالة من المفضلة', 'Remove from Favorites')}
               >
                 <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400 drop-shadow-sm" />
               </button>
             )}
-            <div className="flex flex-col min-w-0">
-              <span className="font-bold text-sm truncate">{template.name}</span>
-              <span className="text-[10px] text-gray-400 font-medium">{template.category}</span>
+            <div className="flex flex-col min-w-0 text-start">
+              <span className="font-bold text-sm truncate">{t(template.name, templateNameTranslations[template.name] || template.name)}</span>
+              <span className="text-[10px] text-gray-400 font-medium">{t(template.category, categoryTranslations[template.category] || template.category)}</span>
             </div>
           </button>
         ))}

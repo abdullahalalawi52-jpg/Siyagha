@@ -2,7 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Library, X, Star, Bookmark } from 'lucide-react';
 import { useApp } from '../../contexts/AppContext';
-import { predefinedTemplates } from '../../data/templates';
+import { predefinedTemplates, templateNameTranslations, categoryTranslations } from '../../data/templates';
 import { useModalAccessibility } from '../../hooks/useModalAccessibility';
 
 export const LibraryModal: React.FC = () => {
@@ -17,6 +17,8 @@ export const LibraryModal: React.FC = () => {
     toggleFavoritePredefined,
     activeTemplate,
     applyTemplate,
+    appLang,
+    t,
   } = useApp();
 
   const handleClose = () => setIsLibraryOpen(false);
@@ -47,12 +49,12 @@ export const LibraryModal: React.FC = () => {
             role="dialog"
             aria-modal="true"
             aria-labelledby="library-modal-title"
-            initial={{ x: '-100%' }}
+            initial={{ x: appLang === 'ar' ? '-100%' : '100%' }}
             animate={{ x: 0 }}
-            exit={{ x: '-100%' }}
-            transition={{ type: 'tween', duration: 0.25, ease: 'easeOut' }}
-            className="fixed top-0 left-0 bottom-0 w-full sm:max-w-2xl md:max-w-3xl lg:max-w-5xl bg-white shadow-2xl z-50 flex flex-col overflow-hidden border-r border-gray-200 text-right"
-            dir="rtl"
+            exit={{ x: appLang === 'ar' ? '-100%' : '100%' }}
+            transition={{ type: 'spring', damping: 28, stiffness: 260 }}
+            className={`absolute top-0 bottom-0 ${appLang === 'ar' ? 'left-0 border-r' : 'right-0 border-l'} w-full sm:max-w-2xl md:max-w-3xl lg:max-w-5xl bg-white shadow-2xl flex flex-col overflow-hidden border-gray-200 text-start z-50`}
+            dir={appLang === 'ar' ? 'rtl' : 'ltr'}
           >
             {/* Header */}
             <div className="bg-white/40 dark:bg-black/20 p-6 sm:p-8 border-b border-gray-100 flex items-center justify-between shrink-0">
@@ -61,15 +63,15 @@ export const LibraryModal: React.FC = () => {
                   <Library className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 id="library-modal-title" className="text-xl font-bold text-gray-900 mb-1">مكتبة القوالب</h3>
-                  <p className="text-sm text-gray-600">اختر قالباً جاهزاً أو من قوالبك المخصصة</p>
+                  <h3 id="library-modal-title" className="text-xl font-bold text-gray-900 mb-1">{t('مكتبة القوالب', 'Template Library')}</h3>
+                  <p className="text-sm text-gray-600">{t('اختر قالباً جاهزاً أو من قوالبك المخصصة', 'Choose a ready template or from your custom templates')}</p>
                 </div>
               </div>
               <button
                 onClick={handleClose}
                 className="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-500 transition-colors shadow-sm cursor-pointer"
                 type="button"
-                aria-label="إغلاق المكتبة"
+                aria-label={t('إغلاق المكتبة', 'Close library')}
               >
                 <X className="w-5 h-5" />
               </button>
@@ -84,7 +86,7 @@ export const LibraryModal: React.FC = () => {
                 role="tab"
                 aria-selected={libraryTab === 'system'}
               >
-                القوالب الجاهزة
+                {t('القوالب الجاهزة', 'Ready Templates')}
               </button>
               <button
                 className={`py-4 font-bold text-sm border-b-2 transition-colors flex items-center gap-2 cursor-pointer ${libraryTab === 'custom' ? 'border-brown-600 text-brown-700' : 'border-transparent text-gray-600 hover:text-gray-900'}`}
@@ -93,7 +95,7 @@ export const LibraryModal: React.FC = () => {
                 role="tab"
                 aria-selected={libraryTab === 'custom'}
               >
-                قوالبي المخصصة
+                {t('قوالبي المخصصة', 'My Custom Templates')}
                 {customTemplates.length > 0 && (
                   <span className="bg-brown-100/80 text-brown-800 text-[10px] px-2 py-0.5 rounded-full">{customTemplates.length}</span>
                 )}
@@ -108,7 +110,7 @@ export const LibraryModal: React.FC = () => {
                     <div className="mb-8">
                       <h4 className="text-sm font-bold text-yellow-600 uppercase tracking-wider mb-4 flex items-center gap-2 justify-start">
                         <span className="w-1.5 h-4 bg-yellow-400 rounded-full inline-block"></span>
-                        المفضلة
+                        {t('المفضلة', 'Favorites')}
                       </h4>
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {predefinedTemplates.filter((t) => favoritePredefined.includes(t.id)).map((template) => (
@@ -123,22 +125,22 @@ export const LibraryModal: React.FC = () => {
                                 : 'border-gray-200 hover:border-brown-300 hover:shadow-sm'
                             }`}
                             onClick={() => applyTemplate(template.id, false)}
-                            aria-label={`تطبيق قالب ${template.name}`}
+                            aria-label={t(`تطبيق قالب ${template.name}`, `Apply template ${t(template.name, templateNameTranslations[template.name] || template.name)}`)}
                           >
                             <button
                               type="button"
                               onClick={(e) => toggleFavoritePredefined(template.id, e)}
                               className="absolute top-2 left-2 p-1 text-yellow-400 hover:text-yellow-500 transition-colors bg-white/80 rounded-full cursor-pointer z-10"
-                              title="إزالة من المفضلة"
-                              aria-label="إزالة من المفضلة"
+                              title={t('إزالة من المفضلة', 'Remove from Favorites')}
+                              aria-label={t('إزالة من المفضلة', 'Remove from Favorites')}
                             >
                               <Star className="w-4 h-4 fill-yellow-400" />
                             </button>
                             <div className={`p-2.5 rounded-xl shrink-0 transition-all ${activeTemplate === template.id ? 'bg-brown-50 text-brown-600' : 'bg-gray-50 text-gray-500 group-hover:bg-brown-50 group-hover:text-brown-500'}`}>
                               {template.icon}
                             </div>
-                            <div className="flex-1 min-w-0 text-right">
-                              <h5 className="font-bold text-sm text-gray-800 group-hover:text-brown-600 transition-colors mb-1 ml-6">{template.name}</h5>
+                            <div className={`flex-1 min-w-0 ${appLang === 'ar' ? 'text-right' : 'text-left'}`}>
+                              <h5 className="font-bold text-sm text-gray-800 group-hover:text-brown-600 transition-colors mb-1 ml-6">{t(template.name, templateNameTranslations[template.name] || template.name)}</h5>
                               <p className="text-xs text-gray-400 line-clamp-2 leading-relaxed">{template.data.subject || template.data.details}</p>
                             </div>
                           </div>
@@ -151,7 +153,7 @@ export const LibraryModal: React.FC = () => {
                     <div key={category}>
                       <h4 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4 flex items-center gap-2 justify-start">
                         <span className="w-1.5 h-4 bg-brown-300 rounded-full inline-block"></span>
-                        {category}
+                        {t(category, categoryTranslations[category] || category)}
                       </h4>
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {predefinedTemplates.filter((t) => t.category === category).map((template) => (
@@ -166,22 +168,22 @@ export const LibraryModal: React.FC = () => {
                                 : 'border-gray-200 hover:border-brown-300 hover:shadow-sm'
                             }`}
                             onClick={() => applyTemplate(template.id, false)}
-                            aria-label={`تطبيق قالب ${template.name}`}
+                            aria-label={t(`تطبيق قالب ${template.name}`, `Apply template ${t(template.name, templateNameTranslations[template.name] || template.name)}`)}
                           >
                             <button
                               type="button"
                               onClick={(e) => toggleFavoritePredefined(template.id, e)}
                               className={`absolute top-2 left-2 p-1 transition-colors bg-white/80 rounded-full cursor-pointer z-10 ${favoritePredefined.includes(template.id) ? 'text-yellow-400 hover:text-yellow-500' : 'text-gray-300 hover:text-yellow-400'}`}
-                              title={favoritePredefined.includes(template.id) ? 'إزالة من المفضلة' : 'إضافة للمفضلة'}
-                              aria-label={favoritePredefined.includes(template.id) ? 'إزالة من المفضلة' : 'إضافة للمفضلة'}
+                              title={favoritePredefined.includes(template.id) ? t('إزالة من المفضلة', 'Remove from Favorites') : t('إضافة للمفضلة', 'Add to Favorites')}
+                              aria-label={favoritePredefined.includes(template.id) ? t('إزالة من المفضلة', 'Remove from Favorites') : t('إضافة للمفضلة', 'Add to Favorites')}
                             >
                               <Star className={`w-4 h-4 ${favoritePredefined.includes(template.id) ? 'fill-yellow-400' : ''}`} />
                             </button>
                             <div className={`p-2.5 rounded-xl shrink-0 transition-all ${activeTemplate === template.id ? 'bg-brown-50 text-brown-600' : 'bg-gray-50 text-gray-500 group-hover:bg-brown-50 group-hover:text-brown-500'}`}>
                               {template.icon}
                             </div>
-                            <div className="flex-1 min-w-0 text-right">
-                              <h5 className="font-bold text-sm text-gray-800 group-hover:text-brown-600 transition-colors mb-1 ml-6">{template.name}</h5>
+                            <div className={`flex-1 min-w-0 ${appLang === 'ar' ? 'text-right' : 'text-left'}`}>
+                              <h5 className="font-bold text-sm text-gray-800 group-hover:text-brown-600 transition-colors mb-1 ml-6">{t(template.name, templateNameTranslations[template.name] || template.name)}</h5>
                               <p className="text-xs text-gray-400 line-clamp-2 leading-relaxed">{template.data.subject || template.data.details}</p>
                             </div>
                           </div>
@@ -195,8 +197,8 @@ export const LibraryModal: React.FC = () => {
                   {customTemplates.length === 0 ? (
                     <div className="text-center text-gray-400 mt-20">
                       <Bookmark className="w-12 h-12 mx-auto mb-3 opacity-20" />
-                      <p className="text-sm font-bold text-gray-600">لا توجد قوالب مخصصة</p>
-                      <p className="text-xs mt-2">يمكنك حفظ أي خطاب تقوم بإعداده كقالب مخصص لاستخدامه لاحقاً.</p>
+                      <p className="text-sm font-bold text-gray-600">{t('لا توجد قوالب مخصصة', 'No custom templates')}</p>
+                      <p className="text-xs mt-2">{t('يمكنك حفظ أي خطاب تقوم بإعداده كقالب مخصص لاستخدامه لاحقاً.', 'You can save any letter you prepare as a custom template to use it later.')}</p>
                     </div>
                   ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -212,13 +214,13 @@ export const LibraryModal: React.FC = () => {
                               : 'border-gray-200 hover:border-brown-300 hover:shadow-sm'
                           }`}
                           onClick={() => applyTemplate(template.id, true)}
-                          aria-label={`تطبيق قالب ${template.name}`}
+                          aria-label={t(`تطبيق قالب ${template.name}`, `Apply template ${template.name}`)}
                         >
                           <div className="flex items-start gap-3.5 min-w-0 flex-1">
                             <div className="p-2.5 rounded-xl bg-brown-50 text-brown-600 shrink-0">
                               <Bookmark className="w-5 h-5" />
                             </div>
-                            <div className="flex-1 min-w-0 text-right">
+                            <div className={`flex-1 min-w-0 ${appLang === 'ar' ? 'text-right' : 'text-left'}`}>
                               <h5 className="font-bold text-sm text-gray-800 group-hover:text-brown-600 transition-colors mb-1">{template.name}</h5>
                               <p className="text-xs text-gray-400 line-clamp-2 leading-relaxed">{template.data.subject}</p>
                             </div>
@@ -232,8 +234,8 @@ export const LibraryModal: React.FC = () => {
                               localStorage.setItem('custom_templates', JSON.stringify(updated));
                             }}
                             className="text-gray-400 hover:text-red-500 p-1.5 bg-gray-50 hover:bg-red-50 rounded-lg transition-colors shrink-0 cursor-pointer"
-                            title="حذف القالب"
-                            aria-label="حذف القالب"
+                            title={t('حذف القالب', 'Delete template')}
+                            aria-label={t('حذف القالب', 'Delete template')}
                           >
                             <X className="w-4 h-4" />
                           </button>

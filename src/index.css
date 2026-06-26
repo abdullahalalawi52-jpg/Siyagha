@@ -131,10 +131,10 @@ body::after {
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-  background: rgba(200, 82, 13, 0.25);
-  border-radius: 99px;
+  background: rgba(200, 82, 13, 0.35) !important;
+  border-radius: 99px !important;
 }
-::-webkit-scrollbar-thumb:hover { background: rgba(200, 82, 13, 0.5); }
+::-webkit-scrollbar-thumb:hover { background: rgba(200, 82, 13, 0.60) !important; }
 
 /* ============================================
  * Header – Seamless integration
@@ -149,17 +149,29 @@ header {
  * Cards / Panels - Premium Glassmorphism
  * ============================================ */
 .bg-white {
-  background: rgba(255, 255, 255, 0.45) !important;
+  background: rgba(253, 250, 246, 0.90) !important; /* Soft warm off-white (Cream 50) */
   backdrop-filter: blur(16px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.6) !important;
-  box-shadow: 0 8px 32px rgba(200, 82, 13, 0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.2) !important;
-  transition: all 0.3s ease !important;
+  border: 1.5px solid rgba(200, 82, 13, 0.12) !important;
+  box-shadow: 0 8px 32px rgba(74, 26, 4, 0.08), 0 2px 8px rgba(0, 0, 0, 0.02), inset 0 0 0 1px rgba(255, 255, 255, 0.3) !important;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  will-change: transform, box-shadow;
 }
 
 .bg-white:hover {
-  background: rgba(255, 255, 255, 0.6) !important;
-  box-shadow: 0 12px 40px rgba(200, 82, 13, 0.08), inset 0 0 0 1px rgba(255, 255, 255, 0.3) !important;
+  background: rgba(253, 250, 246, 0.95) !important;
+  box-shadow: 0 12px 40px rgba(74, 26, 4, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04), inset 0 0 0 1px rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Soft white utility overrides for light mode */
+.bg-white\/40 {
+  background: rgba(250, 244, 235, 0.40) !important; /* Soft cream 100 with 40% opacity */
+}
+.bg-white\/50 {
+  background: rgba(250, 244, 235, 0.50) !important; /* Soft cream 100 with 50% opacity */
+}
+.bg-white\/80 {
+  background: rgba(253, 250, 246, 0.80) !important; /* Soft cream 50 with 80% opacity */
 }
 
 .bg-gray-50 {
@@ -179,17 +191,18 @@ header {
  * Form Inputs – Premium Look
  * ============================================ */
 input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), textarea, select {
-  background: rgba(255, 255, 255, 0.92) !important;
-  border: 1.5px solid rgba(200, 82, 13, 0.12) !important;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+  background: #faf4eb !important; /* Soft warm cream (Cream 100) */
+  border: 1.5px solid rgba(200, 82, 13, 0.18) !important;
+  box-shadow: 0 2px 8px rgba(74, 26, 4, 0.03), inset 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+  transition: border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
   line-height: 1.6 !important;
 }
 
 input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):focus, textarea:focus, select:focus {
   border-color: var(--color-brown-500) !important;
-  box-shadow: 0 0 0 3px rgba(232, 108, 26, 0.12) !important;
+  box-shadow: 0 0 0 3px rgba(232, 108, 26, 0.15), 0 2px 8px rgba(232, 108, 26, 0.08) !important;
   outline: none !important;
-  background: rgba(255, 255, 255, 0.98) !important;
+  background: #fdfaf6 !important; /* Extremely soft off-white (Cream 50) on focus */
 }
 
 /* ============================================
@@ -271,11 +284,12 @@ input[type="checkbox"]:focus-visible, input[type="radio"]:focus-visible {
  * Buttons – Rich Interactions
  * ============================================ */
 button {
-  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease !important;
+  transition: background-color 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1), color 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  will-change: transform;
 }
 
 button:hover:not(:disabled) {
-  transform: translateY(-1px) !important;
+  transform: translateY(-1px) scale(1.02) !important;
 }
 
 button:active:not(:disabled) {
@@ -284,19 +298,19 @@ button:active:not(:disabled) {
 
 /* Premium Glassmorphic buttons */
 .glass-btn {
-  background: rgba(255, 255, 255, 0.18) !important;
+  background: rgba(253, 250, 246, 0.85) !important; /* Soft cream 50 */
   backdrop-filter: blur(12px) saturate(160%) !important;
   -webkit-backdrop-filter: blur(12px) saturate(160%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  border: 1.5px solid rgba(200, 82, 13, 0.15) !important;
   color: #4a3025 !important;
-  box-shadow: 0 4px 15px rgba(200, 82, 13, 0.03), inset 0 0 0 1px rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 4px 10px rgba(74, 26, 4, 0.06), 0 1px 3px rgba(0, 0, 0, 0.03), inset 0 0 0 1px rgba(255, 255, 255, 0.5) !important;
 }
 
 .glass-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.3) !important;
-  border-color: rgba(232, 108, 26, 0.35) !important;
+  background: rgba(253, 250, 246, 0.95) !important;
+  border-color: rgba(232, 108, 26, 0.45) !important;
   color: #c8520d !important;
-  box-shadow: 0 6px 20px rgba(200, 82, 13, 0.06), inset 0 0 0 1px rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 0 6px 14px rgba(200, 82, 13, 0.15), 0 2px 4px rgba(74, 26, 4, 0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.6) !important;
 }
 
 .dark .glass-btn {
@@ -319,11 +333,11 @@ button:active:not(:disabled) {
 button.bg-brown-600,
 .bg-brown-600 {
   background: linear-gradient(135deg, #e86c1a 0%, #c8520d 100%) !important;
-  box-shadow: 0 4px 14px rgba(200, 82, 13, 0.28) !important;
+  box-shadow: 0 4px 14px rgba(200, 82, 13, 0.32), 0 2px 4px rgba(74, 26, 4, 0.1) !important;
 }
 
 button.bg-brown-600:hover:not(:disabled) {
-  box-shadow: 0 6px 20px rgba(200, 82, 13, 0.36) !important;
+  box-shadow: 0 6px 20px rgba(200, 82, 13, 0.40), 0 3px 8px rgba(74, 26, 4, 0.15) !important;
   background: linear-gradient(135deg, #f0781f 0%, #d45a10 100%) !important;
 }
 
@@ -353,9 +367,9 @@ button[class*="rounded-full"][class*="bg-brown-600"] {
  * ============================================ */
 .shadow-2xl {
   box-shadow:
-    0 0 0 1px rgba(232, 108, 26, 0.07),
-    0 25px 60px rgba(200, 82, 13, 0.08),
-    0 8px 24px rgba(0, 0, 0, 0.06) !important;
+    0 0 0 1px rgba(232, 108, 26, 0.12),
+    0 25px 60px rgba(74, 26, 4, 0.12),
+    0 8px 24px rgba(0, 0, 0, 0.08) !important;
 }
 
 /* ============================================
@@ -406,7 +420,14 @@ hr.border-dashed {
   background: rgba(255, 255, 255, 0.70) !important;
   border: 1px solid rgba(232, 108, 26, 0.08) !important;
   box-shadow: 0 2px 12px rgba(200, 82, 13, 0.05) !important;
-  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  will-change: transform;
+}
+
+.bg-gray-50.rounded-xl:hover {
+  transform: translateY(-2px) scale(1.015) !important;
+  box-shadow: 0 8px 24px rgba(200, 82, 13, 0.1) !important;
+  border-color: rgba(232, 108, 26, 0.2) !important;
 }
 
 /* Progress bars */
@@ -473,10 +494,22 @@ hr.border-dashed {
   box-shadow: none !important;
 }
 
-.dark header h1 { color: #f8f0e4 !important; }
-.dark header p.rounded-full {
-  background: rgba(20, 34, 48, 0.6) !important;
-  color: #d0b890 !important;
+/* Premium Header contrast improvement in Dark Mode */
+.dark header h1,
+.dark header p,
+.dark header button {
+  background-color: rgba(13, 21, 32, 0.8) !important;
+  border-color: rgba(232, 108, 26, 0.25) !important;
+}
+
+.dark header h1 {
+  color: #ffffff !important;
+}
+
+.dark header button:hover {
+  background-color: rgba(232, 108, 26, 0.15) !important;
+  border-color: rgba(232, 108, 26, 0.45) !important;
+  color: #ffffff !important;
 }
 
 /* Dark cards - Premium Glassmorphism */
@@ -580,7 +613,8 @@ hr.border-dashed {
 
 /* Active template card gradient override for Dark Mode */
 .dark .from-brown-50.to-orange-50 {
-  background: linear-gradient(135deg, rgba(40, 60, 80, 0.9), rgba(30, 45, 60, 0.9)) !important;
+  background: linear-gradient(135deg, rgba(232, 108, 26, 0.18), rgba(74, 26, 4, 0.25)) !important;
+  border-color: rgba(232, 108, 26, 0.4) !important;
 }
 
 /* Dark preview textarea */
@@ -594,10 +628,10 @@ hr.border-dashed {
 
 /* Dark scrollbar */
 .dark ::-webkit-scrollbar-thumb {
-  background: rgba(232, 108, 26, 0.20);
+  background: rgba(232, 108, 26, 0.60) !important; /* Brighter gold/orange */
 }
 .dark ::-webkit-scrollbar-thumb:hover {
-  background: rgba(232, 108, 26, 0.40);
+  background: rgba(232, 108, 26, 0.85) !important;
 }
 
 /* ============================================
@@ -642,6 +676,33 @@ hr.border-dashed {
  * ============================================ */
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: 0.4s;
-  animation-timing-function: ease;
+  animation: none;
+  mix-blend-mode: normal;
 }
+
+/* ============================================
+ * Premium Document Paper & Branding styles
+ * ============================================ */
+.document-paper {
+  background: #ffffff !important;
+  border: 1px solid rgba(200, 82, 13, 0.15) !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.01), 0 10px 30px rgba(74, 26, 4, 0.04) !important;
+  position: relative;
+  transition: all 0.3s ease !important;
+}
+
+.dark .document-paper {
+  background: rgba(10, 18, 26, 0.60) !important;
+  border: 1px solid rgba(232, 108, 26, 0.15) !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), 0 10px 30px rgba(0, 0, 0, 0.35) !important;
+}
+
+/* logo glow and hover animation */
+.logo-container svg {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.logo-container:hover svg {
+  transform: translateY(-1px) rotate(6deg) scale(1.05);
+  filter: drop-shadow(0 2px 8px rgba(232, 108, 26, 0.4));
+}
+

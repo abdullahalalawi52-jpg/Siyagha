@@ -113,7 +113,7 @@ export const buildPrintElement = (opts: PrintElementOptions): HTMLElement => {
 
     const sigLabel = document.createElement('p');
     applyStyles(sigLabel, { fontSize: '13px', fontWeight: 'bold', marginBottom: '10px', color: '#43302b', fontFamily: `'${fontFamily}', sans-serif` });
-    sigLabel.textContent = 'التوقيع والختم:';
+    sigLabel.textContent = isEn ? 'Signature & Seal:' : 'التوقيع والختم:';
     sigInner.appendChild(sigLabel);
 
     const imgRow = document.createElement('div');

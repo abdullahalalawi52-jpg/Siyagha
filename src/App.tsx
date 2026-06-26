@@ -14,6 +14,7 @@ import ShareModal from './components/modals/ShareModal';
 import OcrModal from './components/modals/OcrModal';
 import SignatureModal from './components/modals/SignatureModal';
 import AiModal from './components/modals/AiModal';
+import AboutModal from './components/modals/AboutModal';
 
 function MainAppContent() {
   const { appLang, form } = useApp();
@@ -54,6 +55,7 @@ function MainAppContent() {
       <OcrModal />
       <SignatureModal />
       <AiModal />
+      <AboutModal />
     </div>
   );
 }

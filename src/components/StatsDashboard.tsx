@@ -2,7 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { FileText, Calendar, Check, Pin } from 'lucide-react';
 import { useApp } from '../contexts/AppContext';
-import { letterTypes } from '../data/templates';
+import { letterTypes, typeTranslations } from '../data/templates';
 
 export const StatsDashboard: React.FC = () => {
   const {
@@ -11,6 +11,8 @@ export const StatsDashboard: React.FC = () => {
     filterTag,
     setFilterTag,
     setIsArchiveOpen,
+    appLang,
+    t,
   } = useApp();
 
   const total = savedLetters.length;
@@ -33,29 +35,29 @@ export const StatsDashboard: React.FC = () => {
     <AnimatePresence>
       {isStatsOpen && (
         <motion.div
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: 'auto' }}
-          exit={{ opacity: 0, height: 0 }}
-          transition={{ duration: 0.25 }}
-          className="overflow-hidden mb-5 text-right"
-          dir="rtl"
+          initial={{ opacity: 0, y: -15, scaleY: 0.95 }}
+          animate={{ opacity: 1, y: 0, scaleY: 1 }}
+          exit={{ opacity: 0, y: -15, scaleY: 0.95 }}
+          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          className="origin-top mb-5 text-start overflow-hidden"
+          dir={appLang === 'ar' ? 'rtl' : 'ltr'}
         >
           <div className="bg-white rounded-2xl border border-brown-100/60 shadow-sm p-5">
             <div className="flex items-center gap-2 mb-5">
               <div className="w-7 h-7 bg-brown-100 rounded-lg flex items-center justify-center text-brown-600">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
               </div>
-              <h3 className="font-bold text-gray-800 text-sm">لوحة إحصائياتي</h3>
-              <span className="text-xs text-gray-400 mr-auto">بناءً على بياناتك المحفوظة محلياً</span>
+              <h3 className="font-bold text-gray-800 text-sm">{t('لوحة إحصائياتي', 'My Stats Dashboard')}</h3>
+              <span className="text-xs text-gray-400 mr-auto">{t('بناءً على بياناتك المحفوظة محلياً', 'Based on your locally saved letters')}</span>
             </div>
 
             {/* KPI Cards */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
               {[
-                { label: 'إجمالي الخطابات', value: total, icon: <FileText className="w-5 h-5" />, bgClass: 'bg-brown-50 border-brown-200/60 text-brown-600 dark:border-brown-200 dark:text-brown-500' },
-                { label: 'هذا الشهر', value: thisMonth, icon: <Calendar className="w-5 h-5" />, bgClass: 'bg-brown-50 border-brown-200/60 text-brown-600 dark:border-brown-200 dark:text-brown-500' },
-                { label: 'مكتملة', value: completed, icon: <Check className="w-5 h-5" />, bgClass: 'bg-brown-50 border-brown-200/60 text-brown-600 dark:border-brown-200 dark:text-brown-500' },
-                { label: 'مثبتة', value: pinnedCount, icon: <Pin className="w-5 h-5 -rotate-45" />, bgClass: 'bg-brown-50 border-brown-200/60 text-brown-600 dark:border-brown-200 dark:text-brown-500' },
+                { label: t('إجمالي الخطابات', 'Total Letters'), value: total, icon: <FileText className="w-5 h-5" />, bgClass: 'bg-brown-50 border-brown-200/60 text-brown-600 dark:border-brown-200 dark:text-brown-500' },
+                { label: t('هذا الشهر', 'This Month'), value: thisMonth, icon: <Calendar className="w-5 h-5" />, bgClass: 'bg-brown-50 border-brown-200/60 text-brown-600 dark:border-brown-200 dark:text-brown-500' },
+                { label: t('مكتملة', 'Completed'), value: completed, icon: <Check className="w-5 h-5" />, bgClass: 'bg-brown-50 border-brown-200/60 text-brown-600 dark:border-brown-200 dark:text-brown-500' },
+                { label: t('مثبتة', 'Pinned'), value: pinnedCount, icon: <Pin className="w-5 h-5 -rotate-45" />, bgClass: 'bg-brown-50 border-brown-200/60 text-brown-600 dark:border-brown-200 dark:text-brown-500' },
               ].map((kpi) => (
                 <div key={kpi.label} className="bg-white rounded-2xl p-4 text-center border border-brown-200/50 shadow-sm flex flex-col items-center justify-between transition-all hover:scale-[1.03] hover:shadow-md hover:border-brown-300">
                   <div className={`w-10 h-10 rounded-[12px] flex items-center justify-center mb-2 border ${kpi.bgClass}`}>
@@ -70,11 +72,11 @@ export const StatsDashboard: React.FC = () => {
             {/* Type Distribution Bar Chart */}
             {total > 0 && (
               <div className="mb-5">
-                <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">توزيع الأنواع</h4>
+                <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">{t('توزيع الأنواع', 'Type Distribution')}</h4>
                 <div className="space-y-2">
                   {typeCounts.map(({ type, count }) => (
                     <div key={type} className="flex items-center gap-3">
-                      <span className="text-xs font-semibold text-gray-600 w-20 shrink-0 text-right">{type}</span>
+                      <span className="text-xs font-semibold text-gray-600 w-20 shrink-0 text-start">{t(type, typeTranslations[type] || type)}</span>
                       <div className="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden">
                         <motion.div
                           initial={{ width: 0 }}
@@ -83,7 +85,7 @@ export const StatsDashboard: React.FC = () => {
                           className="h-2 bg-brown-500 rounded-full"
                         />
                       </div>
-                      <span className="text-xs font-black text-brown-600 w-6 text-left">{count}</span>
+                      <span className="text-xs font-black text-brown-600 w-6 text-start">{count}</span>
                     </div>
                   ))}
                 </div>
@@ -93,7 +95,7 @@ export const StatsDashboard: React.FC = () => {
             {/* Drafts ratio */}
             {total > 0 && (
               <div className="flex items-center gap-3 text-xs">
-                <span className="font-semibold text-gray-500">نسبة الاكتمال:</span>
+                <span className="font-semibold text-gray-500">{t('نسبة الاكتمال:', 'Completion Rate:')}</span>
                 <div className="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
@@ -109,7 +111,7 @@ export const StatsDashboard: React.FC = () => {
             {/* All Tags */}
             {allTags.length > 0 && (
               <div className="mt-4 pt-4 border-t border-gray-100">
-                <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">الوسوم المستخدمة</h4>
+                <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{t('الوسوم المستخدمة', 'Used Tags')}</h4>
                 <div className="flex flex-wrap gap-1.5 justify-start">
                   <button
                     onClick={() => setFilterTag('')}
@@ -117,7 +119,7 @@ export const StatsDashboard: React.FC = () => {
                       filterTag === '' ? 'bg-brown-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                     }`}
                     type="button"
-                  >الكل</button>
+                  >{t('الكل', 'All')}</button>
                   {allTags.map((tag) => (
                     <button
                       key={tag}
@@ -135,7 +137,7 @@ export const StatsDashboard: React.FC = () => {
             )}
 
             {total === 0 && (
-              <p className="text-center text-xs text-gray-400 py-4">لم تقم بحفظ أي خطابات بعد. ابدأ بإنشاء خطابك الأول!</p>
+              <p className="text-center text-xs text-gray-400 py-4">{t('لم تقم بحفظ أي خطابات بعد. ابدأ بإنشاء خطابك الأول!', 'You have not saved any letters yet. Start by creating your first letter!')}</p>
             )}
           </div>
         </motion.div>

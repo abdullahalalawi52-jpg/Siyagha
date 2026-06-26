@@ -11,6 +11,8 @@ export const OcrModal: React.FC = () => {
     ocrLoading,
     ocrError,
     handleOcrUpload,
+    appLang,
+    t,
   } = useApp();
 
   const handleClose = () => setIsOcrOpen(false);
@@ -20,36 +22,37 @@ export const OcrModal: React.FC = () => {
   return (
     <AnimatePresence>
       {isOcrOpen && (
-        <>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={handleClose}
-            className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-40 transition-opacity"
+            className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm"
           />
           <motion.div
             ref={modalRef}
             role="dialog"
             aria-modal="true"
             aria-labelledby="ocr-modal-title"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white rounded-2xl shadow-2xl z-50 overflow-hidden text-right"
-            dir="rtl"
+            initial={{ opacity: 0, scale: 0.93, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.93, y: 20 }}
+            transition={{ type: 'spring', damping: 28, stiffness: 320 }}
+            className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden text-start z-10"
+            dir={appLang === 'ar' ? 'rtl' : 'ltr'}
           >
             <div className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 id="ocr-modal-title" className="text-lg font-bold text-gray-900 flex items-center gap-2">
                   <Camera className="w-5 h-5 text-brown-600" />
-                  واجهة استخراج النصوص (OCR)
+                  {t('واجهة استخراج النصوص (OCR)', 'Text Extraction Interface (OCR)')}
                 </h3>
                 <button
                   onClick={handleClose}
                   className="text-gray-400 hover:bg-gray-100 p-1.5 rounded-lg transition-colors cursor-pointer"
                   type="button"
-                  aria-label="إغلاق النافذة"
+                  aria-label={t('إغلاق النافذة', 'Close window')}
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -57,7 +60,7 @@ export const OcrModal: React.FC = () => {
 
               <div className="space-y-4">
                 <p className="text-xs text-gray-500 leading-relaxed">
-                  قم بتصوير أو رفع صورة لخطاب رسمي ورقي قديم، وسيقوم الذكاء الاصطناعي باستخراج النص بالكامل لتتمكن من التعديل عليه وإعادة استخدامه.
+                  {t('قم بتصوير أو رفع صورة لخطاب رسمي ورقي قديم، وسيقوم الذكاء الاصطناعي باستخراج النص بالكامل لتتمكن من التعديل عليه وإعادة استخدامه.', 'Take a photo or upload an image of an old official paper letter, and AI will extract the full text so you can edit and reuse it.')}
                 </p>
 
                 <div className="border-2 border-dashed border-gray-200 hover:border-brown-400 rounded-xl p-8 text-center bg-gray-50/50 transition-colors relative cursor-pointer group">
@@ -75,9 +78,9 @@ export const OcrModal: React.FC = () => {
                       <Upload className="w-10 h-10 text-gray-400 group-hover:text-brown-500 transition-colors" />
                     )}
                     <span className="text-sm font-bold text-gray-700">
-                      {ocrLoading ? 'جاري استخراج النصوص...' : 'اختر صورة الخطاب أو اسحبها هنا'}
+                      {ocrLoading ? t('جاري استخراج النصوص...', 'Extracting text...') : t('اختر صورة الخطاب أو اسحبها هنا', 'Choose letter image or drag it here')}
                     </span>
-                    <span className="text-xs text-gray-400">يدعم صيغ JPG, PNG, WEBP</span>
+                    <span className="text-xs text-gray-400">{t('يدعم صيغ JPG, PNG, WEBP', 'Supports JPG, PNG, WEBP formats')}</span>
                   </div>
                 </div>
 
@@ -95,12 +98,12 @@ export const OcrModal: React.FC = () => {
                   disabled={ocrLoading}
                   className="text-xs font-bold text-gray-500 hover:text-gray-700 px-4 py-2.5 rounded-lg transition-colors border border-gray-200 disabled:opacity-50 cursor-pointer"
                 >
-                  إلغاء
+                  {t('إلغاء', 'Cancel')}
                 </button>
               </div>
             </div>
           </motion.div>
-        </>
+        </div>
       )}
     </AnimatePresence>
   );

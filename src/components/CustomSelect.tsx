@@ -31,7 +31,7 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({ options, value, onCh
   }, []);
 
   return (
-    <div className="space-y-1.5 relative text-right" ref={wrapperRef}>
+    <div className="space-y-1.5 relative text-start" ref={wrapperRef}>
       {label && <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider block">{label}</div>}
       <button
         id={id}
@@ -41,7 +41,7 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({ options, value, onCh
       >
         <div className="flex items-center gap-2 flex-1 min-w-0">
           {selectedOption?.icon && React.createElement(selectedOption.icon, { className: "w-4 h-4 text-gray-500 shrink-0" })}
-          <span className="truncate text-right block w-full">{selectedOption?.label}</span>
+          <span className="truncate text-start block w-full">{selectedOption?.label}</span>
         </div>
         <svg className={`w-4 h-4 text-gray-500 shrink-0 mr-2 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
       </button>
@@ -55,7 +55,7 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({ options, value, onCh
               <button
                 key={opt.value}
                 type="button"
-                className={`w-full flex items-center gap-2 px-3 py-2.5 text-sm text-right hover:bg-gray-50 transition-colors ${value === opt.value ? 'bg-brown-50 text-brown-700 font-bold' : 'text-gray-700 font-medium'} flex-1 min-w-0`}
+                className={`w-full flex items-center gap-2 px-3 py-2.5 text-sm text-start hover:bg-gray-50 transition-colors ${value === opt.value ? 'bg-brown-50 text-brown-700 font-bold' : 'text-gray-700 font-medium'} flex-1 min-w-0`}
                 onClick={() => { onChange(opt.value); setIsOpen(false); }}
               >
                 {opt.icon && React.createElement(opt.icon, { className: `w-4 h-4 shrink-0 ${value === opt.value ? 'text-brown-600' : 'text-gray-400'}` })}

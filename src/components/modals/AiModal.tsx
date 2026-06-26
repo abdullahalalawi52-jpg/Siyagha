@@ -17,6 +17,7 @@ export const AiModal: React.FC = () => {
     handleAnalyzeTone,
     generatedLetter,
     t,
+    appLang,
   } = useApp();
 
   const handleClose = () => setIsAiModalOpen(false);
@@ -26,37 +27,38 @@ export const AiModal: React.FC = () => {
   return (
     <AnimatePresence>
       {isAiModalOpen && (
-        <>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={handleClose}
-            className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-40 transition-opacity"
+            className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm"
           />
           <motion.div
             ref={modalRef}
             role="dialog"
             aria-modal="true"
             aria-labelledby="ai-modal-title"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-white rounded-2xl shadow-2xl z-50 overflow-hidden text-right"
-            dir="rtl"
+            initial={{ opacity: 0, scale: 0.93, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.93, y: 20 }}
+            transition={{ type: 'spring', damping: 28, stiffness: 320 }}
+            className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden text-start z-10"
+            dir={appLang === 'ar' ? 'rtl' : 'ltr'}
           >
             <div className="p-6">
               {/* Header */}
               <div className="flex items-center justify-between mb-6 pb-2 border-b border-gray-100">
                 <h3 id="ai-modal-title" className="text-lg font-bold text-gray-900 flex items-center gap-2">
                   <Sparkles className="w-5 h-5 text-brown-600 animate-pulse" />
-                  مساعد الذكاء الاصطناعي (AI Assistant)
+                  {t('مساعد الذكاء الاصطناعي (AI Assistant)', 'AI Assistant')}
                 </h3>
                 <button
                   onClick={handleClose}
                   className="text-gray-400 hover:bg-gray-100 p-1.5 rounded-lg transition-colors cursor-pointer"
                   type="button"
-                  aria-label="إغلاق النافذة"
+                  aria-label={t('إغلاق النافذة', 'Close window')}
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -68,42 +70,42 @@ export const AiModal: React.FC = () => {
                 <button
                   onClick={handlePolishLetter}
                   disabled={aiPolishing || isProofreading || toneLoading || !generatedLetter}
-                  className="p-4 rounded-xl border border-brown-100 bg-brown-50/50 hover:bg-brown-50 hover:border-brown-300 transition-all text-right flex flex-col gap-2 disabled:opacity-50 cursor-pointer"
+                  className={`p-4 rounded-xl border border-brown-100 bg-brown-50/50 hover:bg-brown-50 hover:border-brown-300 transition-all ${appLang === 'ar' ? 'text-right' : 'text-left'} flex flex-col gap-2 disabled:opacity-50 cursor-pointer`}
                   type="button"
                 >
                   <div className="w-8 h-8 rounded-lg bg-brown-100 flex items-center justify-center text-brown-700">
                     {aiPolishing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
                   </div>
-                  <h4 className="font-bold text-sm text-gray-800">تحسين الصياغة</h4>
-                  <p className="text-xs text-gray-500 leading-relaxed">إعادة كتابة الخطاب بأسلوب أكثر بلاغة واحترافية.</p>
+                  <h4 className="font-bold text-sm text-gray-800">{t('تحسين الصياغة', 'Polish Writing')}</h4>
+                  <p className="text-xs text-gray-500 leading-relaxed">{t('إعادة كتابة الخطاب بأسلوب أكثر بلاغة واحترافية.', 'Rewrite the letter in a more eloquent and professional style.')}</p>
                 </button>
 
                 {/* Proofread Button */}
                 <button
                   onClick={handleProofread}
                   disabled={aiPolishing || isProofreading || toneLoading || !generatedLetter}
-                  className="p-4 rounded-xl border border-brown-100 bg-brown-50/50 hover:bg-brown-50 hover:border-brown-300 transition-all text-right flex flex-col gap-2 disabled:opacity-50 cursor-pointer"
+                  className={`p-4 rounded-xl border border-brown-100 bg-brown-50/50 hover:bg-brown-50 hover:border-brown-300 transition-all ${appLang === 'ar' ? 'text-right' : 'text-left'} flex flex-col gap-2 disabled:opacity-50 cursor-pointer`}
                   type="button"
                 >
                   <div className="w-8 h-8 rounded-lg bg-brown-100 flex items-center justify-center text-brown-700">
                     {isProofreading ? <Loader2 className="w-4 h-4 animate-spin" /> : <SpellCheck className="w-4 h-4" />}
                   </div>
-                  <h4 className="font-bold text-sm text-gray-800">التدقيق الإملائي</h4>
-                  <p className="text-xs text-gray-500 leading-relaxed">تصحيح الأخطاء النحوية والإملائية وتصويب الصياغة.</p>
+                  <h4 className="font-bold text-sm text-gray-800">{t('التدقيق الإملائي', 'Proofread & Edit')}</h4>
+                  <p className="text-xs text-gray-500 leading-relaxed">{t('تصحيح الأخطاء النحوية والإملائية وتصويب الصياغة.', 'Correct grammar, spelling, and refine styling.')}</p>
                 </button>
 
                 {/* Tone Analysis Button */}
                 <button
                   onClick={handleAnalyzeTone}
                   disabled={aiPolishing || isProofreading || toneLoading || !generatedLetter}
-                  className="p-4 rounded-xl border border-brown-100 bg-brown-50/50 hover:bg-brown-50 hover:border-brown-300 transition-all text-right flex flex-col gap-2 disabled:opacity-50 sm:col-span-2 cursor-pointer"
+                  className={`p-4 rounded-xl border border-brown-100 bg-brown-50/50 hover:bg-brown-50 hover:border-brown-300 transition-all ${appLang === 'ar' ? 'text-right' : 'text-left'} flex flex-col gap-2 disabled:opacity-50 sm:col-span-2 cursor-pointer`}
                   type="button"
                 >
                   <div className="w-8 h-8 rounded-lg bg-brown-100 flex items-center justify-center text-brown-700">
                     {toneLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <MessageSquare className="w-4 h-4" />}
                   </div>
-                  <h4 className="font-bold text-sm text-gray-800">تحليل النبرة والأسلوب</h4>
-                  <p className="text-xs text-gray-500 leading-relaxed">تحليل مستوى الرسمية وملاءمة نبرة الخطاب مع تقديم اقتراحات للتحسين.</p>
+                  <h4 className="font-bold text-sm text-gray-800">{t('تحليل النبرة والأسلوب', 'Analyze Tone & Style')}</h4>
+                  <p className="text-xs text-gray-500 leading-relaxed">{t('تحليل مستوى الرسمية وملاءمة نبرة الخطاب مع تقديم اقتراحات للتحسين.', 'Analyze formality level and tone suitability, providing improvement suggestions.')}</p>
                 </button>
               </div>
 
@@ -118,18 +120,18 @@ export const AiModal: React.FC = () => {
                   >
                     <h4 className="font-bold text-sm text-gray-900 flex items-center gap-1.5">
                       <Check className="w-4 h-4 text-green-600" />
-                      نتائج تحليل الأسلوب والنبرة:
+                      {t('نتائج تحليل الأسلوب والنبرة:', 'Style & Tone Analysis Results:')}
                     </h4>
 
                     <div className="bg-gray-50 p-4 rounded-xl space-y-3">
                       <div className="flex justify-between items-center text-xs">
-                        <span className="font-bold text-gray-600">النبرة العامة:</span>
+                        <span className="font-bold text-gray-600">{t('النبرة العامة:', 'General Tone:')}</span>
                         <span className="font-black text-brown-700 bg-brown-50 px-2 py-0.5 rounded-md border border-brown-200">{toneResult.toneName}</span>
                       </div>
 
                       <div className="space-y-1">
                         <div className="flex justify-between items-center text-xs">
-                          <span className="font-bold text-gray-600">مستوى الرسمية:</span>
+                          <span className="font-bold text-gray-600">{t('مستوى الرسمية:', 'Formality Level:')}</span>
                           <span className="font-black text-gray-800">{toneResult.formalityScore}%</span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-1.5">
@@ -138,7 +140,7 @@ export const AiModal: React.FC = () => {
                       </div>
 
                       <div className="space-y-1">
-                        <span className="text-xs font-bold text-gray-600 block">ملخص التحليل:</span>
+                        <span className="text-xs font-bold text-gray-600 block">{t('ملخص التحليل:', 'Analysis Summary:')}</span>
                         <p className="text-xs text-gray-500 leading-relaxed">{toneResult.summary}</p>
                       </div>
 
@@ -146,7 +148,7 @@ export const AiModal: React.FC = () => {
                         <div className="space-y-1.5 pt-2 border-t border-gray-200/60">
                           <span className="text-xs font-bold text-gray-700 block flex items-center gap-1">
                             <AlertCircle className="w-3.5 h-3.5 text-amber-500" />
-                            مقترحات لتحسين الخطاب:
+                            {t('مقترحات لتحسين الخطاب:', 'Suggestions for Improvement:')}
                           </span>
                           <ul className="list-disc list-inside text-xs text-gray-500 space-y-1 pr-1">
                             {toneResult.suggestions.map((suggestion: string, idx: number) => (
@@ -161,7 +163,7 @@ export const AiModal: React.FC = () => {
               </AnimatePresence>
             </div>
           </motion.div>
-        </>
+        </div>
       )}
     </AnimatePresence>
   );

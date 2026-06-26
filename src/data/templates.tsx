@@ -410,3 +410,80 @@ export const fontSizes = [
   { label: 'كبير جداً (18px)', value: '18px' },
   { label: 'ضخم (20px)', value: '20px' }
 ];
+
+export const typeTranslations: Record<string, string> = {
+  'إداري/رسمي': 'Administrative/Official',
+  'أعمال': 'Business',
+  'شخصي': 'Personal',
+};
+
+export const subTypeTranslations: Record<string, string> = {
+  'خطاب طلب (وظيفة، إجازة، مساعدة)': 'Request Letter (Job, Leave, Assistance)',
+  'خطاب شكوى (تظلم، إبلاغ عن مشكلة)': 'Complaint Letter (Grievance, Issue Reporting)',
+  'خطاب استفسار': 'Inquiry Letter',
+  'خطاب عرض سعر': 'Quotation Letter',
+  'خطاب شراكة': 'Partnership Letter',
+  'خطاب تعريف بالشركة': 'Company Profile Letter',
+  'خطاب شكر': 'Thank You Letter',
+  'خطاب اعتذار': 'Apology Letter',
+  'خطاب تهنئة': 'Congratulation Letter',
+  'أخرى': 'Other',
+};
+
+export const toneTranslations: Record<string, string> = {
+  'رسمي': 'Official',
+  'مهني جداً': 'Very Professional',
+  'ودود': 'Friendly',
+  'حماسي': 'Enthusiastic',
+  'إقناعي': 'Persuasive',
+  'حازم': 'Assertive',
+  'رسمية ومهنية': 'Official & Professional',
+  'مهنية': 'Professional',
+  'حازمة': 'Assertive',
+  'ودية': 'Friendly',
+  'إقناعية': 'Persuasive',
+};
+
+export const formalityTranslations: Record<string, string> = {
+  'رسمي جداً': 'Very Formal',
+  'رسمي': 'Formal',
+  'شبه رسمي': 'Semi-Formal',
+  'ودي (غير رسمي)': 'Informal',
+};
+
+export const categoryTranslations: Record<string, string> = {
+  'شركات خاصة': 'Private Companies',
+  'جهات حكومية': 'Government Entities',
+  'شخصي': 'Personal',
+  'جامعات': 'Universities',
+  'إداري/رسمي': 'Official/Administrative',
+  'أعمال': 'Business',
+};
+
+export const templateNameTranslations: Record<string, string> = {
+  'طلب وظيفة': 'Job Application',
+  'خطاب شكوى': 'Complaint Letter',
+  'خطاب شكر': 'Thank You Letter',
+  'طلب إجازة': 'Leave Request',
+  'طلب استقالة': 'Resignation Request',
+  'طلب قبول جامعي': 'University Admission Request',
+  'طلب رعاية': 'Sponsorship Request',
+  'دعوة رسمية': 'Official Invitation',
+  'طلب ترقية': 'Promotion Request',
+  'عرض سعر': 'Price Quotation',
+  'خطاب تعريف بالشركة': 'Company Profile',
+  'مطالبة مالية': 'Financial Claim',
+  'طلب نقل': 'Transfer Request',
+  'إنذار موظف': 'Employee Warning',
+  'طلب مساعدة مالية': 'Financial Assistance Request',
+  'طلب شراكة استراتيجية': 'Strategic Partnership Request',
+  'تهنئة بترقية': 'Promotion Congratulations',
+  'خطاب تعزية ومواساة': 'Condolence Letter',
+  'طلب تدريب تعاوني/صيفي': 'Coop/Summer Training Request',
+  'تفويض رسمي': 'Official Delegation',
+  'إقرار وتعهد': 'Undertaking & Pledge',
+  'إنهاء خدمة موظف': 'Employee Termination',
+  'طلب تسهيلات بنكية/تمويل': 'Bank Funding/Facilities Request',
+  'طلب تقرير طبي': 'Medical Report Request',
+};
+

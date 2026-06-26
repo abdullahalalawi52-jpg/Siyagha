@@ -176,6 +176,24 @@ const checkGeminiKey = (req: any, res: express.Response, next: express.NextFunct
   }));
   app.use(express.json({ limit: "50mb" })); // Increased limit to handle PDF base64 payloads
 
+  // CORS Middleware to allow requests from frontend domains like GitHub Pages
+  app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    if (origin) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+    } else {
+      res.setHeader('Access-Control-Allow-Origin', '*');
+    }
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,Content-Type,Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    
+    if (req.method === 'OPTIONS') {
+      return res.sendStatus(200);
+    }
+    next();
+  });
+
   // API routes
   app.post("/api/send-email", emailLimiter, async (req, res) => {
     try {
@@ -393,7 +411,7 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
 
   app.post("/api/generate-letter", geminiLimiter, checkGeminiKey, async (req: any, res) => {
     try {
-      const { type, subType, senderName, recipientName, recipientRole, subject, details, tone, formality, language, date } = req.body;
+      const { type, subType, senderName, senderPhone, senderEmail, recipientName, recipientRole, subject, details, tone, formality, language, date } = req.body;
       const ai = req.ai;
 
       const prompt = `
@@ -404,7 +422,7 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
 - لغة الخطاب: ${language === 'en' ? 'English' : 'Arabic (العربية الفصحى)'}
 - تاريخ الخطاب: ${date || '[التاريخ]'}
 - التصنيف والنوع: ${type} ${subType ? '(' + subType + ')' : ''}
-- من (المرسل): ${senderName}
+- من (المرسل): ${senderName}${senderPhone ? ' (رقم الهاتف: ' + senderPhone + ')' : ''}${senderEmail ? ' (البريد الإلكتروني: ' + senderEmail + ')' : ''}
 - إلى (المرسل إليه): ${recipientName}
 - صفة/منصب المرسل إليه: ${recipientRole || 'غير محدد'}
 - الموضوع الأساسي للخطاب: ${subject}
@@ -419,7 +437,7 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
    - فقرة تمهيدية (تدخل في صلب الموضوع بلباقة).
    - فقرة أو فقرات التفاصيل (شرح الموضوع أو الطلب أو القرار بناءً على التفاصيل المعطاة، بأسلوب مقنع وواضح).
    - فقرة ختامية (تطلعات، شكر وتقدير، أو دعوة لإجراء معين).
-   - الخاتمة (التحية الختامية، التوقيع/اسم المرسل).
+   - الخاتمة (التحية الختامية، التوقيع/اسم المرسل، وتفاصيل الاتصال مثل الهاتف أو البريد الإلكتروني تحت اسم المرسل مباشرة في حال توفرها بشكل أنيق ومناسب للمراسلات).
 2. البلاغة واللغة: استخدام لغة عالية الدقة، خالية من الأخطاء النحوية والإملائية. إذا كانت اللغة العربية، استخدم الفصحى البليغة والمصطلحات الإدارية المعتمدة وتجنب أي ركاكة.
 3. النبرة والرسمية: التزم حرفياً بمستوى الرسمية والنبرة. إذا كان "رسمي جداً"، استخدم ألقاب تفخيم (معالي، سعادة، المكرم). إذا كان "ودّي"، اجعله أكثر ليونة وتقارباً.
 4. التنسيق: لا تستخدم علامات التنسيق الخاصة بـ Markdown (مثل ** أو #). استخدم فقط المسافات والأسطر الفارغة لتقسيم الفقرات بشكل نظيف ومنسق للطباعة.
@@ -500,7 +518,7 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
       }
 
       const host = req.get('host') || 'localhost:3000';
-      const protocol = req.protocol;
+      const protocol = req.headers['x-forwarded-proto'] || req.protocol;
       res.json({ token, url: `${protocol}://${host}/share/${token}`, hasPassword: !!password });
     } catch (err: any) {
       console.error("Share Error:", err);

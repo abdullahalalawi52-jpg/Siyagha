@@ -44,9 +44,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
     try {
       await signInWithPopup(auth, googleProvider);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error signing in with Google:", error);
-      alert("حدث خطأ أثناء تسجيل الدخول");
+      let message = "حدث خطأ أثناء تسجيل الدخول";
+      if (error && error.code) {
+        message += ` (${error.code})`;
+        if (error.code === 'auth/unauthorized-domain') {
+          message += "\n\n⚠️ هذا النطاق غير مصرح به في Firebase Console. يرجى التأكد من إضافة 'abdullahalalawi52-jpg.github.io' إلى النطاقات المعتمدة (Authorized Domains) في إعدادات Authentication.";
+        } else if (error.code === 'auth/configuration-not-found') {
+          message += "\n\n⚠️ لم يتم تفعيل تسجيل الدخول بجوجل (Google Sign-In) في لوحة تحكم Firebase.";
+        } else if (error.code === 'auth/popup-closed-by-user') {
+          message += "\n\n⚠️ تم إغلاق نافذة تسجيل الدخول قبل إتمام العملية.";
+        }
+      } else if (error && error.message) {
+        message += `: ${error.message}`;
+      }
+      alert(message);
     }
   };
 
