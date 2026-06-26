@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { flushSync } from 'react-dom';
 
 export interface UIContextType {
   appLang: 'ar' | 'en';
@@ -82,10 +83,8 @@ export const UIProvider: React.FC<{ children: React.ReactNode }> = ({ children }
 
     // @ts-ignore
     const transition = document.startViewTransition(() => {
-      import('react-dom').then(({ flushSync }) => {
-        flushSync(() => {
-          setDarkMode((prev) => !prev);
-        });
+      flushSync(() => {
+        setDarkMode((prev) => !prev);
       });
     });
 
