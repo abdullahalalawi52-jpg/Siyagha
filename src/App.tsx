@@ -17,7 +17,15 @@ import AiModal from './components/modals/AiModal';
 import AboutModal from './components/modals/AboutModal';
 
 function MainAppContent() {
-  const { appLang, form } = useApp();
+  const { appLang, form, generatedLetter, t } = useApp();
+  const [activeMobileTab, setActiveMobileTab] = React.useState<'form' | 'preview'>('form');
+
+  // Switch to preview tab when a letter is generated
+  React.useEffect(() => {
+    if (generatedLetter) {
+      setActiveMobileTab('preview');
+    }
+  }, [generatedLetter]);
 
   React.useEffect(() => {
     const baseTitle = appLang === 'ar'
@@ -41,9 +49,40 @@ function MainAppContent() {
         <QuickTemplates />
         <StatsDashboard />
 
+        {/* Mobile Tab Switcher */}
+        <div className="flex lg:hidden bg-white/70 dark:bg-slate-900/60 backdrop-blur-md p-1.5 rounded-2xl border border-brown-100/50 dark:border-slate-800/80 shadow-sm w-full max-w-xs mx-auto gap-1">
+          <button
+            onClick={() => setActiveMobileTab('form')}
+            className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
+              activeMobileTab === 'form'
+                ? 'bg-brown-600 text-white shadow-sm'
+                : 'text-brown-700 dark:text-brown-300 hover:bg-brown-50 dark:hover:bg-slate-800/40'
+            }`}
+          >
+            {t('تعبئة البيانات', 'Fill Details')}
+          </button>
+          <button
+            onClick={() => setActiveMobileTab('preview')}
+            className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all relative cursor-pointer ${
+              activeMobileTab === 'preview'
+                ? 'bg-brown-600 text-white shadow-sm'
+                : 'text-brown-700 dark:text-brown-300 hover:bg-brown-50 dark:hover:bg-slate-800/40'
+            }`}
+          >
+            {t('معاينة الخطاب', 'Preview')}
+            {activeMobileTab === 'form' && generatedLetter && (
+              <span className="absolute top-2.5 right-3.5 w-2 h-2 bg-orange-500 rounded-full border border-white animate-pulse" />
+            )}
+          </button>
+        </div>
+
         <div className="grid lg:grid-cols-12 gap-6 items-start">
-          <LetterForm />
-          <LetterPreview />
+          <div className={`${activeMobileTab === 'form' ? 'block' : 'hidden'} lg:block lg:col-span-5`}>
+            <LetterForm />
+          </div>
+          <div className={`${activeMobileTab === 'preview' ? 'block' : 'hidden'} lg:block lg:col-span-7`}>
+            <LetterPreview />
+          </div>
         </div>
       </main>
 
