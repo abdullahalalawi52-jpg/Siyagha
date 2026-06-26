@@ -414,6 +414,89 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
       const { type, subType, senderName, senderPhone, senderEmail, recipientName, recipientRole, subject, details, tone, formality, language, date } = req.body;
       const ai = req.ai;
 
+      // Define Few-Shot Examples for Arabic
+      const fewShotExamplesAr = `
+[أمثلة للخطابات الرسمية الممتازة للمحاكاة]
+
+مثال 1: خطاب طلب رسمي
+بسم الله الرحمن الرحيم
+التاريخ: 26 يونيو 2026
+
+سعادة مدير عام الشركة المحترم،
+السلام عليكم ورحمة الله وبركاته،
+
+الموضوع: طلب توفير رخص برمجية إضافية لقسم التطوير
+
+أهدي سعادتكم أطيب التحيات، متمنياً لكم دوام التوفيق والنجاح في أعمالكم.
+
+بالإشارة إلى حاجة قسم التطوير والابتكار البرمجي الحالية لتسريع وتيرة العمل على منصة "صياغة"، نود إحاطة سعادتكم علماً بأننا نمر بمرحلة توسع وتعيين مهندسين جدد. وبناءً عليه، نتقدم لطلب الموافقة على شراء وتوفير خمس رخص إضافية لبيئات التطوير البرمجية.
+
+إن توفير هذه الرخص سيساهم بشكل مباشر في تمكين المهندسين الجدد من بدء مهامهم فوراً وضمان عدم تأخر المشاريع المجدولة لهذا الربع. مرفق مع هذا الطلب قائمة بالأسماء والتكلفة التقديرية للرخص المطلوبة للاطلاع عليها.
+
+شاكرين ومقدرين لسعادتكم حسن تعاونكم الدائم ودعمكم المستمر لفرق العمل.
+
+وتقبلوا فائق الاحترام والتقدير،
+
+المرسل: أحمد الحربي (رئيس قسم التطوير)
+البريد الإلكتروني: a.harbi@example.com
+الهاتف: 0500000000
+
+---
+
+مثال 2: خطاب إشعار أو إقرار إداري
+بسم الله الرحمن الرحيم
+التاريخ: 26 يونيو 2026
+
+سعادة رئيس مجلس الإدارة المحترم،
+السلام عليكم ورحمة الله وبركاته،
+
+الموضوع: إشعار بانتهاء المرحلة الأولى من مشروع صياغة
+
+تهديكم إدارة المشاريع أطيب تحياتها، وتتمنى لكم وافر الصحة والعافية.
+
+يسرنا إشعار سعادتكم بانتهاء كافة أعمال البناء والاختبار الخاصة بالمرحلة الأولى لمشروع "منصة صياغة للخطابات الرسمية" في الوقت المحدد ووفق الميزانية المرصودة.
+
+وقد شملت هذه المرحلة تهيئة السياقات الأساسية للتطبيق وإعادة تصميم شريط أدوات المعاينة وحل مشاكل تباين الألوان في الهيدر، وتم فحص كافة الوظائف لتعمل بنجاح تام وبأعلى معايير الأمان وتجربة المستخدم.
+
+نتطلع لتعيين موعد قريب لتقديم عرض توضيحي حي لسعادتكم وأعضاء المجلس لاستعراض النتائج ومناقشة خطة إطلاق المرحلة الثانية.
+
+شاكرين لكم توجيهاتكم السديدة ومتابعتكم المستمرة التي كانت الركيزة الأساسية لهذا النجاح.
+
+وتفضلوا بقبول خالص التحية والتقدير،
+
+المرسل: سارة العتيبي (مديرة إدارة المشاريع)
+البريد الإلكتروني: s.otaibi@example.com
+`;
+
+      // Define Few-Shot Examples for English
+      const fewShotExamplesEn = `
+[Examples of High-Quality English Official Letters for Simulation]
+
+Example 1: Official Request Letter
+Date: June 26, 2026
+
+To: The Director General of the Company,
+Dear Sir,
+
+Subject: Request for Additional Software Licenses for the Development Team
+
+I hope this letter finds you well. I would like to express my appreciation for your continuous support of our department.
+
+With reference to the current expansion of the Software Development and Innovation department, we would like to inform you that we are hiring new engineers. Consequently, we kindly request your approval for the procurement of five additional development software licenses.
+
+Acquiring these licenses will directly enable the new team members to initiate their tasks immediately, ensuring all projects remain on schedule for this quarter. Attached is the list of candidates along with the estimated cost details for your review.
+
+Thank you for your prompt attention to this matter and for your ongoing cooperation.
+
+Sincerely,
+
+Sender: Ahmad Al-Harbi (Head of Development)
+Email: a.harbi@example.com
+Phone: 0500000000
+`;
+
+      const fewShotExamples = language === 'en' ? fewShotExamplesEn : fewShotExamplesAr;
+
       const prompt = `
 أنت خبير متمرس ومحترف في صياغة الخطابات الرسمية، الإدارية، والتجارية. 
 المطلوب منك صياغة خطاب متكامل، بليغ، وذو بنية منطقية قوية، بناءً على المعطيات التالية:
@@ -430,6 +513,8 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
 - مستوى الرسمية: ${formality || 'رسمي'}
 - تفاصيل وإضافات يجب تضمينها: ${details || 'لا توجد تفاصيل إضافية. قم بتأليف محتوى مناسب ومقنع يخدم الموضوع الأساسي بدقة.'}
 
+${fewShotExamples}
+
 [شروط الصياغة والتعليمات الصارمة]
 1. الهيكلة المنطقية: يجب أن يتكون الخطاب من:
    - ديباجة افتتاحية (بسملة في العربية، ثم التاريخ، ثم اسم المرسل إليه ومنصبه، ثم التحية الافتتاحية).
@@ -444,12 +529,37 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
 5. الإخراج النهائي: لا تضف أي ردود حوارية مثل "إليك الخطاب" أو "بالتأكيد". ابدأ فوراً بكتابة النص النهائي للخطاب فقط ليكون جاهزاً للنسخ مباشرة.
       `;
 
+      // Step 1: Generate initial letter draft
       const response = await safeGenerate(ai, {
         model: "gemini-flash-lite-latest",
         contents: prompt,
       });
 
-      res.json({ text: response.text });
+      const generatedText = response.text || "";
+
+      // Step 2: Self-Correction/Verification Step (Fast grammar and spelling check)
+      const correctionPrompt = `
+أنت مدقق لغوي خبير متخصص في المراسلات الإدارية الرسمية.
+قم بمراجعة وتصحيح الخطاب التالي للتأكد من خلوه تماماً من أي أخطاء إملائية، نحوية، أو لغوية.
+
+[تعليمات التدقيق الصارمة]
+1. ركز بشكل خاص في اللغة العربية على:
+   - التفريق الصحيح بين همزة الوصل وهمزة القطع (مثل: استخدام "إنشاء" بدلاً من "انشاء"، و"إعداد" بدلاً من "اعداد"، و"استعلام" بدلاً من "إستعلام"، و"اتخاذ" بدلاً من "إتخاذ").
+   - الاستخدام الصحيح للياء والألف المقصورة (مثل: "علي" كحرف جر تُكتب "على"، و"في" تُكتب "في").
+   - التفريق الصحيح بين التاء المربوطة والهاء (مثل: "كتابة" بالتاء المربوطة، و"توجه" بالهاء).
+2. حافظ على هيكل الخطاب بالكامل، ونبرته، ومضمونه، ومعلوماته الحساسة دون أي تغيير أو حذف.
+3. أرجع النص المصحح والمنسق مباشرة بدون أي مقدمات أو شروحات أو علامات تنسيق Markdown (لا تستخدم ** أو #).
+
+النص المراد تدقيقه:
+"${generatedText}"
+      `;
+
+      const correctedResponse = await safeGenerate(ai, {
+        model: "gemini-flash-lite-latest",
+        contents: correctionPrompt,
+      });
+
+      res.json({ text: correctedResponse.text || generatedText });
     } catch (error: any) {
       handleApiError(error, res, "حدث خطأ أثناء صياغة الخطاب");
     }
