@@ -120,7 +120,7 @@ export const LetterPreview: React.FC = () => {
               type="button"
             >
               <Sparkles className="w-4 h-4 animate-pulse" />
-              <span>{t('مساعد الذكاء الاصطناعي 🤖', 'AI Assistant 🤖')}</span>
+              <span>{t('مساعد الذكاء الاصطناعي', 'AI Assistant')}</span>
             </button>
 
             {/* Save Menu */}
