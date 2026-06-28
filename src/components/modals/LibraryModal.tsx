@@ -57,7 +57,7 @@ export const LibraryModal: React.FC = () => {
             dir={appLang === 'ar' ? 'rtl' : 'ltr'}
           >
             {/* Header */}
-            <div className="bg-white/40 dark:bg-slate-900/40 p-6 sm:p-8 border-b border-gray-100 dark:border-slate-800 flex items-center justify-between shrink-0">
+            <div className="bg-white dark:bg-slate-900 p-6 sm:p-8 border-b border-gray-100 dark:border-slate-800 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-brown-50/80 dark:bg-brown-500/20 backdrop-blur-sm rounded-2xl flex items-center justify-center text-brown-600 dark:text-brown-400 shadow-sm border border-brown-100/50 dark:border-brown-500/20">
                   <Library className="w-6 h-6" />
@@ -78,7 +78,7 @@ export const LibraryModal: React.FC = () => {
             </div>
 
             {/* Tabs */}
-            <div className="flex border-b border-gray-100 dark:border-slate-800 bg-gray-50/30 dark:bg-slate-900/10 px-6 sm:px-8 shrink-0 gap-6" role="tablist" aria-label="تبويبات القوالب">
+            <div className="flex border-b border-gray-100 dark:border-slate-800 bg-gray-50 dark:bg-slate-900 px-6 sm:px-8 shrink-0 gap-6" role="tablist" aria-label="تبويبات القوالب">
               <button
                 className={`py-4 font-bold text-sm border-b-2 transition-colors cursor-pointer ${libraryTab === 'system' ? 'border-brown-600 text-brown-700 dark:text-brown-400 dark:border-brown-500' : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
                 onClick={() => setLibraryTab('system')}
