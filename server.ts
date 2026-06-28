@@ -342,6 +342,55 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
     }
   });
 
+  app.post("/api/analyze-ats", geminiLimiter, checkGeminiKey, async (req: any, res) => {
+    try {
+      const { text, jobDescription } = req.body;
+      if (!text || !jobDescription) {
+        return res.status(400).json({ error: "خطاب التقديم والوصف الوظيفي مطلوبان للتحليل" });
+      }
+      const ai = req.ai;
+
+      const prompt = `
+You are an expert ATS (Applicant Tracking System) recruiter and scanner.
+Analyze the following candidate's cover letter/application against the job description:
+
+Job Description:
+"""
+${jobDescription}
+"""
+
+Candidate's Cover Letter:
+"""
+${text}
+"""
+
+Evaluate the match and provide the analysis as a JSON object (no markdown formatting, no \`\`\`json block, just raw JSON) containing:
+1. "matchScore": A percentage score (number between 0 and 100) representing how well the letter matches the job requirements.
+2. "matchedKeywords": An array of important keywords/skills found in the job description that ARE present in the letter.
+3. "missingKeywords": An array of important keywords/skills found in the job description that ARE MISSING from the letter.
+4. "summary": A brief analysis in Arabic (2-3 sentences) of how well the letter represents the candidate's fit.
+5. "suggestions": An array of 3 actionable suggestions in Arabic to optimize this letter for ATS scanners and increase the match score.
+`;
+
+      const response = await safeGenerate(ai, {
+        model: "gemini-flash-lite-latest",
+        contents: prompt,
+        config: {
+          safetySettings: SAFETY_SETTINGS,
+          // @ts-ignore
+          safety_settings: SAFETY_SETTINGS,
+        },
+      });
+
+      let jsonStr = response.text || "{}";
+      jsonStr = jsonStr.replace(/```json/g, '').replace(/```/g, '').trim();
+      
+      res.json(JSON.parse(jsonStr));
+    } catch (error: any) {
+      handleApiError(error, res, "فشل تحليل مطابقة ATS");
+    }
+  });
+
   app.post("/api/polish-letter", geminiLimiter, checkGeminiKey, async (req: any, res) => {
     try {
       const { text, language } = req.body;
@@ -447,7 +496,8 @@ ${combinedSamples}
       const { 
         type, subType, senderName, senderPhone, senderEmail, recipientName, recipientRole, 
         subject, details, tone, formality, language, date,
-        brandVoiceProfile, replyToText, replyStance 
+        brandVoiceProfile, replyToText, replyStance,
+        jobDescription, resumeInfo
       } = req.body;
       const ai = req.ai;
 
@@ -571,6 +621,22 @@ ${details || 'صياغة رد إداري رسمي مناسب متكامل يتن
 - الموضوع الأساسي للخطاب: ${subject}
 - تفاصيل وإضافات يجب تضمينها: ${details || 'لا توجد تفاصيل إضافية. قم بتأليف محتوى مناسب ومقنع يخدم الموضوع الأساسي بدقة.'}
 `;
+        if (type === 'توظيف وتطوير مهني' || jobDescription || resumeInfo) {
+          contentPrompt += `
+[سياق التقديم على وظيفة (Career Context)]
+- وصف الوظيفة المستهدفة (Job Description):
+"""
+${jobDescription || ''}
+"""
+- السيرة الذاتية / مهارات وخبرات المتقدم (Resume/Bio):
+"""
+${resumeInfo || ''}
+"""
+
+تعليمات الصياغة المهنية:
+عند صياغة الخطاب، قم بمطابقة خبرات المتقدم وسيرته الذاتية بذكاء وإقناع مع متطلبات الوصف الوظيفي، مع إبراز نقاط القوة المناسبة وكيف يمكن للمتقدم تقديم قيمة مضافة للجهة الموظفة.
+`;
+        }
       }
 
       const prompt = `

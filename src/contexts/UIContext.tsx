@@ -27,8 +27,10 @@ export interface UIContextType {
   setIsAboutOpen: (open: boolean) => void;
   isBrandVoiceModalOpen: boolean;
   setIsBrandVoiceModalOpen: (open: boolean) => void;
-  ocrTargetField: 'details' | 'replyToText';
-  setOcrTargetField: (field: 'details' | 'replyToText') => void;
+  isCareerProfileModalOpen: boolean;
+  setIsCareerProfileModalOpen: (open: boolean) => void;
+  ocrTargetField: 'details' | 'replyToText' | 'jobDescription' | 'resumeInfo';
+  setOcrTargetField: (field: 'details' | 'replyToText' | 'jobDescription' | 'resumeInfo') => void;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   filterType: string;
@@ -140,7 +142,8 @@ export const UIProvider: React.FC<{ children: React.ReactNode }> = ({ children }
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isBrandVoiceModalOpen, setIsBrandVoiceModalOpen] = useState(false);
-  const [ocrTargetField, setOcrTargetField] = useState<'details' | 'replyToText'>('details');
+  const [isCareerProfileModalOpen, setIsCareerProfileModalOpen] = useState(false);
+  const [ocrTargetField, setOcrTargetField] = useState<'details' | 'replyToText' | 'jobDescription' | 'resumeInfo'>('details');
 
   // Archive filters
   const [searchQuery, setSearchQuery] = useState('');
@@ -188,6 +191,8 @@ export const UIProvider: React.FC<{ children: React.ReactNode }> = ({ children }
         setIsAboutOpen,
         isBrandVoiceModalOpen,
         setIsBrandVoiceModalOpen,
+        isCareerProfileModalOpen,
+        setIsCareerProfileModalOpen,
         ocrTargetField,
         setOcrTargetField,
         searchQuery,

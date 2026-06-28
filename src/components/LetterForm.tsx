@@ -41,6 +41,8 @@ export const LetterForm: React.FC = () => {
     appLang,
     t,
     setIsBrandVoiceModalOpen,
+    setIsCareerProfileModalOpen,
+    careerProfile,
     setOcrTargetField,
     brandVoiceProfiles,
   } = useApp();
@@ -140,13 +142,22 @@ export const LetterForm: React.FC = () => {
                   <Sparkles className="w-3.5 h-3.5 text-brown-600 animate-pulse" />
                   {t('بصمة الأسلوب اللغوي الخاص', 'Custom Brand Voice')}
                 </label>
-                <button
-                  type="button"
-                  onClick={() => setIsBrandVoiceModalOpen(true)}
-                  className="text-[10px] text-brown-700 hover:text-brown-850 bg-brown-100/40 hover:bg-brown-100/80 px-2 py-0.5 rounded transition-colors font-bold cursor-pointer"
-                >
-                  {t('إدارة البصمات ⚙️', 'Manage Voices ⚙️')}
-                </button>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setIsCareerProfileModalOpen(true)}
+                    className="text-[10px] text-brown-700 hover:text-brown-850 bg-brown-100/40 hover:bg-brown-100/80 px-2 py-0.5 rounded transition-colors font-bold cursor-pointer"
+                  >
+                    {t('الملف المهني 💼', 'Career Profile 💼')}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsBrandVoiceModalOpen(true)}
+                    className="text-[10px] text-brown-750 hover:text-brown-850 bg-brown-100/40 hover:bg-brown-100/80 px-2 py-0.5 rounded transition-colors font-bold cursor-pointer"
+                  >
+                    {t('إدارة البصمات ⚙️', 'Manage Voices ⚙️')}
+                  </button>
+                </div>
               </div>
               <CustomSelect
                 id="brand-voice-select"
@@ -440,6 +451,87 @@ export const LetterForm: React.FC = () => {
                       </button>
                     ))}
                   </div>
+                </div>
+              </motion.div>
+            )}
+
+            {form.type === 'توظيف وتطوير مهني' && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                className="space-y-4 bg-brown-50/10 border border-brown-100/20 p-4 rounded-xl mt-4 text-start"
+              >
+                {/* Job Description */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <label htmlFor="job-desc-textarea" className="text-xs font-bold text-gray-750 dark:text-gray-300">
+                      {t('الوصف الوظيفي للوظيفة المستهدفة', 'Target Job Description')}
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setOcrTargetField('jobDescription');
+                        setIsOcrOpen(true);
+                      }}
+                      className="text-[10px] text-brown-750 hover:text-brown-850 bg-brown-100/40 hover:bg-brown-100/80 flex items-center gap-1 px-2 py-0.5 rounded transition-colors font-bold cursor-pointer"
+                    >
+                      <Camera className="w-3 h-3" />
+                      {t('استخراج بـ OCR', 'Extract via OCR')}
+                    </button>
+                  </div>
+                  <textarea
+                    id="job-desc-textarea"
+                    rows={3}
+                    placeholder={t('قم بلصق متطلبات الوظيفة أو الوصف الوظيفي هنا ليتطابق الخطاب معها...', 'Paste job requirements or Job Description here...')}
+                    className="w-full rounded-xl border border-gray-200 p-2.5 text-xs focus:ring-2 focus:ring-brown-500 outline-none resize-none leading-relaxed bg-white dark:bg-slate-850 dark:text-white dark:border-slate-700 text-gray-800"
+                    value={form.jobDescription || ''}
+                    onChange={(e) => setForm({ ...form, jobDescription: e.target.value })}
+                  />
+                </div>
+
+                {/* Resume Bio */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <label htmlFor="resume-info-textarea" className="text-xs font-bold text-gray-750 dark:text-gray-300">
+                      {t('نبذة عن سيرتك الذاتية وخبراتك', 'Your Resume Info / Career Bio')}
+                    </label>
+                    <div className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setForm((prev: any) => ({
+                            ...prev,
+                            resumeInfo: `${careerProfile.fullName ? `الاسم: ${careerProfile.fullName}\n` : ''}${careerProfile.qualification ? `المؤهل: ${careerProfile.qualification} (${careerProfile.specialization || ''})\n` : ''}${careerProfile.experienceYears ? `الخبرة: ${careerProfile.experienceYears}\n` : ''}${careerProfile.skills ? `المهارات والإنجازات: ${careerProfile.skills}` : ''}`,
+                            senderName: prev.senderName || careerProfile.fullName || '',
+                            senderEmail: prev.senderEmail || careerProfile.email || '',
+                            senderPhone: prev.senderPhone || careerProfile.phone || '',
+                          }));
+                        }}
+                        className="text-[10px] text-brown-750 hover:text-brown-850 bg-brown-100/40 hover:bg-brown-100/80 flex items-center gap-1 px-2 py-0.5 rounded transition-colors font-bold cursor-pointer"
+                        title={t('تعبئة تلقائية من بيانات ملفك المهني المحفوظ', 'Autofill from your career profile')}
+                      >
+                        {t('تعبئة من ملفي المهني 📝', 'Autofill from Profile 📝')}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setOcrTargetField('resumeInfo');
+                          setIsOcrOpen(true);
+                        }}
+                        className="text-[10px] text-brown-750 hover:text-brown-850 bg-brown-100/40 hover:bg-brown-100/80 flex items-center gap-1 px-2 py-0.5 rounded transition-colors font-bold cursor-pointer"
+                      >
+                        <Camera className="w-3 h-3" />
+                      </button>
+                    </div>
+                  </div>
+                  <textarea
+                    id="resume-info-textarea"
+                    rows={3}
+                    placeholder={t('اكتب مهاراتك وخبراتك الرئيسية أو انقر على تعبئة لإدراجها تلقائياً...', 'Write your key skills and experience or autofill them...')}
+                    className="w-full rounded-xl border border-gray-200 p-2.5 text-xs focus:ring-2 focus:ring-brown-500 outline-none resize-none leading-relaxed bg-white dark:bg-slate-855 dark:text-white dark:border-slate-700 text-gray-800"
+                    value={form.resumeInfo || ''}
+                    onChange={(e) => setForm({ ...form, resumeInfo: e.target.value })}
+                  />
                 </div>
               </motion.div>
             )}

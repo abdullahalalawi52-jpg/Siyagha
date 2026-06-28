@@ -6,6 +6,16 @@ import { toneOptions, formalityOptions, letterTypes, predefinedTemplates } from 
 
 const ObjectKeys = Object.keys(letterTypes);
 
+export interface CareerProfile {
+  fullName: string;
+  email: string;
+  phone: string;
+  qualification: string;
+  specialization: string;
+  experienceYears: string;
+  skills: string;
+}
+
 export interface FormContextType {
   form: {
     type: string;
@@ -26,8 +36,12 @@ export interface FormContextType {
     isReplyMode: boolean;
     replyToText: string;
     replyStance: string;
+    jobDescription?: string;
+    resumeInfo?: string;
   };
   setForm: React.Dispatch<React.SetStateAction<any>>;
+  careerProfile: CareerProfile;
+  setCareerProfile: (profile: CareerProfile) => void;
   customTemplates: any[];
   setCustomTemplates: React.Dispatch<React.SetStateAction<any[]>>;
   favoriteTemplates: { type: string; subType: string }[];
@@ -85,9 +99,55 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
     isReplyMode: false,
     replyToText: '',
     replyStance: 'approval',
+    jobDescription: '',
+    resumeInfo: '',
   });
 
-  const [brandVoiceProfiles, setBrandVoiceProfiles] = useState<{ id: string; name: string; profile: string }[]>([]);
+  const defaultBrandVoices = [
+    {
+      id: 'default_tech',
+      name: 'الأسلوب المهني التقني',
+      profile: 'كتابة مباشرة وعملية، تركز على الحقائق والأرقام والنتائج المحققة. استخدام مصطلحات تقنية دقيقة ومصطلحات قطاع العمل. جمل متوسطة الطول، نبرة موضوعية، خالية من المبالغات الإنشائية، تبرز المهارات البرمجية وحل المشكلات الهندسية.'
+    },
+    {
+      id: 'default_creative',
+      name: 'الأسلوب الإبداعي',
+      profile: 'أسلوب حماسي، مبتكر وملهم. استخدام كلمات تعبر عن الشغف والتطور والابتكار. صياغة ديناميكية وتفاعلية تبرز المهارات التصميمية والقدرة على التفكير خارج الصندوق وحل المشكلات بطرق غير تقليدية.'
+    },
+    {
+      id: 'default_corporate',
+      name: 'الأسلوب المؤسسي',
+      profile: 'أسلوب رسمي ووقور للغاية. استخدام ديباجات مؤسسية وعبارات إدارية كلاسيكية فصيحة. يركز على الالتزام والمسؤولية والعمل الجماعي والقيم التنظيمية، مع نبرة هادئة ورصينة ومحترمة.'
+    }
+  ];
+
+  const [brandVoiceProfiles, setBrandVoiceProfiles] = useState<{ id: string; name: string; profile: string }[]>(() => {
+    try {
+      const savedProfiles = localStorage.getItem('brand_voice_profiles');
+      return savedProfiles ? JSON.parse(savedProfiles) : defaultBrandVoices;
+    } catch (e) {
+      return defaultBrandVoices;
+    }
+  });
+
+  const [careerProfile, setCareerProfileState] = useState<CareerProfile>({
+    fullName: '',
+    email: '',
+    phone: '',
+    qualification: '',
+    specialization: '',
+    experienceYears: '',
+    skills: '',
+  });
+
+  const setCareerProfile = (profile: CareerProfile) => {
+    setCareerProfileState(profile);
+    try {
+      localStorage.setItem('career_profile', JSON.stringify(profile));
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   // Sync form language when app language changes
   useEffect(() => {
@@ -144,7 +204,21 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     try {
       const savedProfiles = localStorage.getItem('brand_voice_profiles');
-      if (savedProfiles) setBrandVoiceProfiles(JSON.parse(savedProfiles));
+      if (savedProfiles) {
+        setBrandVoiceProfiles(JSON.parse(savedProfiles));
+      } else {
+        setBrandVoiceProfiles(defaultBrandVoices);
+        localStorage.setItem('brand_voice_profiles', JSON.stringify(defaultBrandVoices));
+      }
+    } catch (e) {
+      console.error(e);
+    }
+
+    try {
+      const savedProfile = localStorage.getItem('career_profile');
+      if (savedProfile) {
+        setCareerProfileState(JSON.parse(savedProfile));
+      }
     } catch (e) {
       console.error(e);
     }
@@ -346,6 +420,8 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
         brandVoiceProfiles,
         saveBrandVoiceProfile,
         deleteBrandVoiceProfile,
+        careerProfile,
+        setCareerProfile,
       }}
     >
       {children}

@@ -98,10 +98,20 @@ export interface LetterContextType {
   } | null;
   setToneResult: (res: any) => void;
   toneLoading: boolean;
+  atsLoading: boolean;
+  atsResult: {
+    matchScore: number;
+    matchedKeywords: string[];
+    missingKeywords: string[];
+    summary: string;
+    suggestions: string[];
+  } | null;
+  setAtsResult: (res: any) => void;
   handleExportDOCX: () => void;
   handleExportPDF: () => Promise<void>;
   handlePolishLetter: () => Promise<void>;
   handleAnalyzeTone: () => Promise<void>;
+  handleAnalyzeAts: () => Promise<void>;
   handleCreateShareLink: () => Promise<void>;
   handleTogglePin: (e: React.MouseEvent, id: string) => void;
   handleSave: () => void;
@@ -229,6 +239,8 @@ export const LetterProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [aiPolishing, setAiPolishing] = useState(false);
   const [toneResult, setToneResult] = useState<any>(null);
   const [toneLoading, setToneLoading] = useState(false);
+  const [atsLoading, setAtsLoading] = useState(false);
+  const [atsResult, setAtsResult] = useState<any>(null);
 
   // Load local saved letters
   useEffect(() => {
@@ -456,6 +468,36 @@ export const LetterProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   };
 
+  // AI ATS analysis
+  const handleAnalyzeAts = async () => {
+    if (!generatedLetter) return;
+    if (!form.jobDescription) {
+      alert(ui.appLang === 'ar' ? 'يرجى إدخال الوصف الوظيفي أولاً لإجراء تحليل ATS.' : 'Please enter a job description first to analyze ATS.');
+      return;
+    }
+    if (!ui.isOnline) {
+      alert(ui.appLang === 'ar' ? 'أنت غير متصل بالإنترنت حالياً. يرجى الاتصال بالإنترنت لتحليل مطابقة ATS.' : 'You are currently offline. Please connect to the internet to analyze ATS match.');
+      return;
+    }
+    setAtsLoading(true);
+    setAtsResult(null);
+    try {
+      const response = await fetch(getApiUrl('/api/analyze-ats'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: generatedLetter, jobDescription: form.jobDescription }),
+      });
+
+      const data = await handleResponse(response, 'فشل تحليل مطابقة ATS');
+      setAtsResult(data);
+      ui.setIsAiModalOpen(true);
+    } catch (err: any) {
+      alert(err.message || 'حدث خطأ أثناء تحليل ATS');
+    } finally {
+      setAtsLoading(false);
+    }
+  };
+
   // AI Sharing Link
   const handleCreateShareLink = async () => {
     if (!generatedLetter) return;
@@ -514,6 +556,10 @@ export const LetterProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           if (data.text) {
             if (ui.ocrTargetField === 'replyToText') {
               setForm((prev: any) => ({ ...prev, replyToText: data.text }));
+            } else if (ui.ocrTargetField === 'jobDescription') {
+              setForm((prev: any) => ({ ...prev, jobDescription: data.text }));
+            } else if (ui.ocrTargetField === 'resumeInfo') {
+              setForm((prev: any) => ({ ...prev, resumeInfo: data.text }));
             } else {
               setForm((prev: any) => ({ ...prev, details: data.text }));
             }
@@ -899,10 +945,14 @@ export const LetterProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         toneResult,
         setToneResult,
         toneLoading,
+        atsLoading,
+        atsResult,
+        setAtsResult,
         handleExportDOCX,
         handleExportPDF,
         handlePolishLetter,
         handleAnalyzeTone,
+        handleAnalyzeAts,
         handleCreateShareLink,
         handleTogglePin,
         handleSave,

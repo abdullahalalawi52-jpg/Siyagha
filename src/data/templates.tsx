@@ -28,6 +28,16 @@ export const letterTypes = {
       { name: 'خطاب تهنئة', icon: Sparkles },
       { name: 'أخرى', icon: FileText }
     ]
+  },
+  'توظيف وتطوير مهني': {
+    icon: Briefcase,
+    subTypes: [
+      { name: 'خطاب تغطية (Cover Letter)', icon: FileText },
+      { name: 'رسالة متابعة طلب توظيف', icon: Mail },
+      { name: 'رسالة تواصل LinkedIn', icon: User },
+      { name: 'رسالة شكر بعد المقابلة', icon: Heart },
+      { name: 'رسالة قبول/اعتذار عن عرض عمل', icon: AlertCircle }
+    ]
   }
 };
 
@@ -35,6 +45,7 @@ export const getLetterTypeData = (type: string) => {
   if (type === 'إداري/رسمي') return letterTypes['إداري/رسمي'];
   if (type === 'أعمال') return letterTypes['أعمال'];
   if (type === 'شخصي') return letterTypes['شخصي'];
+  if (type === 'توظيف وتطوير مهني') return letterTypes['توظيف وتطوير مهني'];
   return letterTypes['إداري/رسمي'];
 };
 
@@ -42,6 +53,48 @@ export const toneOptions = ['رسمي', 'مهني جداً', 'ودود', 'حما
 export const formalityOptions = ['رسمي جداً', 'رسمي', 'شبه رسمي', 'ودي (غير رسمي)'];
 
 export const predefinedTemplates = [
+  {
+    id: 'cover_letter',
+    category: 'توظيف وتطوير مهني',
+    name: 'خطاب تغطية (Cover Letter)',
+    icon: <FileText className="w-5 h-5" />,
+    data: {
+      type: 'توظيف وتطوير مهني',
+      subType: 'خطاب تغطية (Cover Letter)',
+      subject: 'طلب الانضمام لفريق عملكم المميز',
+      details: 'أود التعبير عن اهتمامي الشديد بالانضمام لشركتكم المرموقة، وتجدون طيه تفاصيل خبراتي ومهاراتي المتوافقة مع متطلبات الوظيفة.',
+      tone: 'مهني جداً',
+      formality: 'رسمي'
+    }
+  },
+  {
+    id: 'linkedin_connect',
+    category: 'توظيف وتطوير مهني',
+    name: 'رسالة تواصل LinkedIn',
+    icon: <User className="w-5 h-5" />,
+    data: {
+      type: 'توظيف وتطوير مهني',
+      subType: 'رسالة تواصل LinkedIn',
+      subject: 'طلب تواصل مهني',
+      details: 'أهلاً بك، يشرفني التواصل معك لمتابعة مستجدات قطاع الأعمال والتعاون المهني المتبادل.',
+      tone: 'ودود',
+      formality: 'شبه رسمي'
+    }
+  },
+  {
+    id: 'interview_followup',
+    category: 'توظيف وتطوير مهني',
+    name: 'رسالة شكر بعد المقابلة',
+    icon: <Heart className="w-5 h-5" />,
+    data: {
+      type: 'توظيف وتطوير مهني',
+      subType: 'رسالة شكر بعد المقابلة',
+      subject: 'شكر وتقدير على وقتكم الثمين في المقابلة الشخصية',
+      details: 'سعدت جداً بمقابلتكم اليوم واستعراض تفاصيل الفرصة الوظيفية، وأتطلع قدماً لخطواتنا القادمة.',
+      tone: 'حماسي',
+      formality: 'رسمي'
+    }
+  },
   {
     id: 'job_application',
     category: 'شركات خاصة',
@@ -415,6 +468,7 @@ export const typeTranslations: Record<string, string> = {
   'إداري/رسمي': 'Administrative/Official',
   'أعمال': 'Business',
   'شخصي': 'Personal',
+  'توظيف وتطوير مهني': 'Employment & Career',
 };
 
 export const subTypeTranslations: Record<string, string> = {
@@ -427,6 +481,11 @@ export const subTypeTranslations: Record<string, string> = {
   'خطاب شكر': 'Thank You Letter',
   'خطاب اعتذار': 'Apology Letter',
   'خطاب تهنئة': 'Congratulation Letter',
+  'خطاب تغطية (Cover Letter)': 'Cover Letter',
+  'رسالة متابعة طلب توظيف': 'Job Application Follow-up',
+  'رسالة تواصل LinkedIn': 'LinkedIn Networking Message',
+  'رسالة شكر بعد المقابلة': 'Post-Interview Thank You',
+  'رسالة قبول/اعتذار عن عرض عمل': 'Job Offer Response (Accept/Decline)',
   'أخرى': 'Other',
 };
 
@@ -458,6 +517,7 @@ export const categoryTranslations: Record<string, string> = {
   'جامعات': 'Universities',
   'إداري/رسمي': 'Official/Administrative',
   'أعمال': 'Business',
+  'توظيف وتطوير مهني': 'Employment & Career',
 };
 
 export const templateNameTranslations: Record<string, string> = {
@@ -485,5 +545,10 @@ export const templateNameTranslations: Record<string, string> = {
   'إنهاء خدمة موظف': 'Employee Termination',
   'طلب تسهيلات بنكية/تمويل': 'Bank Funding/Facilities Request',
   'طلب تقرير طبي': 'Medical Report Request',
+  'خطاب تغطية (Cover Letter)': 'Cover Letter',
+  'رسالة تواصل LinkedIn': 'LinkedIn Connect',
+  'رسالة شكر بعد المقابلة': 'Post-Interview Thank You',
+  'رسالة متابعة طلب توظيف': 'Job Application Follow-up',
+  'رسالة قبول/اعتذار عن عرض عمل': 'Job Offer Response',
 };
 
