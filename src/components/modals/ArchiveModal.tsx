@@ -64,9 +64,9 @@ export const ArchiveModal: React.FC = () => {
             role="dialog"
             aria-modal="true"
             aria-labelledby="archive-modal-title"
-            initial={{ x: '-100%' }}
+            initial={{ x: appLang === 'ar' ? '100%' : '-100%' }}
             animate={{ x: 0 }}
-            exit={{ x: '-100%' }}
+            exit={{ x: appLang === 'ar' ? '100%' : '-100%' }}
             transition={{ type: 'spring', damping: 28, stiffness: 260 }}
             className={`absolute top-0 bottom-0 ${appLang === 'ar' ? 'right-0 border-l' : 'left-0 border-r'} w-full max-w-sm bg-white shadow-2xl flex flex-col border-gray-200 text-start z-10`}
             dir={appLang === 'ar' ? 'rtl' : 'ltr'}
