@@ -56,10 +56,16 @@ export const QuickTemplates: React.FC = () => {
       {/* Render top 4 templates */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {sortedTemplates.slice(0, 4).map((template) => (
-          <button
-            type="button"
+          <div
             key={template.id}
             onClick={() => applyTemplate(template.id)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                applyTemplate(template.id);
+              }
+            }}
+            tabIndex={0}
+            role="button"
             className={`group relative flex items-center gap-3 p-4 rounded-2xl border text-start transition-all hover:-translate-y-0.5 active:scale-[0.97] cursor-pointer ${
               activeTemplate === template.id
                 ? 'border-brown-400 bg-gradient-to-br from-brown-50 to-orange-50 text-brown-700 shadow-lg ring-2 ring-brown-400/25'
@@ -87,7 +93,7 @@ export const QuickTemplates: React.FC = () => {
               <span className="font-bold text-sm truncate">{t(template.name, templateNameTranslations[template.name] || template.name)}</span>
               <span className="text-[10px] text-gray-400 font-medium">{t(template.category, categoryTranslations[template.category] || template.category)}</span>
             </div>
-          </button>
+          </div>
         ))}
       </div>
     </div>

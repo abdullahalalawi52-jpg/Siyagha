@@ -24,6 +24,8 @@ export interface PrintElementOptions {
     companyDetails?: string;
     logoUrl?: string;
     footerText?: string;
+    theme?: string;
+    footerTheme?: string;
   };
   signatureImage: string | null;
   sealImage: string | null;

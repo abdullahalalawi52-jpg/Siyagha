@@ -53,38 +53,118 @@ export const buildPrintElement = (opts: PrintElementOptions): HTMLElement => {
   // ── Header ──
   if (branding.enableHeader) {
     const header = document.createElement('div');
-    applyStyles(header, {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      borderBottom: '2px solid #a18072',
-      paddingBottom: '15px',
-      marginBottom: '30px',
-      direction: dir,
-    });
+    const theme = branding.theme || 'classic';
 
-    const headerText = document.createElement('div');
-    applyStyles(headerText, { textAlign: align });
+    if (theme === 'classic') {
+      applyStyles(header, {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        textAlign: 'center',
+        borderBottom: '1px solid #ebdcd5',
+        paddingBottom: '20px',
+        marginBottom: '30px',
+        direction: dir,
+        gap: '8px',
+      });
 
-    const companyNameEl = document.createElement('h1');
-    applyStyles(companyNameEl, { fontSize: '20px', margin: '0', color: '#43302b', fontFamily: `'${fontFamily}', sans-serif` });
-    companyNameEl.textContent = branding.companyName || 'المؤسسة';
+      if (branding.logoUrl) {
+        const logoSrc = sanitizeUrl(branding.logoUrl);
+        if (logoSrc) {
+          const logo = document.createElement('img');
+          logo.src = logoSrc;
+          applyStyles(logo, { maxHeight: '60px', maxWidth: '150px', objectFit: 'contain', marginBottom: '5px' });
+          header.appendChild(logo);
+        }
+      }
 
-    const companyDetailsEl = document.createElement('p');
-    applyStyles(companyDetailsEl, { fontSize: '12px', color: '#777', margin: '5px 0 0 0', whiteSpace: 'pre-line', fontFamily: `'${fontFamily}', sans-serif` });
-    companyDetailsEl.textContent = branding.companyDetails || '';
+      const companyNameEl = document.createElement('h1');
+      applyStyles(companyNameEl, { fontSize: '20px', margin: '0', color: '#43302b', fontWeight: 'bold', fontFamily: `'${fontFamily}', sans-serif` });
+      companyNameEl.textContent = branding.companyName || 'المؤسسة';
+      header.appendChild(companyNameEl);
 
-    headerText.appendChild(companyNameEl);
-    headerText.appendChild(companyDetailsEl);
-    header.appendChild(headerText);
+      const companyDetailsEl = document.createElement('p');
+      applyStyles(companyDetailsEl, { fontSize: '11px', color: '#777', margin: '0', whiteSpace: 'pre-line', fontFamily: `'${fontFamily}', sans-serif`, lineHeight: '1.6' });
+      companyDetailsEl.textContent = branding.companyDetails || '';
+      header.appendChild(companyDetailsEl);
 
-    if (branding.logoUrl) {
-      const logoSrc = sanitizeUrl(branding.logoUrl);
-      if (logoSrc) {
-        const logo = document.createElement('img');
-        logo.src = logoSrc;
-        applyStyles(logo, { maxHeight: '60px', maxWidth: '150px', objectFit: 'contain' });
-        header.appendChild(logo);
+    } else {
+      // Split layout for modern, creative, elegant
+      if (theme === 'creative') {
+        applyStyles(header, {
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          backgroundColor: '#fcfaf9',
+          border: '1px solid #ebdcd5',
+          borderRadius: '12px',
+          padding: '20px',
+          marginBottom: '30px',
+          direction: dir,
+          gap: '15px',
+        });
+      } else if (theme === 'elegant') {
+        applyStyles(header, {
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          borderTop: '4px solid #846358',
+          paddingTop: '15px',
+          paddingBottom: '10px',
+          marginBottom: '30px',
+          direction: dir,
+          gap: '15px',
+        });
+      } else {
+        // modern
+        applyStyles(header, {
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          borderBottom: '2.5px solid #846358',
+          paddingBottom: '15px',
+          marginBottom: '30px',
+          direction: dir,
+          gap: '15px',
+        });
+      }
+
+      // Arrange text & logo based on dir
+      const headerText = document.createElement('div');
+      applyStyles(headerText, { textAlign: align });
+
+      const companyNameEl = document.createElement('h1');
+      applyStyles(companyNameEl, { fontSize: '20px', margin: '0', color: '#43302b', fontWeight: 'bold', fontFamily: `'${fontFamily}', sans-serif` });
+      companyNameEl.textContent = branding.companyName || 'المؤسسة';
+      headerText.appendChild(companyNameEl);
+
+      const companyDetailsEl = document.createElement('p');
+      applyStyles(companyDetailsEl, { fontSize: '11px', color: '#777', margin: '5px 0 0 0', whiteSpace: 'pre-line', fontFamily: `'${fontFamily}', sans-serif`, lineHeight: '1.5' });
+      companyDetailsEl.textContent = branding.companyDetails || '';
+      headerText.appendChild(companyDetailsEl);
+
+      if (dir === 'rtl') {
+        if (branding.logoUrl) {
+          const logoSrc = sanitizeUrl(branding.logoUrl);
+          if (logoSrc) {
+            const logo = document.createElement('img');
+            logo.src = logoSrc;
+            applyStyles(logo, { maxHeight: '50px', maxWidth: '140px', objectFit: 'contain' });
+            header.appendChild(logo);
+          }
+        }
+        header.appendChild(headerText);
+      } else {
+        header.appendChild(headerText);
+        if (branding.logoUrl) {
+          const logoSrc = sanitizeUrl(branding.logoUrl);
+          if (logoSrc) {
+            const logo = document.createElement('img');
+            logo.src = logoSrc;
+            applyStyles(logo, { maxHeight: '50px', maxWidth: '140px', objectFit: 'contain' });
+            header.appendChild(logo);
+          }
+        }
       }
     }
 
@@ -148,16 +228,58 @@ export const buildPrintElement = (opts: PrintElementOptions): HTMLElement => {
   // ── Footer ──
   if (branding.enableFooter) {
     const footer = document.createElement('div');
-    applyStyles(footer, {
-      borderTop: '1px solid #eaddd7',
-      paddingTop: '10px',
-      textAlign: 'center',
-      fontSize: '11px',
-      color: '#846358',
-      marginTop: '40px',
-      fontFamily: `'${fontFamily}', sans-serif`,
-    });
-    footer.textContent = branding.footerText || '';
+    const footerTheme = branding.footerTheme || 'centered';
+
+    if (footerTheme === 'minimal') {
+      applyStyles(footer, {
+        paddingTop: '5px',
+        textAlign: 'center',
+        fontSize: '9px',
+        color: '#999',
+        marginTop: '40px',
+        fontFamily: `'${fontFamily}', sans-serif`,
+      });
+      footer.textContent = branding.footerText || '';
+    } else if (footerTheme === 'split') {
+      applyStyles(footer, {
+        borderTop: '1px solid #ebdcd5',
+        paddingTop: '12px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        fontSize: '11px',
+        color: '#846358',
+        marginTop: '40px',
+        fontFamily: `'${fontFamily}', sans-serif`,
+        direction: dir,
+      });
+
+      const compNameSpan = document.createElement('span');
+      compNameSpan.textContent = branding.companyName || '';
+      const footerTextSpan = document.createElement('span');
+      footerTextSpan.textContent = branding.footerText || '';
+
+      if (dir === 'rtl') {
+        footer.appendChild(footerTextSpan);
+        footer.appendChild(compNameSpan);
+      } else {
+        footer.appendChild(compNameSpan);
+        footer.appendChild(footerTextSpan);
+      }
+    } else {
+      // centered
+      applyStyles(footer, {
+        borderTop: '1px solid #ebdcd5',
+        paddingTop: '12px',
+        textAlign: 'center',
+        fontSize: '11px',
+        color: '#846358',
+        marginTop: '40px',
+        fontFamily: `'${fontFamily}', sans-serif`,
+      });
+      footer.textContent = branding.footerText || '';
+    }
+
     wrapper.appendChild(footer);
   }
 

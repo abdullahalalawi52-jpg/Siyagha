@@ -25,6 +25,10 @@ export interface UIContextType {
   setIsAiModalOpen: (open: boolean) => void;
   isAboutOpen: boolean;
   setIsAboutOpen: (open: boolean) => void;
+  isBrandVoiceModalOpen: boolean;
+  setIsBrandVoiceModalOpen: (open: boolean) => void;
+  ocrTargetField: 'details' | 'replyToText';
+  setOcrTargetField: (field: 'details' | 'replyToText') => void;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   filterType: string;
@@ -135,6 +139,8 @@ export const UIProvider: React.FC<{ children: React.ReactNode }> = ({ children }
   const [isOcrOpen, setIsOcrOpen] = useState(false);
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
+  const [isBrandVoiceModalOpen, setIsBrandVoiceModalOpen] = useState(false);
+  const [ocrTargetField, setOcrTargetField] = useState<'details' | 'replyToText'>('details');
 
   // Archive filters
   const [searchQuery, setSearchQuery] = useState('');
@@ -180,6 +186,10 @@ export const UIProvider: React.FC<{ children: React.ReactNode }> = ({ children }
         setIsAiModalOpen,
         isAboutOpen,
         setIsAboutOpen,
+        isBrandVoiceModalOpen,
+        setIsBrandVoiceModalOpen,
+        ocrTargetField,
+        setOcrTargetField,
         searchQuery,
         setSearchQuery,
         filterType,

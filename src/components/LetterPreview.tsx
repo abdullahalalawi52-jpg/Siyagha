@@ -384,28 +384,30 @@ export const LetterPreview: React.FC = () => {
         <div className="flex-1 overflow-y-auto relative flex flex-col justify-between p-6 rounded-xl document-paper">
           {/* Header inside Preview */}
           {generatedLetter && !loading && !isProofreading && branding.enableHeader && (
-            <div className={`mb-8 ${
+            <div className={`mb-8 w-full ${
               branding.theme === 'classic'
-                ? 'border-b-2 border-brown-200 pb-6 flex flex-col items-center text-center gap-3'
+                ? 'border-b border-brown-200 pb-6 flex flex-col items-center text-center gap-3'
                 : branding.theme === 'creative'
-                ? `bg-brown-50/50 p-6 rounded-2xl border border-brown-100 flex items-center justify-between ${form.language === 'en' ? 'flex-row' : 'flex-row-reverse'}`
-                : `border-b-4 border-brown-600 pb-4 flex items-end justify-between ${form.language === 'en' ? 'flex-row' : 'flex-row-reverse'}`
+                ? `bg-brown-50/55 p-6 rounded-2xl border border-brown-100 flex items-center justify-between gap-4 ${form.language === 'en' ? 'flex-row' : 'flex-row-reverse'}`
+                : branding.theme === 'elegant'
+                ? `border-t-4 border-brown-600 pt-4 pb-2 flex items-center justify-between gap-4 ${form.language === 'en' ? 'flex-row' : 'flex-row-reverse'}`
+                : `border-b-2 border-brown-600 pb-4 flex items-end justify-between gap-4 ${form.language === 'en' ? 'flex-row' : 'flex-row-reverse'}` // modern
             }`} dir={form.language === 'en' ? 'ltr' : 'rtl'}>
 
               {branding.theme === 'classic' ? (
                 <>
-                  {branding.logoUrl && <img src={branding.logoUrl} alt="Logo" className="max-h-20 max-w-[150px] object-contain mb-2" />}
-                  <h3 className="font-bold text-xl text-brown-900" style={{ fontFamily }}>{branding.companyName || t('اسم الجهة/المؤسسة', 'Company Name')}</h3>
-                  <p className="text-sm text-gray-500 whitespace-pre-line" style={{ fontFamily }}>{branding.companyDetails}</p>
+                  {branding.logoUrl && <img src={branding.logoUrl} alt="Logo" className="max-h-16 max-w-[150px] object-contain mb-1" />}
+                  <h3 className="font-bold text-lg text-brown-900" style={{ fontFamily }}>{branding.companyName || t('اسم الجهة/المؤسسة', 'Company Name')}</h3>
+                  <p className="text-xs text-gray-500 whitespace-pre-line leading-relaxed" style={{ fontFamily }}>{branding.companyDetails}</p>
                 </>
               ) : (
                 <>
                   <div className={form.language === 'en' ? 'text-left' : 'text-right'}>
-                    <h3 className="font-bold text-xl text-brown-900 mb-1" style={{ fontFamily }}>{branding.companyName || t('اسم الجهة/المؤسسة', 'Company Name')}</h3>
+                    <h3 className="font-bold text-lg text-brown-900 mb-1" style={{ fontFamily }}>{branding.companyName || t('اسم الجهة/المؤسسة', 'Company Name')}</h3>
                     <p className="text-xs text-gray-500 whitespace-pre-line leading-relaxed" style={{ fontFamily }}>{branding.companyDetails}</p>
                   </div>
                   {branding.logoUrl && (
-                    <img src={branding.logoUrl} alt="Logo" className="max-h-16 max-w-[140px] object-contain shrink-0" />
+                    <img src={branding.logoUrl} alt="Logo" className="max-h-14 max-w-[140px] object-contain shrink-0" />
                   )}
                 </>
               )}
@@ -505,8 +507,21 @@ export const LetterPreview: React.FC = () => {
 
           {/* Footer in Preview */}
           {generatedLetter && !loading && !isProofreading && branding.enableFooter && (
-            <div className="border-t border-gray-100 pt-4 mt-8 text-center text-xs text-brown-500/80" style={{ fontFamily }}>
-              {branding.footerText || t('التذييل السفلي', 'Footer')}
+            <div className={`mt-8 ${
+              (branding.footerTheme || 'centered') === 'minimal'
+                ? 'pt-2 text-center text-[10px] text-gray-400'
+                : (branding.footerTheme || 'centered') === 'split'
+                ? `border-t border-gray-150 pt-4 flex justify-between items-center text-xs text-brown-500/80 ${form.language === 'en' ? 'flex-row' : 'flex-row-reverse'}`
+                : 'border-t border-gray-150 pt-4 text-center text-xs text-brown-500/80' // centered
+            }`} dir={form.language === 'en' ? 'ltr' : 'rtl'} style={{ fontFamily }}>
+              {(branding.footerTheme || 'centered') === 'split' ? (
+                <>
+                  <span>{branding.companyName || t('اسم المؤسسة', 'Company Name')}</span>
+                  <span>{branding.footerText || t('التذييل السفلي', 'Footer Text')}</span>
+                </>
+              ) : (
+                <span>{branding.footerText || t('التذييل السفلي', 'Footer Text')}</span>
+              )}
             </div>
           )}
         </div>

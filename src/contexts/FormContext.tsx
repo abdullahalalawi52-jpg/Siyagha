@@ -21,6 +21,11 @@ export interface FormContextType {
     formality: string;
     language: string;
     date: string;
+    brandVoiceProfile: string;
+    brandVoiceName: string;
+    isReplyMode: boolean;
+    replyToText: string;
+    replyStance: string;
   };
   setForm: React.Dispatch<React.SetStateAction<any>>;
   customTemplates: any[];
@@ -41,6 +46,9 @@ export interface FormContextType {
   isListening: boolean;
   currentVariables: string[];
   replaceVariable: (variable: string, value: string) => void;
+  brandVoiceProfiles: { id: string; name: string; profile: string }[];
+  saveBrandVoiceProfile: (name: string, profile: string) => void;
+  deleteBrandVoiceProfile: (id: string) => void;
 }
 
 const FormContext = createContext<FormContextType | undefined>(undefined);
@@ -72,7 +80,14 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
     formality: formalityOptions[1],
     language: 'ar',
     date: new Date().toISOString().split('T')[0],
+    brandVoiceProfile: '',
+    brandVoiceName: '',
+    isReplyMode: false,
+    replyToText: '',
+    replyStance: 'approval',
   });
+
+  const [brandVoiceProfiles, setBrandVoiceProfiles] = useState<{ id: string; name: string; profile: string }[]>([]);
 
   // Sync form language when app language changes
   useEffect(() => {
@@ -126,7 +141,47 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (e) {
       console.error(e);
     }
+
+    try {
+      const savedProfiles = localStorage.getItem('brand_voice_profiles');
+      if (savedProfiles) setBrandVoiceProfiles(JSON.parse(savedProfiles));
+    } catch (e) {
+      console.error(e);
+    }
   }, []);
+
+  const saveBrandVoiceProfile = (name: string, profile: string) => {
+    const newProfile = {
+      id: `profile_${Date.now()}`,
+      name,
+      profile,
+    };
+    const updated = [...brandVoiceProfiles, newProfile];
+    setBrandVoiceProfiles(updated);
+    try {
+      localStorage.setItem('brand_voice_profiles', JSON.stringify(updated));
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const deleteBrandVoiceProfile = (id: string) => {
+    const updated = brandVoiceProfiles.filter((p) => p.id !== id);
+    setBrandVoiceProfiles(updated);
+    try {
+      localStorage.setItem('brand_voice_profiles', JSON.stringify(updated));
+    } catch (e) {
+      console.error(e);
+    }
+    // Clear active brand voice from form if it was deleted
+    setForm((prev: any) => {
+      const activeProf = brandVoiceProfiles.find((p) => p.id === id);
+      if (activeProf && prev.brandVoiceName === activeProf.name) {
+        return { ...prev, brandVoiceProfile: '', brandVoiceName: '' };
+      }
+      return prev;
+    });
+  };
 
   // Helper helper to get savedLetters from localStorage without importing LetterContext
   const getLocalSavedLetters = () => {
@@ -288,6 +343,9 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isListening,
         currentVariables,
         replaceVariable,
+        brandVoiceProfiles,
+        saveBrandVoiceProfile,
+        deleteBrandVoiceProfile,
       }}
     >
       {children}

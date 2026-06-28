@@ -60,6 +60,7 @@ export interface LetterContextType {
     logoUrl: string;
     enableFooter: boolean;
     footerText: string;
+    footerTheme?: string;
   };
   setBranding: React.Dispatch<React.SetStateAction<any>>;
   signatureImage: string | null;
@@ -204,6 +205,7 @@ export const LetterProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     logoUrl: '',
     enableFooter: false,
     footerText: '',
+    footerTheme: 'centered',
   });
 
   const [signatureImage, setSignatureImage] = useState<string | null>(null);
@@ -510,7 +512,11 @@ export const LetterProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           const data = await handleResponse(res, 'فشل استخراج النصوص');
 
           if (data.text) {
-            setForm((prev: any) => ({ ...prev, details: data.text }));
+            if (ui.ocrTargetField === 'replyToText') {
+              setForm((prev: any) => ({ ...prev, replyToText: data.text }));
+            } else {
+              setForm((prev: any) => ({ ...prev, details: data.text }));
+            }
             setActiveSection('basic');
             ui.setIsOcrOpen(false);
           } else {

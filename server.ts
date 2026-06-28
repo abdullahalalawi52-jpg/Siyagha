@@ -409,9 +409,46 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
     }
   });
 
+  app.post("/api/analyze-style", geminiLimiter, checkGeminiKey, async (req: any, res) => {
+    try {
+      const { samples } = req.body;
+      if (!samples || !Array.isArray(samples) || samples.length === 0) {
+        return res.status(400).json({ error: "Samples are required" });
+      }
+
+      const ai = req.ai;
+      const combinedSamples = samples.map((s, i) => `نموذج ${i + 1}:\n"""\n${s}\n"""`).join("\n\n");
+      const prompt = `
+أنت خبير لغوي متخصص في تحليل أساليب الكتابة العربية والإنجليزية.
+قم بتحليل النماذج التالية من خطابات المستخدم واستخلص "بصمة أسلوبه اللغوي" (خصائصه الكتابية المكررة).
+
+النماذج:
+${combinedSamples}
+
+الشروط والتعليمات:
+1. صِف الخصائص الأسلوبية اللغوية بدقة (طول الجمل، نوعية المفردات المستخدمة، طريقة البدء والترحيب، أسلوب الختام، مستوى المباشرة أو التفصيل، علامات الترقيم، والنبرة العامة).
+2. اكتب الوصف باللغة العربية بأسلوب مقتضب ومباشر في فقرة واحدة أو فقرتين (بحد أقصى 120 كلمة).
+3. أرجع الوصف النهائي مباشرة وبدون أي مقدمات أو هوامش أو علامات تنسيق Markdown (مثل ** أو #).
+`;
+
+      const response = await safeGenerate(ai, {
+        model: "gemini-flash-lite-latest",
+        contents: prompt,
+      });
+
+      res.json({ styleProfile: response.text?.trim() });
+    } catch (error: any) {
+      handleApiError(error, res, "فشل تحليل بصمة الأسلوب");
+    }
+  });
+
   app.post("/api/generate-letter", geminiLimiter, checkGeminiKey, async (req: any, res) => {
     try {
-      const { type, subType, senderName, senderPhone, senderEmail, recipientName, recipientRole, subject, details, tone, formality, language, date } = req.body;
+      const { 
+        type, subType, senderName, senderPhone, senderEmail, recipientName, recipientRole, 
+        subject, details, tone, formality, language, date,
+        brandVoiceProfile, replyToText, replyStance 
+      } = req.body;
       const ai = req.ai;
 
       // Define Few-Shot Examples for Arabic
@@ -497,6 +534,45 @@ Phone: 0500000000
 
       const fewShotExamples = language === 'en' ? fewShotExamplesEn : fewShotExamplesAr;
 
+      let customStylePrompt = "";
+      if (brandVoiceProfile) {
+        customStylePrompt = `
+[بصمة الأسلوب اللغوي المطلوب محاكاتها]
+يجب كتابة الخطاب بالكامل باتباع الخصائص اللغوية ونبرة وصياغة وبنية الجمل التالية بدقة:
+"${brandVoiceProfile}"
+تأكد من مطابقة هذا الأسلوب قدر الإمكان في المفردات وطول الجمل والترحيب والخاتمة.
+`;
+      }
+
+      let contentPrompt = "";
+      if (replyToText) {
+        let stanceText = "";
+        if (replyStance === 'approval') stanceText = language === 'en' ? 'Approval / Acceptance' : 'الموافقة والقبول التام';
+        else if (replyStance === 'rejection') stanceText = language === 'en' ? 'Rejection / Decline' : 'الرفض والاعتذار بلباقة';
+        else if (replyStance === 'more_info') stanceText = language === 'en' ? 'Request for more information / clarification' : 'طلب معلومات أو تفاصيل إضافية أو توضيح';
+        else if (replyStance === 'thanks') stanceText = language === 'en' ? 'Thanks & Appreciation' : 'الشكر والتقدير والامتنان';
+        else if (replyStance === 'clarification') stanceText = language === 'en' ? 'Clarification / Inquiry' : 'التوضيح والرد على الاستفسارات';
+        else stanceText = replyStance || (language === 'en' ? 'Formal Reply' : 'رد رسمي ملائم');
+
+        contentPrompt = `
+[الخطاب الوارد المطلوب الرد عليه]
+"${replyToText}"
+
+[موقف الرد المطلوب اتخاذه]
+موقفك من الخطاب الوارد هو: ${stanceText}
+
+[تفاصيل وملاحظات إضافية للرد]
+${details || 'صياغة رد إداري رسمي مناسب متكامل يتناول النقاط المذكورة بالخطاب الوارد.'}
+
+المطلوب: صياغة خطاب رد رسمي واحترافي يوجه إلى المرسل الأصلي للخطاب الوارد (أو الجهة الوارد منها)، بحيث يجيب على النقاط الرئيسية للرسالة الواردة بلباقة واحترافية وبناءً على التفاصيل وموقف الرد المحدد.
+`;
+      } else {
+        contentPrompt = `
+- الموضوع الأساسي للخطاب: ${subject}
+- تفاصيل وإضافات يجب تضمينها: ${details || 'لا توجد تفاصيل إضافية. قم بتأليف محتوى مناسب ومقنع يخدم الموضوع الأساسي بدقة.'}
+`;
+      }
+
       const prompt = `
 أنت خبير متمرس ومحترف في صياغة الخطابات الرسمية، الإدارية، والتجارية. 
 المطلوب منك صياغة خطاب متكامل، بليغ، وذو بنية منطقية قوية، بناءً على المعطيات التالية:
@@ -508,10 +584,12 @@ Phone: 0500000000
 - من (المرسل): ${senderName}${senderPhone ? ' (رقم الهاتف: ' + senderPhone + ')' : ''}${senderEmail ? ' (البريد الإلكتروني: ' + senderEmail + ')' : ''}
 - إلى (المرسل إليه): ${recipientName}
 - صفة/منصب المرسل إليه: ${recipientRole || 'غير محدد'}
-- الموضوع الأساسي للخطاب: ${subject}
 - نبرة الخطاب المطلوبة: ${tone || 'رسمية ومهنية'}
 - مستوى الرسمية: ${formality || 'رسمي'}
-- تفاصيل وإضافات يجب تضمينها: ${details || 'لا توجد تفاصيل إضافية. قم بتأليف محتوى مناسب ومقنع يخدم الموضوع الأساسي بدقة.'}
+
+${contentPrompt}
+
+${customStylePrompt}
 
 ${fewShotExamples}
 
@@ -520,7 +598,7 @@ ${fewShotExamples}
    - ديباجة افتتاحية (بسملة في العربية، ثم التاريخ، ثم اسم المرسل إليه ومنصبه، ثم التحية الافتتاحية).
    - سطر الموضوع (مثال: الموضوع: ...).
    - فقرة تمهيدية (تدخل في صلب الموضوع بلباقة).
-   - فقرة أو فقرات التفاصيل (شرح الموضوع أو الطلب أو القرار بناءً على التفاصيل المعطاة، بأسلوب مقنع وواضح).
+   - فقرة أو فقرات التفاصيل (شرح الموضوع أو الطلب أو القرار بناءً على التفاصيل ومحتوى الخطاب، بأسلوب مقنع وواضح).
    - فقرة ختامية (تطلعات، شكر وتقدير، أو دعوة لإجراء معين).
    - الخاتمة (التحية الختامية، التوقيع/اسم المرسل، وتفاصيل الاتصال مثل الهاتف أو البريد الإلكتروني تحت اسم المرسل مباشرة في حال توفرها بشكل أنيق ومناسب للمراسلات).
 2. البلاغة واللغة: استخدام لغة عالية الدقة، خالية من الأخطاء النحوية والإملائية. إذا كانت اللغة العربية، استخدم الفصحى البليغة والمصطلحات الإدارية المعتمدة وتجنب أي ركاكة.

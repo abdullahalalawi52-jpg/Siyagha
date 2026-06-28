@@ -40,6 +40,9 @@ export const LetterForm: React.FC = () => {
     loading,
     appLang,
     t,
+    setIsBrandVoiceModalOpen,
+    setOcrTargetField,
+    brandVoiceProfiles,
   } = useApp();
 
   return (
@@ -127,6 +130,61 @@ export const LetterForm: React.FC = () => {
                   label: t(st.name, subTypeTranslations[st.name] || st.name),
                   icon: st.icon,
                 }))}
+              />
+            </div>
+
+            {/* Custom Brand Voice Dropdown */}
+            <div className="space-y-1.5 mt-2 bg-gray-50/50 border border-gray-100 p-3 rounded-xl">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-bold text-gray-700 flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-brown-600 animate-pulse" />
+                  {t('بصمة الأسلوب اللغوي الخاص', 'Custom Brand Voice')}
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setIsBrandVoiceModalOpen(true)}
+                  className="text-[10px] text-brown-700 hover:text-brown-850 bg-brown-100/40 hover:bg-brown-100/80 px-2 py-0.5 rounded transition-colors font-bold cursor-pointer"
+                >
+                  {t('إدارة البصمات ⚙️', 'Manage Voices ⚙️')}
+                </button>
+              </div>
+              <select
+                className="w-full rounded-xl border border-gray-250 bg-white px-3 py-2 text-xs focus:ring-2 focus:ring-brown-500 outline-none text-gray-700 font-medium"
+                value={form.brandVoiceName}
+                onChange={(e) => {
+                  const selected = brandVoiceProfiles.find(p => p.name === e.target.value);
+                  setForm((prev: any) => ({
+                    ...prev,
+                    brandVoiceName: e.target.value,
+                    brandVoiceProfile: selected ? selected.profile : '',
+                  }));
+                }}
+              >
+                <option value="">{t('توليد تلقائي افتراضي (Default)', 'Default Style')}</option>
+                {brandVoiceProfiles.map((p) => (
+                  <option key={p.id} value={p.name}>{p.name}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Smart Auto-Reply Mode Toggle */}
+            <div className="flex items-center justify-between text-xs text-gray-550 bg-brown-50/20 p-3 rounded-xl border border-brown-100/30 animate-all">
+              <label htmlFor="reply-mode-checkbox" className="font-bold text-gray-755 cursor-pointer">
+                {t('تفعيل وضع الرد الذكي على خطاب وارد', 'Enable Reply to Incoming Letter')}
+              </label>
+              <input
+                id="reply-mode-checkbox"
+                type="checkbox"
+                checked={form.isReplyMode}
+                onChange={(e) => {
+                  const val = e.target.checked;
+                  setForm((prev: any) => ({
+                    ...prev,
+                    isReplyMode: val,
+                    subject: val ? (prev.subject || t('رد رسمي', 'Official Reply')) : prev.subject,
+                  }));
+                }}
+                className="w-4.5 h-4.5 rounded border-gray-300 text-brown-600 focus:ring-brown-500 cursor-pointer"
               />
             </div>
 
@@ -253,33 +311,37 @@ export const LetterForm: React.FC = () => {
               </div>
             </div>
 
-            <hr className="border-gray-100 my-4 border-dashed" />
+            {!form.isReplyMode && (
+              <>
+                <hr className="border-gray-100 my-4 border-dashed" />
 
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <label htmlFor="letter-subject" className="text-sm font-bold text-gray-800 flex items-center gap-2">
-                  {t('موضوع الخطاب / عنوانه', 'Letter Subject / Title')} <span className="text-red-500">*</span>
-                </label>
-                <button
-                  type="button"
-                  onClick={handleSuggestTitle}
-                  disabled={isSuggestingTitle}
-                  className="text-xs text-brown-700 hover:text-brown-800 bg-brown-50 hover:bg-brown-100 flex items-center gap-1.5 px-2 py-1 rounded transition-colors disabled:opacity-50 cursor-pointer"
-                  title={t('الذكاء الاصطناعي سيقوم باقتراح عنوان مناسب بناءً على التفاصيل', 'AI will suggest a suitable title based on details')}
-                >
-                  {isSuggestingTitle ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
-                  {t('اقتراح عنوان ذكي', 'Suggest Smart Title')}
-                </button>
-              </div>
-              <input
-                id="letter-subject"
-                type="text"
-                placeholder={t('اتركه فارغاً، أو ادخل مثال: طلب الموافقة على رصيد إجازة', 'Leave blank, or enter e.g., Request for annual leave approval')}
-                className="w-full rounded-xl border-gray-200 border px-3 py-2.5 text-sm focus:ring-2 focus:ring-brown-500 focus:border-brown-500 outline-none transition-all"
-                value={form.subject}
-                onChange={(e) => setForm({ ...form, subject: e.target.value })}
-              />
-            </div>
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <label htmlFor="letter-subject" className="text-sm font-bold text-gray-800 flex items-center gap-2">
+                      {t('موضوع الخطاب / عنوانه', 'Letter Subject / Title')} <span className="text-red-500">*</span>
+                    </label>
+                    <button
+                      type="button"
+                      onClick={handleSuggestTitle}
+                      disabled={isSuggestingTitle}
+                      className="text-xs text-brown-700 hover:text-brown-800 bg-brown-50 hover:bg-brown-100 flex items-center gap-1.5 px-2 py-1 rounded transition-colors disabled:opacity-50 cursor-pointer"
+                      title={t('الذكاء الاصطناعي سيقوم باقتراح عنوان مناسب بناءً على التفاصيل', 'AI will suggest a suitable title based on details')}
+                    >
+                      {isSuggestingTitle ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
+                      {t('اقتراح عنوان ذكي', 'Suggest Smart Title')}
+                    </button>
+                  </div>
+                  <input
+                    id="letter-subject"
+                    type="text"
+                    placeholder={t('اتركه فارغاً، أو ادخل مثال: طلب الموافقة على رصيد إجازة', 'Leave blank, or enter e.g., Request for annual leave approval')}
+                    className="w-full rounded-xl border-gray-200 border px-3 py-2.5 text-sm focus:ring-2 focus:ring-brown-500 focus:border-brown-500 outline-none transition-all"
+                    value={form.subject}
+                    onChange={(e) => setForm({ ...form, subject: e.target.value })}
+                  />
+                </div>
+              </>
+            )}
 
             <hr className="border-gray-100 my-4 border-dashed" />
 
@@ -317,9 +379,76 @@ export const LetterForm: React.FC = () => {
               </div>
             </div>
 
+            {form.isReplyMode && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                className="space-y-4 bg-brown-50/20 border border-brown-100/50 p-4 rounded-xl mt-4 text-start"
+              >
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <label htmlFor="incoming-letter-textarea" className="text-xs font-bold text-gray-750">
+                      {t('نص الخطاب الوارد', 'Incoming Letter Text')} <span className="text-red-500">*</span>
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setOcrTargetField('replyToText');
+                        setIsOcrOpen(true);
+                      }}
+                      className="text-[10px] text-brown-750 hover:text-brown-850 bg-brown-100/40 hover:bg-brown-100/80 flex items-center gap-1 px-2 py-0.5 rounded transition-colors font-bold cursor-pointer"
+                    >
+                      <Camera className="w-3.5 h-3.5" />
+                      {t('استخراج بـ OCR', 'Extract via OCR')}
+                    </button>
+                  </div>
+                  <textarea
+                    id="incoming-letter-textarea"
+                    rows={4}
+                    placeholder={t('قم بلصق الخطاب الوارد الذي تريد الرد عليه، أو استخرجه من صورة بالـ OCR بالضغط على الزر بالأعلى...', 'Paste the incoming letter you wish to reply to, or extract it from an image using OCR...')}
+                    className="w-full rounded-xl border border-gray-250 p-2.5 text-xs focus:ring-2 focus:ring-brown-500 outline-none resize-none leading-relaxed bg-white text-gray-800"
+                    value={form.replyToText}
+                    onChange={(e) => setForm({ ...form, replyToText: e.target.value })}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider block">
+                    {t('موقف الرد المطلوب', 'Reply Stance')}
+                  </label>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    {[
+                      { id: 'approval', label: t('موافقة وقبول', 'Accept / Approve') },
+                      { id: 'rejection', label: t('رفض واعتذار', 'Reject / Decline') },
+                      { id: 'more_info', label: t('طلب تفاصيل', 'Request Details') },
+                      { id: 'thanks', label: t('شكر وتقدير', 'Thanks / Appreciation') },
+                      { id: 'clarification', label: t('توضيح واستفسار', 'Clarification') },
+                    ].map((stance) => (
+                      <button
+                        key={stance.id}
+                        type="button"
+                        onClick={() => setForm({ ...form, replyStance: stance.id })}
+                        className={`py-2 text-[10px] sm:text-xs font-bold rounded-lg transition-all border cursor-pointer ${
+                          form.replyStance === stance.id
+                            ? 'bg-brown-600 text-white border-brown-600 shadow-sm'
+                            : 'bg-white text-gray-655 border-gray-200 hover:border-brown-300 hover:bg-gray-50'
+                        }`}
+                      >
+                        {stance.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
             <div className="space-y-1.5 mt-4">
               <div className="flex items-center justify-between">
-                <label htmlFor="details-textarea" className="text-sm font-bold text-gray-800">{t('الصياغة الذكية: تفاصيل الخطاب / المبررات', 'Smart Drafting: Letter Details / Reasons')}</label>
+                <label htmlFor="details-textarea" className="text-sm font-bold text-gray-800">
+                  {form.isReplyMode 
+                    ? t('ملاحظات وتفاصيل إضافية للرد', 'Additional Details / Notes for Reply') 
+                    : t('الصياغة الذكية: تفاصيل الخطاب / المبررات', 'Smart Drafting: Letter Details / Reasons')}
+                </label>
                 <div className="flex items-center gap-1.5">
                   <button
                     type="button"
@@ -387,7 +516,7 @@ export const LetterForm: React.FC = () => {
               {/* Generate button */}
               <button
                 type="submit"
-                disabled={loading || !form.senderName || !form.recipientName || !form.subject}
+                disabled={loading || !form.senderName || !form.recipientName || (!form.isReplyMode && !form.subject) || (form.isReplyMode && !form.replyToText)}
                 className="w-full py-3 bg-brown-600 hover:bg-brown-700 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md disabled:opacity-50 disabled:cursor-not-allowed text-sm"
               >
                 {loading ? (
@@ -442,11 +571,12 @@ export const LetterForm: React.FC = () => {
               <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="space-y-4 p-4 border border-gray-100 bg-gray-50/50 rounded-xl overflow-hidden">
                 <div className="space-y-1.5">
                   <label className="text-xs font-semibold text-gray-500 block">{t('شكل وتصميم الترويسة (Theme)', 'Header Theme')}</label>
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-2 gap-2">
                     {[
-                      { id: 'classic', label: t('كلاسيكي', 'Classic') },
-                      { id: 'modern', label: t('حديث', 'Modern') },
-                      { id: 'creative', label: t('إبداعي', 'Creative') },
+                      { id: 'classic', label: t('كلاسيكي ممركز', 'Classic Centered') },
+                      { id: 'modern', label: t('حديث منقسم', 'Modern Split') },
+                      { id: 'creative', label: t('كرت إبداعي', 'Creative Card') },
+                      { id: 'elegant', label: t('أنيق عصري', 'Elegant Top-Bar') },
                     ].map((tTheme) => (
                       <button
                         key={tTheme.id}
@@ -532,6 +662,29 @@ export const LetterForm: React.FC = () => {
                     onChange={(e) => setBranding((prev: any) => ({ ...prev, footerText: e.target.value }))}
                     className="w-full rounded-xl border-gray-200 border px-3 py-2 text-sm focus:ring-2 focus:ring-brown-500 outline-none"
                   />
+                </div>
+                <div className="space-y-1.5 mt-3 text-start">
+                  <label className="text-xs font-semibold text-gray-500 block">{t('شكل وتصميم التذييل', 'Footer Layout')}</label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { id: 'centered', label: t('ممركز', 'Centered') },
+                      { id: 'split', label: t('منقسم', 'Split') },
+                      { id: 'minimal', label: t('بسيط', 'Minimal') },
+                    ].map((fTheme) => (
+                      <button
+                        key={fTheme.id}
+                        type="button"
+                        onClick={() => setBranding((prev: any) => ({ ...prev, footerTheme: fTheme.id }))}
+                        className={`py-2 text-[11px] sm:text-xs font-bold rounded-lg transition-all border cursor-pointer ${
+                          (branding.footerTheme || 'centered') === fTheme.id
+                            ? 'bg-brown-600 text-white border-brown-600 shadow-md'
+                            : 'bg-white text-gray-600 border-gray-200 hover:border-brown-300 hover:bg-gray-50'
+                        }`}
+                      >
+                        {fTheme.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </motion.div>
             )}
