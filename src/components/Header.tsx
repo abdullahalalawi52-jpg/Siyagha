@@ -159,7 +159,7 @@ export const Header: React.FC = () => {
           {/* Auth Button */}
           {user ? (
             <div className="flex items-center gap-1">
-              <span className="text-[10px] font-bold text-brown-700 dark:text-brown-300 hidden md:block truncate max-w-[80px] px-2 py-1 bg-brown-500/5 dark:bg-teal-950/20 rounded-md">
+              <span className="text-[10px] font-bold text-brown-700 dark:text-brown-300 hidden md:block truncate max-w-[150px] px-2 py-1 bg-brown-500/5 dark:bg-teal-950/20 rounded-md">
                 {user.displayName || user.email}
               </span>
               <button
