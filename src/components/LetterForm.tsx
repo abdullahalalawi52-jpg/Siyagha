@@ -148,23 +148,25 @@ export const LetterForm: React.FC = () => {
                   {t('إدارة البصمات ⚙️', 'Manage Voices ⚙️')}
                 </button>
               </div>
-              <select
-                className="w-full rounded-xl border border-gray-250 bg-white px-3 py-2 text-xs focus:ring-2 focus:ring-brown-500 outline-none text-gray-700 font-medium"
+              <CustomSelect
+                id="brand-voice-select"
                 value={form.brandVoiceName}
-                onChange={(e) => {
-                  const selected = brandVoiceProfiles.find(p => p.name === e.target.value);
+                onChange={(val) => {
+                  const selected = brandVoiceProfiles.find((p: any) => p.name === val);
                   setForm((prev: any) => ({
                     ...prev,
-                    brandVoiceName: e.target.value,
+                    brandVoiceName: val,
                     brandVoiceProfile: selected ? selected.profile : '',
                   }));
                 }}
-              >
-                <option value="">{t('توليد تلقائي افتراضي (Default)', 'Default Style')}</option>
-                {brandVoiceProfiles.map((p) => (
-                  <option key={p.id} value={p.name}>{p.name}</option>
-                ))}
-              </select>
+                options={[
+                  { value: '', label: t('توليد تلقائي افتراضي (Default)', 'Default Style') },
+                  ...brandVoiceProfiles.map((p: any) => ({
+                    value: p.name,
+                    label: p.name,
+                  }))
+                ]}
+              />
             </div>
 
             {/* Smart Auto-Reply Mode Toggle */}
