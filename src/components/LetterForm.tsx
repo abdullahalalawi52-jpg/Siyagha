@@ -4,6 +4,7 @@ import { PenLine, Star, Loader2, Sparkles, Mic, MicOff, Camera, Bookmark, X, Upl
 import { useApp } from '../contexts/AppContext';
 import { CustomSelect } from './CustomSelect';
 import { letterTypes, toneOptions, formalityOptions, getLetterTypeData, typeTranslations, subTypeTranslations, toneTranslations, formalityTranslations } from '../data/templates';
+import { checkSpelling, applySpellingFix, SpellingIssue } from '../utils/spellingLinter';
 
 export const LetterForm: React.FC = () => {
     const {
@@ -46,6 +47,17 @@ export const LetterForm: React.FC = () => {
     setOcrTargetField,
     brandVoiceProfiles,
   } = useApp();
+
+  const [spellingIssues, setSpellingIssues] = React.useState<SpellingIssue[]>([]);
+
+  React.useEffect(() => {
+    if (form.language === 'ar') {
+      const issues = checkSpelling(form.details || '');
+      setSpellingIssues(issues);
+    } else {
+      setSpellingIssues([]);
+    }
+  }, [form.details, form.language]);
 
   return (
     <div className="lg:col-span-5 bg-white p-6 rounded-2xl shadow-sm border border-brown-100/60 relative overflow-hidden text-start" dir={appLang === 'ar' ? 'rtl' : 'ltr'}>
@@ -583,6 +595,46 @@ export const LetterForm: React.FC = () => {
                   <span className="w-2 h-2 rounded-full bg-red-500 inline-block"></span>
                   {t('يستمع... تحدث الآن', 'Listening... speak now')}
                 </p>
+              )}
+
+              {/* Spelling Linter Suggestions */}
+              {spellingIssues.length > 0 && (
+                <div className="mt-2.5 space-y-2 bg-amber-50/80 dark:bg-amber-950/20 border border-amber-200/50 dark:border-amber-900/30 p-3.5 rounded-xl text-xs">
+                  <p className="font-bold text-amber-800 dark:text-amber-400 flex items-center gap-1.5 mb-1.5">
+                    <span className="w-1.5 h-3 bg-amber-500 rounded-full"></span>
+                    {t('تنبيهات إملائية مقترحة:', 'Suggested spelling warnings:')}
+                  </p>
+                  <div className="flex flex-col gap-2">
+                    {spellingIssues.slice(0, 3).map((issue) => (
+                      <div key={issue.id} className="flex items-center justify-between gap-3 bg-white/70 dark:bg-slate-900/40 p-2 rounded-lg border border-amber-100/50 dark:border-amber-950/30">
+                        <div className="min-w-0">
+                          <span className="font-semibold text-gray-500 dark:text-gray-400">
+                            {t('الكلمة:', 'Word:')}{' '}
+                            <span className="line-through text-red-500 font-bold px-1">{issue.word}</span>
+                            {' '}←{' '}
+                            <span className="text-green-600 dark:text-green-400 font-black px-1 text-sm">{issue.suggestion}</span>
+                          </span>
+                          <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-0.5 leading-relaxed">{t(issue.reasonAr, issue.reasonEn)}</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const fixedText = applySpellingFix(form.details || '', issue);
+                            setForm((prev: any) => ({ ...prev, details: fixedText }));
+                          }}
+                          className="shrink-0 bg-green-600 hover:bg-green-700 text-white font-bold px-2.5 py-1 rounded-md transition-colors cursor-pointer text-[10px]"
+                        >
+                          {t('تطبيق التعديل ✨', 'Apply Fix ✨')}
+                        </button>
+                      </div>
+                    ))}
+                    {spellingIssues.length > 3 && (
+                      <p className="text-[10px] text-amber-600 dark:text-amber-550 font-medium text-start">
+                        {t(`+ هناك ${spellingIssues.length - 3} تنبيهات إملائية أخرى في النص...`, `+ There are ${spellingIssues.length - 3} other spelling warnings...`)}
+                      </p>
+                    )}
+                  </div>
+                </div>
               )}
             </div>
 

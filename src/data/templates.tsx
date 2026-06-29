@@ -1,5 +1,5 @@
 import React from 'react';
-import { Building2, Briefcase, AlertCircle, MessageSquare, FileText, User, Heart, Sparkles, Calendar, Mail } from 'lucide-react';
+import { Building2, Briefcase, AlertCircle, MessageSquare, FileText, User, Heart, Sparkles, Calendar, Mail, Scale, Stethoscope, GraduationCap } from 'lucide-react';
 
 export const letterTypes = {
   'إداري/رسمي': {
@@ -38,6 +38,33 @@ export const letterTypes = {
       { name: 'رسالة شكر بعد المقابلة', icon: Heart },
       { name: 'رسالة قبول/اعتذار عن عرض عمل', icon: AlertCircle }
     ]
+  },
+  'قانوني': {
+    icon: Scale,
+    subTypes: [
+      { name: 'خطاب إنذار قانوني', icon: AlertCircle },
+      { name: 'خطاب مطالبة حقوقية', icon: FileText },
+      { name: 'عقد/اتفاقية تقديم خدمات', icon: FileText },
+      { name: 'أخرى', icon: FileText }
+    ]
+  },
+  'طبي': {
+    icon: Stethoscope,
+    subTypes: [
+      { name: 'خطاب تقرير طبي', icon: Heart },
+      { name: 'خطاب إجازة مرضية', icon: Calendar },
+      { name: 'طلب إحالة طبية', icon: FileText },
+      { name: 'أخرى', icon: FileText }
+    ]
+  },
+  'أكاديمي/تعليمي': {
+    icon: GraduationCap,
+    subTypes: [
+      { name: 'خطاب طلب قبول جامعي', icon: Building2 },
+      { name: 'خطاب توصية أكاديمية', icon: User },
+      { name: 'طلب تأجيل دراسي', icon: Calendar },
+      { name: 'أخرى', icon: FileText }
+    ]
   }
 };
 
@@ -46,6 +73,9 @@ export const getLetterTypeData = (type: string) => {
   if (type === 'أعمال') return letterTypes['أعمال'];
   if (type === 'شخصي') return letterTypes['شخصي'];
   if (type === 'توظيف وتطوير مهني') return letterTypes['توظيف وتطوير مهني'];
+  if (type === 'قانوني') return letterTypes['قانوني'];
+  if (type === 'طبي') return letterTypes['طبي'];
+  if (type === 'أكاديمي/تعليمي') return letterTypes['أكاديمي/تعليمي'];
   return letterTypes['إداري/رسمي'];
 };
 
@@ -444,6 +474,216 @@ export const predefinedTemplates = [
       tone: 'رسمية ومهنية',
       formality: 'رسمي'
     }
+  },
+  {
+    id: 'legal_warning',
+    category: 'القطاع القانوني',
+    name: 'إنذار قانوني رسمي',
+    icon: <Scale className="w-5 h-5" />,
+    data: {
+      type: 'قانوني',
+      subType: 'خطاب إنذار قانوني',
+      subject: 'إشعار وإنذار قانوني بضرورة تسوية [الموضوع]',
+      details: 'نوجه إليكم هذا الإنذار القانوني الرسمي بشأن عدم الالتزام بـ [البند أو الاتفاقية]، ونطالبكم بتسوية الأمر خلال [المدة] لتفادي اتخاذ الإجراءات القضائية.',
+      tone: 'حازمة',
+      formality: 'رسمي جداً'
+    }
+  },
+  {
+    id: 'legal_agreement',
+    category: 'القطاع القانوني',
+    name: 'عقد تقديم خدمات',
+    icon: <FileText className="w-5 h-5" />,
+    data: {
+      type: 'قانوني',
+      subType: 'عقد/اتفاقية تقديم خدمات',
+      subject: 'اتفاقية تقديم خدمات استشارية ومهنية',
+      details: 'تحدد هذه الاتفاقية الشروط والأحكام لتقديم خدمات [نوع الخدمات] بين الطرف الأول [المرسل] والطرف الثاني [الموجه إليه].',
+      tone: 'رسمية ومهنية',
+      formality: 'رسمي جداً'
+    }
+  },
+  {
+    id: 'sick_leave',
+    category: 'القطاع الطبي',
+    name: 'خطاب إجازة مرضية',
+    icon: <Calendar className="w-5 h-5" />,
+    data: {
+      type: 'طبي',
+      subType: 'خطاب إجازة مرضية',
+      subject: 'تقرير إجازة مرضية وعذر طبي',
+      details: 'نشهد نحن [اسم المستشفى/العيادة] بأن المريض [اسم المريض] يعاني من [الحالة الصحية] ويحتاج إلى فترة راحة وتقرير طبي مدته [عدد الأيام] أيام تبدأ من [التاريخ].',
+      tone: 'رسمية ومهنية',
+      formality: 'رسمي'
+    }
+  },
+  {
+    id: 'academic_recommendation',
+    category: 'القطاع الأكاديمي',
+    name: 'توصية أكاديمية',
+    icon: <GraduationCap className="w-5 h-5" />,
+    data: {
+      type: 'أكاديمي/تعليمي',
+      subType: 'خطاب توصية أكاديمية',
+      subject: 'خطاب توصية أكاديمية للطالب [اسم الطالب]',
+      details: 'يسعدني بصفتي [رتبتك الأكاديمية] أن أتقدم بهذه التوصية للطالب المتميز [اسم الطالب] للالتحاق ببرنامجكم الدراسي، نظراً لتميزه المعرفي وسلوكه الأكاديمي الرفيع.',
+      tone: 'إقناعية',
+      formality: 'رسمي'
+    }
+  },
+  {
+    id: 'academic_deferral',
+    category: 'القطاع الأكاديمي',
+    name: 'طلب تأجيل دراسي',
+    icon: <Calendar className="w-5 h-5" />,
+    data: {
+      type: 'أكاديمي/تعليمي',
+      subType: 'طلب تأجيل دراسي',
+      subject: 'طلب تأجيل الدراسة للفصل الدراسي [اسم الفصل]',
+      details: 'أتقدم لسيادتكم بطلبنا هذا للموافقة على تأجيل دراستي للفصل الدراسي [اسم الفصل] نظراً لظروفي الخاصة المتمثلة في [الظروف].',
+      tone: 'رسمية ومهنية',
+      formality: 'رسمي'
+    }
+  },
+  {
+    id: 'salary_increase',
+    category: 'شركات خاصة',
+    name: 'طلب زيادة راتب',
+    icon: <Briefcase className="w-5 h-5" />,
+    data: {
+      type: 'إداري/رسمي',
+      subType: 'خطاب طلب (وظيفة، إجازة، مساعدة)',
+      subject: 'طلب إعادة النظر في الراتب والمزايا الوظيفية',
+      details: 'أتقدم لسيادتكم بطلب مراجعة راتبي الحالي بما يتناسب مع زيادة المسؤوليات الموكلة إليّ وجهودي المستمرة في تحقيق أهداف الشركة.',
+      tone: 'مهني جداً',
+      formality: 'رسمي'
+    }
+  },
+  {
+    id: 'experience_certificate',
+    category: 'شركات خاصة',
+    name: 'طلب شهادة خبرة',
+    icon: <FileText className="w-5 h-5" />,
+    data: {
+      type: 'إداري/رسمي',
+      subType: 'خطاب طلب (وظيفة، إجازة، مساعدة)',
+      subject: 'طلب إصدار شهادة خبرة وخدمة',
+      details: 'أرجو التكرم بالموافقة على تزويدي بشهادة خبرة رسمية توضح مسمياتي الوظيفية وفترة عملي بالشركة، وذلك لاستكمال مسوغات شخصية.',
+      tone: 'مهنية',
+      formality: 'رسمي'
+    }
+  },
+  {
+    id: 'employee_appreciation',
+    category: 'شركات خاصة',
+    name: 'خطاب شكر للموظف المتميز',
+    icon: <Heart className="w-5 h-5" />,
+    data: {
+      type: 'شخصي',
+      subType: 'خطاب شكر',
+      subject: 'خطاب شكر وتقدير للأداء المتميز والتفاني',
+      details: 'يسر إدارة الشركة أن تعرب لك عن خالص الشكر والتقدير لجهودك الاستثنائية وتفانيك في العمل، مما كان له أثر كبير في نجاح الفريق.',
+      tone: 'حماسي',
+      formality: 'رسمي'
+    }
+  },
+  {
+    id: 'contract_termination',
+    category: 'القطاع القانوني',
+    name: 'إشعار بفسخ عقد',
+    icon: <AlertCircle className="w-5 h-5" />,
+    data: {
+      type: 'قانوني',
+      subType: 'أخرى',
+      subject: 'إشعار رسمي بإنهاء وفسخ العقد المبرم',
+      details: 'نحيطكم علماً برغبتنا في عدم تجديد أو فسخ العقد المبرم بيننا بتاريخ [التاريخ]، وذلك وفقاً للبند رقم [رقم البند] من شروط الاتفاقية.',
+      tone: 'حازمة',
+      formality: 'رسمي جداً'
+    }
+  },
+  {
+    id: 'medical_referral',
+    category: 'القطاع الطبي',
+    name: 'طلب إحالة طبية',
+    icon: <FileText className="w-5 h-5" />,
+    data: {
+      type: 'طبي',
+      subType: 'طلب إحالة طبية',
+      subject: 'طلب إحالة طبية لمستشفى تخصصي',
+      details: 'أرجو التكرم بالموافقة على إحالة المريض [اسم المريض] إلى مستشفى [اسم المستشفى] لمتابعة العلاج تحت إشراف طبيب استشاري تخصصي.',
+      tone: 'رسمية ومهنية',
+      formality: 'رسمي'
+    }
+  },
+  {
+    id: 'board_meeting',
+    category: 'أعمال',
+    name: 'دعوة لاجتماع مجلس إدارة',
+    icon: <Calendar className="w-5 h-5" />,
+    data: {
+      type: 'أعمال',
+      subType: 'أخرى',
+      subject: 'دعوة لحضور اجتماع مجلس الإدارة رقم [رقم الاجتماع]',
+      details: 'يسرنا دعوتكم لحضور اجتماع مجلس الإدارة القادم والمقرر عقده يوم [اليوم] في تمام الساعة [الوقت] بمقر الشركة، لمناقشة جدول الأعمال المرفق.',
+      tone: 'رسمية ومهنية',
+      formality: 'رسمي جداً'
+    }
+  },
+  {
+    id: 'tech_support',
+    category: 'إداري/رسمي',
+    name: 'طلب دعم فني / تقني',
+    icon: <Briefcase className="w-5 h-5" />,
+    data: {
+      type: 'إداري/رسمي',
+      subType: 'أخرى',
+      subject: 'طلب صيانة ودعم فني طارئ لأنظمة [اسم النظام]',
+      details: 'نأمل التكرم بتوجيه فريق الدعم الفني لإصلاح العطل التقني المفاجئ في أنظمة الشبكة الداخلية لضمان استمرارية سير العمل دون انقطاع.',
+      tone: 'رسمية ومهنية',
+      formality: 'رسمي'
+    }
+  },
+  {
+    id: 'employee_clearance',
+    category: 'شركات خاصة',
+    name: 'خطاب إخلاء طرف',
+    icon: <User className="w-5 h-5" />,
+    data: {
+      type: 'إداري/رسمي',
+      subType: 'أخرى',
+      subject: 'شهادة إخلاء طرف وبراءة ذمة للموظف',
+      details: 'تشهد الشركة بأن الموظف/ة [الاسم] قد أنهى علاقته التعاقدية وتم إخلاء طرفه وتسليم كافة العهد المالية والعينية التي بحوزته بنجاح.',
+      tone: 'رسمية ومهنية',
+      formality: 'رسمي جداً'
+    }
+  },
+  {
+    id: 'official_inquiry',
+    category: 'جهات حكومية',
+    name: 'طلب استفسار رسمي',
+    icon: <MessageSquare className="w-5 h-5" />,
+    data: {
+      type: 'إداري/رسمي',
+      subType: 'خطاب استفسار',
+      subject: 'طلب استفسار بشأن معاملة رقم [رقم المعاملة]',
+      details: 'نتوجه إليكم بطلبنا هذا للإفادة والاستفسار عن حالة المعاملة الخاصة بنا المقيدة برقم [الرقم] وتاريخ [التاريخ]، لمعرفة الإجراء التالي المطلوب.',
+      tone: 'رسمية ومهنية',
+      formality: 'رسمي جداً'
+    }
+  },
+  {
+    id: 'legal_claim',
+    category: 'القطاع القانوني',
+    name: 'خطاب مطالبة حقوقية',
+    icon: <Scale className="w-5 h-5" />,
+    data: {
+      type: 'قانوني',
+      subType: 'خطاب مطالبة حقوقية',
+      subject: 'مطالبة حقوقية ودية بسداد الالتزامات المالية المتأخرة',
+      details: 'نطالبكم بموجب هذا الخطاب بالوفاء بالتزاماتكم المالية المتأخرة والبالغة [المبلغ] في موعد أقصاه [التاريخ] لتجنب اللجوء للمطالبة القضائية.',
+      tone: 'حازمة',
+      formality: 'رسمي جداً'
+    }
   }
 ];
 
@@ -469,6 +709,9 @@ export const typeTranslations: Record<string, string> = {
   'أعمال': 'Business',
   'شخصي': 'Personal',
   'توظيف وتطوير مهني': 'Employment & Career',
+  'قانوني': 'Legal',
+  'طبي': 'Medical',
+  'أكاديمي/تعليمي': 'Academic/Educational',
 };
 
 export const subTypeTranslations: Record<string, string> = {
@@ -486,6 +729,15 @@ export const subTypeTranslations: Record<string, string> = {
   'رسالة تواصل LinkedIn': 'LinkedIn Networking Message',
   'رسالة شكر بعد المقابلة': 'Post-Interview Thank You',
   'رسالة قبول/اعتذار عن عرض عمل': 'Job Offer Response (Accept/Decline)',
+  'خطاب إنذار قانوني': 'Legal Warning Letter',
+  'خطاب مطالبة حقوقية': 'Legal Claim Letter',
+  'عقد/اتفاقية تقديم خدمات': 'Service Agreement Contract',
+  'خطاب تقرير طبي': 'Medical Report Letter',
+  'خطاب إجازة مرضية': 'Sick Leave Certificate',
+  'طلب إحالة طبية': 'Medical Referral Request',
+  'خطاب طلب قبول جامعي': 'University Admission Request',
+  'خطاب توصية أكاديمية': 'Academic Recommendation Letter',
+  'طلب تأجيل دراسي': 'Academic Deferral Request',
   'أخرى': 'Other',
 };
 
@@ -518,6 +770,9 @@ export const categoryTranslations: Record<string, string> = {
   'إداري/رسمي': 'Official/Administrative',
   'أعمال': 'Business',
   'توظيف وتطوير مهني': 'Employment & Career',
+  'القطاع القانوني': 'Legal Sector',
+  'القطاع الطبي': 'Medical Sector',
+  'القطاع الأكاديمي': 'Academic Sector',
 };
 
 export const templateNameTranslations: Record<string, string> = {
@@ -550,5 +805,20 @@ export const templateNameTranslations: Record<string, string> = {
   'رسالة شكر بعد المقابلة': 'Post-Interview Thank You',
   'رسالة متابعة طلب توظيف': 'Job Application Follow-up',
   'رسالة قبول/اعتذار عن عرض عمل': 'Job Offer Response',
+  'إنذار قانوني رسمي': 'Official Legal Warning',
+  'عقد تقديم خدمات': 'Service Agreement Contract',
+  'خطاب إجازة مرضية': 'Sick Leave Certificate',
+  'توصية أكاديمية': 'Academic Recommendation',
+  'طلب تأجيل دراسي': 'Academic Deferral Request',
+  'طلب زيادة راتب': 'Salary Increase Request',
+  'طلب شهادة خبرة': 'Experience Certificate Request',
+  'خطاب شكر للموظف المتميز': 'Outstanding Employee Thank You',
+  'إشعار بفسخ عقد': 'Contract Termination Notice',
+  'طلب إحالة طبية': 'Medical Referral Request',
+  'دعوة لاجتماع مجلس إدارة': 'Board Meeting Invitation',
+  'طلب دعم فني / تقني': 'Technical Support Request',
+  'خطاب إخلاء طرف': 'Clearance/Discharge Letter',
+  'طلب استفسار رسمي': 'Official Inquiry Request',
+  'خطاب مطالبة حقوقية': 'Legal Claim',
 };
 

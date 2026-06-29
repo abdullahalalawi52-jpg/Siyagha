@@ -17,6 +17,7 @@ import AiModal from './components/modals/AiModal';
 import AboutModal from './components/modals/AboutModal';
 import BrandVoiceModal from './components/modals/BrandVoiceModal';
 import { CareerProfileModal } from './components/modals/CareerProfileModal';
+import { CloudStorageModal } from './components/modals/CloudStorageModal';
 
 function MainAppContent() {
   const { appLang, form, generatedLetter, t } = useApp();
@@ -99,6 +100,7 @@ function MainAppContent() {
       <AboutModal />
       <BrandVoiceModal />
       <CareerProfileModal />
+      <CloudStorageModal />
     </div>
   );
 }
