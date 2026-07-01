@@ -245,7 +245,7 @@ export const UIProvider: React.FC<{ children: React.ReactNode }> = ({ children }
       {children}
 
       {/* Modern Animated Toasts Overlay */}
-      <div className="fixed bottom-6 right-6 left-6 md:left-auto md:right-6 z-55 flex flex-col gap-2.5 max-w-sm pointer-events-none" style={{ direction: appLang === 'ar' ? 'rtl' : 'ltr' }}>
+      <div className="fixed bottom-6 right-6 left-6 md:left-auto md:right-6 z-55 flex flex-col gap-2.5 max-w-sm pointer-events-none" dir={appLang === 'ar' ? 'rtl' : 'ltr'}>
         <AnimatePresence>
           {toasts.map((toast) => (
             <motion.div

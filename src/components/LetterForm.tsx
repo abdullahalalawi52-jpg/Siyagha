@@ -25,9 +25,9 @@ export const LetterForm: React.FC = () => {
   return (
     <div className="lg:col-span-5 premium-card p-6 rounded-2xl shadow-sm border border-brown-100/60 relative overflow-hidden text-start" dir={appLang === 'ar' ? 'rtl' : 'ltr'}>
       {/* decorative top gradient bar */}
-      <div className="absolute top-0 left-0 right-0 h-0.5 rounded-t-2xl" style={{ background: 'linear-gradient(90deg, #e86c1a, #f9883a, #e86c1a)' }} />
-      <h2 className="text-base font-black text-gray-900 mb-6 flex items-center gap-2.5" style={{ letterSpacing: '-0.01em' }}>
-        <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg,#e86c1a,#c8520d)' }}>
+      <div className="absolute top-0 left-0 right-0 h-0.5 rounded-t-2xl bg-gradient-to-r from-brown-500 via-brown-400 to-brown-500" />
+      <h2 className="text-base font-black text-gray-900 mb-6 flex items-center gap-2.5 tracking-tight">
+        <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-gradient-to-br from-brown-500 to-brown-600">
           <PenLine className="w-3.5 h-3.5 text-white" />
         </div>
         {t('التخصيص والتفاصيل', 'Customization & Details')}
