@@ -273,7 +273,7 @@ export const LetterProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       sealImage: brandingState.sealImage,
     });
 
-    const opt: any = {
+    const opt = {
       margin: 15,
       filename: `${form.subject || 'letter'}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
@@ -281,7 +281,7 @@ export const LetterProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
     };
 
-    const html2pdfModule = await import('html2pdf.js') as any;
+    const html2pdfModule = await import('html2pdf.js') as unknown as { default: any };
     const html2pdf = html2pdfModule.default;
     html2pdf().set(opt).from(printElement).save();
   };

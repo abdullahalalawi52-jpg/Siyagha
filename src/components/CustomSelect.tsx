@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'motion/react';
 interface Option {
   label: string;
   value: string;
-  icon?: any;
+  icon?: React.ComponentType<{ className?: string }>;
 }
 
 interface CustomSelectProps {

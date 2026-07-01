@@ -2,9 +2,11 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { X } from 'lucide-react';
 import { useApp } from '../../contexts/AppContext';
+import { useLetter } from '../../contexts/LetterContext';
 
 export const BrandingTab: React.FC = () => {
-  const { branding, setBranding, handleImageUpload, t } = useApp();
+  const { t } = useApp();
+  const { branding, setBranding, handleImageUpload } = useLetter();
 
   return (
     <div className="space-y-4">
@@ -16,7 +18,7 @@ export const BrandingTab: React.FC = () => {
           id="enable-header-checkbox"
           type="checkbox"
           checked={branding.enableHeader}
-          onChange={(e) => setBranding((prev: any) => ({ ...prev, enableHeader: e.target.checked }))}
+          onChange={(e) => setBranding((prev) => ({ ...prev, enableHeader: e.target.checked }))}
           className="w-5 h-5 rounded border-gray-300 text-brown-600 focus:ring-brown-500 transition-colors cursor-pointer"
         />
       </div>
@@ -35,7 +37,7 @@ export const BrandingTab: React.FC = () => {
                 <button
                   key={tTheme.id}
                   type="button"
-                  onClick={() => setBranding((prev: any) => ({ ...prev, theme: tTheme.id }))}
+                  onClick={() => setBranding((prev) => ({ ...prev, theme: tTheme.id }))}
                   className={`py-2 text-xs font-bold rounded-lg transition-all border cursor-pointer ${
                     branding.theme === tTheme.id
                       ? 'bg-brown-600 text-white border-brown-600 shadow-md'
@@ -54,7 +56,7 @@ export const BrandingTab: React.FC = () => {
               type="text"
               placeholder={t('مثال: شركة التقنية الحديثة', 'e.g., Modern Technology Company')}
               value={branding.companyName}
-              onChange={(e) => setBranding((prev: any) => ({ ...prev, companyName: e.target.value }))}
+              onChange={(e) => setBranding((prev) => ({ ...prev, companyName: e.target.value }))}
               className="w-full rounded-xl border-gray-200 border px-3 py-2 text-sm focus:ring-2 focus:ring-brown-500 outline-none"
             />
           </div>
@@ -65,7 +67,7 @@ export const BrandingTab: React.FC = () => {
               rows={3}
               placeholder={t('مثال:&#10;الرياض، المملكة العربية السعودية&#10;هاتف: 920000000&#10;info@company.com', 'e.g.,&#10;London, UK&#10;Phone: +44 20 7946 0958&#10;info@company.com')}
               value={branding.companyDetails}
-              onChange={(e) => setBranding((prev: any) => ({ ...prev, companyDetails: e.target.value }))}
+              onChange={(e) => setBranding((prev) => ({ ...prev, companyDetails: e.target.value }))}
               className="w-full rounded-xl border-gray-200 border px-3 py-2 text-sm focus:ring-2 focus:ring-brown-500 outline-none resize-none"
             />
           </div>
@@ -83,7 +85,7 @@ export const BrandingTab: React.FC = () => {
                 <img src={branding.logoUrl} alt="Logo preview" className="max-h-16 rounded border border-gray-200 bg-white" />
                 <button
                   type="button"
-                  onClick={() => setBranding((prev: any) => ({ ...prev, logoUrl: '' }))}
+                  onClick={() => setBranding((prev) => ({ ...prev, logoUrl: '' }))}
                   className="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 shadow cursor-pointer"
                   aria-label={t('حذف الشعار', 'Remove logo')}
                 >
@@ -105,7 +107,7 @@ export const BrandingTab: React.FC = () => {
           id="enable-footer-checkbox"
           type="checkbox"
           checked={branding.enableFooter}
-          onChange={(e) => setBranding((prev: any) => ({ ...prev, enableFooter: e.target.checked }))}
+          onChange={(e) => setBranding((prev) => ({ ...prev, enableFooter: e.target.checked }))}
           className="w-5 h-5 rounded border-gray-300 text-brown-600 focus:ring-brown-500 transition-colors cursor-pointer"
         />
       </div>
@@ -119,7 +121,7 @@ export const BrandingTab: React.FC = () => {
               type="text"
               placeholder={t('مثال: هذا الخطاب سري وخاص بالجهة المرسل إليها.', 'e.g., This letter is confidential and intended solely for the recipient.')}
               value={branding.footerText}
-              onChange={(e) => setBranding((prev: any) => ({ ...prev, footerText: e.target.value }))}
+              onChange={(e) => setBranding((prev) => ({ ...prev, footerText: e.target.value }))}
               className="w-full rounded-xl border-gray-200 border px-3 py-2 text-sm focus:ring-2 focus:ring-brown-500 outline-none"
             />
           </div>
@@ -134,7 +136,7 @@ export const BrandingTab: React.FC = () => {
                 <button
                   key={fTheme.id}
                   type="button"
-                  onClick={() => setBranding((prev: any) => ({ ...prev, footerTheme: fTheme.id }))}
+                  onClick={() => setBranding((prev) => ({ ...prev, footerTheme: fTheme.id }))}
                   className={`py-2 text-[11px] sm:text-xs font-bold rounded-lg transition-all border cursor-pointer ${
                     (branding.footerTheme || 'centered') === fTheme.id
                       ? 'bg-brown-600 text-white border-brown-600 shadow-md'

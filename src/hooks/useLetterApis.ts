@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { escapeHtml, sanitizeUrl, buildPrintElement } from '../utils/helpers';
-import { LetterFormState, ToneAnalysisResult, AtsAnalysisResult, EmailFormState } from '../types';
+import { LetterFormState, ToneAnalysisResult, AtsAnalysisResult, EmailFormState, BrandingConfig } from '../types';
+import { UIContextType } from '../contexts/UIContext';
 
 export interface UseLetterApisProps {
   form: LetterFormState;
   setForm: React.Dispatch<React.SetStateAction<LetterFormState>>;
   generatedLetter: string;
   updateLetterContent: (content: string, addToHistory?: boolean) => void;
-  ui: any;
-  branding: any;
+  ui: UIContextType;
+  branding: BrandingConfig;
   signatureImage: string | null;
   setSignatureImage: (img: string | null) => void;
   sealImage: string | null;
@@ -274,13 +275,13 @@ export const useLetterApis = ({
 
           if (data.text) {
             if (ui.ocrTargetField === 'replyToText') {
-              setForm((prev: any) => ({ ...prev, replyToText: data.text }));
+              setForm((prev) => ({ ...prev, replyToText: data.text }));
             } else if (ui.ocrTargetField === 'jobDescription') {
-              setForm((prev: any) => ({ ...prev, jobDescription: data.text }));
+              setForm((prev) => ({ ...prev, jobDescription: data.text }));
             } else if (ui.ocrTargetField === 'resumeInfo') {
-              setForm((prev: any) => ({ ...prev, resumeInfo: data.text }));
+              setForm((prev) => ({ ...prev, resumeInfo: data.text }));
             } else {
-              setForm((prev: any) => ({ ...prev, details: data.text }));
+              setForm((prev) => ({ ...prev, details: data.text }));
             }
             setActiveSection('basic');
             ui.setIsOcrOpen(false);
@@ -328,7 +329,7 @@ export const useLetterApis = ({
 
       const data = await handleResponse(response, 'فشل في اقتراح العنوان');
       if (data.title) {
-        setForm((prev: any) => ({ ...prev, subject: data.title }));
+        setForm((prev) => ({ ...prev, subject: data.title }));
         ui.addToast('تم اقتراح العنوان بنجاح!', 'success');
       }
     } catch (err) {
@@ -396,7 +397,7 @@ export const useLetterApis = ({
           sealImage,
         });
 
-        const opt: any = {
+        const opt = {
           margin: 15,
           filename: 'letter.pdf',
           image: { type: 'jpeg', quality: 0.98 },
@@ -404,7 +405,7 @@ export const useLetterApis = ({
           jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
         };
 
-        const html2pdfModule = await import('html2pdf.js') as any;
+        const html2pdfModule = await import('html2pdf.js') as unknown as { default: any };
         const html2pdf = html2pdfModule.default;
         pdfAttachmentBase64 = await html2pdf().set(opt).from(printElement).outputPdf('datauristring');
       }

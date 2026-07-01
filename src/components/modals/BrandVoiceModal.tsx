@@ -72,7 +72,7 @@ export const BrandVoiceModal: React.FC = () => {
         setSample2('');
         setSample3('');
         // Select it immediately
-        setForm((prev: any) => ({
+        setForm((prev) => ({
           ...prev,
           brandVoiceName: profileName.trim(),
           brandVoiceProfile: data.styleProfile,
@@ -80,8 +80,9 @@ export const BrandVoiceModal: React.FC = () => {
       } else {
         throw new Error(t('لم يرجع الخادم أي نتيجة صالحة للتحليل', 'Server returned empty style profile'));
       }
-    } catch (err: any) {
-      setError(err.message || t('حدث خطأ أثناء الاتصال بالخادم', 'An error occurred while calling the server'));
+    } catch (err: unknown) {
+      const error = err as Error;
+      setError(error.message || t('حدث خطأ أثناء الاتصال بالخادم', 'An error occurred while calling the server'));
     } finally {
       setLoading(false);
     }
@@ -155,7 +156,7 @@ export const BrandVoiceModal: React.FC = () => {
                         <div
                           key={p.id}
                           onClick={() => {
-                            setForm((prev: any) => ({
+                            setForm((prev) => ({
                               ...prev,
                               brandVoiceName: isActive ? '' : p.name,
                               brandVoiceProfile: isActive ? '' : p.profile,

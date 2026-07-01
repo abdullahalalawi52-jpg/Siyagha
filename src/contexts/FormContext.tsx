@@ -249,7 +249,7 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.error(e);
     }
     // Clear active brand voice from form if it was deleted
-    setForm((prev: any) => {
+    setForm((prev) => {
       const activeProf = brandVoiceProfiles.find((p) => p.id === id);
       if (activeProf && prev.brandVoiceName === activeProf.name) {
         return { ...prev, brandVoiceProfile: '', brandVoiceName: '' };
@@ -364,9 +364,9 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
     recognition.onstart = () => setIsListening(true);
     recognition.onend = () => setIsListening(false);
     recognition.onerror = () => setIsListening(false);
-    recognition.onresult = (event: any) => {
+    recognition.onresult = (event: { results: { [index: number]: { [index: number]: { transcript: string } } } }) => {
       const transcript = event.results[0][0].transcript;
-      setForm((prev: any) => ({
+      setForm((prev) => ({
         ...prev,
         details: prev.details ? prev.details + ' ' + transcript : transcript,
       }));
@@ -388,7 +388,7 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const replaceVariable = (variable: string, value: string) => {
     if (!value) return;
     const target = '[' + variable + ']';
-    setForm((prev: any) => ({
+    setForm((prev) => ({
       ...prev,
       subject: prev.subject.replaceAll(target, value),
       details: prev.details.replaceAll(target, value),

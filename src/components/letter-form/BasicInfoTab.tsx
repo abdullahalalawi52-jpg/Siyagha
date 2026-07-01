@@ -77,7 +77,7 @@ export const BasicInfoTab: React.FC = () => {
           }
           value={form.subType}
           onChange={(val) => setForm({ ...form, subType: val })}
-          options={getLetterTypeData(form.type).subTypes.map((st: any) => ({
+          options={getLetterTypeData(form.type).subTypes.map((st) => ({
             value: st.name,
             label: t(st.name, subTypeTranslations[st.name] || st.name),
             icon: st.icon,
@@ -113,8 +113,8 @@ export const BasicInfoTab: React.FC = () => {
           id="brand-voice-select"
           value={form.brandVoiceName}
           onChange={(val) => {
-            const selected = brandVoiceProfiles.find((p: any) => p.name === val);
-            setForm((prev: any) => ({
+            const selected = brandVoiceProfiles.find((p) => p.name === val);
+            setForm((prev) => ({
               ...prev,
               brandVoiceName: val,
               brandVoiceProfile: selected ? selected.profile : '',
@@ -122,7 +122,7 @@ export const BasicInfoTab: React.FC = () => {
           }}
           options={[
             { value: '', label: t('توليد تلقائي افتراضي (Default)', 'Default Style') },
-            ...brandVoiceProfiles.map((p: any) => ({
+            ...brandVoiceProfiles.map((p) => ({
               value: p.name,
               label: p.name,
             }))
@@ -141,7 +141,7 @@ export const BasicInfoTab: React.FC = () => {
           checked={form.isReplyMode}
           onChange={(e) => {
             const val = e.target.checked;
-            setForm((prev: any) => ({
+            setForm((prev) => ({
               ...prev,
               isReplyMode: val,
               subject: val ? (prev.subject || t('رد رسمي', 'Official Reply')) : prev.subject,
@@ -447,7 +447,7 @@ export const BasicInfoTab: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => {
-                    setForm((prev: any) => ({
+                    setForm((prev) => ({
                       ...prev,
                       resumeInfo: `${careerProfile.fullName ? `الاسم: ${careerProfile.fullName}\n` : ''}${careerProfile.qualification ? `المؤهل: ${careerProfile.qualification} (${careerProfile.specialization || ''})\n` : ''}${careerProfile.experienceYears ? `الخبرة: ${careerProfile.experienceYears}\n` : ''}${careerProfile.skills ? `المهارات والإنجازات: ${careerProfile.skills}` : ''}`,
                       senderName: prev.senderName || careerProfile.fullName || '',
@@ -556,7 +556,7 @@ export const BasicInfoTab: React.FC = () => {
                     type="button"
                     onClick={() => {
                       const fixedText = applySpellingFix(form.details || '', issue);
-                      setForm((prev: any) => ({ ...prev, details: fixedText }));
+                      setForm((prev) => ({ ...prev, details: fixedText }));
                     }}
                     className="shrink-0 bg-green-600 hover:bg-green-700 text-white font-bold px-2.5 py-1 rounded-md transition-colors cursor-pointer text-[10px]"
                   >
