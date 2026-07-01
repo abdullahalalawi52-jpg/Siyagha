@@ -89,7 +89,7 @@ export const ArchiveModal: React.FC = () => {
             </div>
 
             <div className="p-4 border-b border-gray-100 bg-white flex flex-col gap-3 shrink-0">
-              <div className="flex bg-gray-100 p-1 rounded-lg" role="tablist" aria-label="تبويبات الأرشيف">
+              <div className="flex bg-gray-100 dark:bg-slate-800/80 p-1 rounded-lg" role="tablist" aria-label="تبويبات الأرشيف">
                 <button
                   onClick={() => setArchiveTab('all')}
                   className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-all cursor-pointer ${archiveTab === 'all' ? 'bg-white text-brown-900 shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'}`}

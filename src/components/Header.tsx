@@ -26,7 +26,7 @@ export const Header: React.FC = () => {
         <div className="flex items-center gap-2 sm:gap-3">
           {/* Logo Bubble */}
           <div className="h-10 sm:h-11 px-3 flex items-center gap-2.5 bg-white/60 dark:bg-teal-950/40 backdrop-blur-md border border-brown-100/50 dark:border-teal-800/80 rounded-2xl shadow-sm transition-all hover:border-brown-400/40 group cursor-pointer">
-            <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-white/40 dark:bg-black/20 border border-white/50 dark:border-white/10 shadow-xs transition-all group-hover:scale-105">
+            <div className="w-7 h-7 rounded-lg flex items-center justify-center premium-glass-white-40 dark:bg-black/20 border border-white/50 dark:border-white/10 shadow-xs transition-all group-hover:scale-105">
               <svg viewBox="0 0 100 100" className="w-4.5 h-4.5 select-none" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   <linearGradient id="nibGrad" x1="0%" y1="0%" x2="100%" y2="100%">

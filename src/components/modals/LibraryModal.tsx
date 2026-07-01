@@ -130,7 +130,7 @@ export const LibraryModal: React.FC = () => {
                             <button
                               type="button"
                               onClick={(e) => toggleFavoritePredefined(template.id, e)}
-                              className="absolute top-2 left-2 p-1 text-yellow-400 hover:text-yellow-500 transition-colors bg-white/80 dark:bg-slate-800/80 rounded-full cursor-pointer z-10"
+                              className="absolute top-2 left-2 p-1 text-yellow-400 hover:text-yellow-500 transition-colors premium-glass-white-80 dark:bg-slate-800/80 rounded-full cursor-pointer z-10"
                               title={t('إزالة من المفضلة', 'Remove from Favorites')}
                               aria-label={t('إزالة من المفضلة', 'Remove from Favorites')}
                             >
@@ -173,7 +173,7 @@ export const LibraryModal: React.FC = () => {
                             <button
                               type="button"
                               onClick={(e) => toggleFavoritePredefined(template.id, e)}
-                              className={`absolute top-2 left-2 p-1 transition-colors bg-white/80 dark:bg-slate-800/80 rounded-full cursor-pointer z-10 ${favoritePredefined.includes(template.id) ? 'text-yellow-400 hover:text-yellow-500' : 'text-gray-300 dark:text-gray-600 hover:text-yellow-400 dark:hover:text-yellow-550'}`}
+                              className={`absolute top-2 left-2 p-1 transition-colors premium-glass-white-80 dark:bg-slate-800/80 rounded-full cursor-pointer z-10 ${favoritePredefined.includes(template.id) ? 'text-yellow-400 hover:text-yellow-500' : 'text-gray-300 dark:text-gray-600 hover:text-yellow-400 dark:hover:text-yellow-550'}`}
                               title={favoritePredefined.includes(template.id) ? t('إزالة من المفضلة', 'Remove from Favorites') : t('إضافة للمفضلة', 'Add to Favorites')}
                               aria-label={favoritePredefined.includes(template.id) ? t('إزالة من المفضلة', 'Remove from Favorites') : t('إضافة للمفضلة', 'Add to Favorites')}
                             >

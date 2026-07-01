@@ -9,6 +9,13 @@
   --color-logo-end: #c8520d;
   --color-logo-accent-start: #2d1a08;
   --color-logo-accent-end: #1e1105;
+
+  /* WCAG AA Gray colors - Light Mode */
+  --color-app-gray-400: #6b6b6b;
+  --color-app-gray-450: #5d5d5d;
+  --color-app-gray-500: #555555;
+  --color-app-gray-550: #4b4b4b;
+  --color-app-gray-655: #3b3b3b;
 }
 
 /* ============================================
@@ -39,6 +46,13 @@
   --color-teal-800: #142230;
   --color-teal-700: #1e3040;
   --color-teal-600: #2a4055;
+
+  /* Override standard grays to be WCAG AA compliant automatically */
+  --color-gray-400: var(--color-app-gray-400);
+  --color-gray-450: var(--color-app-gray-450);
+  --color-gray-500: var(--color-app-gray-500);
+  --color-gray-550: var(--color-app-gray-550);
+  --color-gray-655: var(--color-app-gray-655);
 }
 
 /* ============================================
@@ -143,25 +157,25 @@ body::after {
   box-shadow: 0 12px 40px rgba(74, 26, 4, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04), inset 0 0 0 1px rgba(255, 255, 255, 0.4);
 }
 
-/* Soft white utility custom backgrounds for light mode */
-.bg-white\/40 {
+/* Premium Glass Panel Utilities */
+.premium-glass-white-40 {
   background-color: rgba(250, 244, 235, 0.40); /* Soft cream 100 with 40% opacity */
 }
-.bg-white\/50 {
+.premium-glass-white-50 {
   background-color: rgba(250, 244, 235, 0.50); /* Soft cream 100 with 50% opacity */
 }
-.bg-white\/80 {
+.premium-glass-white-80 {
   background-color: rgba(253, 250, 246, 0.80); /* Soft cream 50 with 80% opacity */
 }
 
 /* Custom transparent panels */
-.bg-gray-50 {
+.premium-glass-gray-50 {
   background-color: rgba(253, 247, 240, 0.4);
   backdrop-filter: blur(12px) saturate(150%);
   -webkit-backdrop-filter: blur(12px) saturate(150%);
   border: 1px solid rgba(255, 255, 255, 0.4);
 }
-.bg-gray-100 {
+.premium-glass-gray-100 {
   background-color: rgba(250, 242, 232, 0.5);
   backdrop-filter: blur(12px) saturate(150%);
   -webkit-backdrop-filter: blur(12px) saturate(150%);
@@ -418,6 +432,13 @@ hr.border-dashed {
   --color-logo-accent-end: #000000;
   color: #f0e8dc;
   background-color: #080e14;
+
+  /* WCAG AA Gray colors - Dark Mode */
+  --color-app-gray-400: #b0b0b0;
+  --color-app-gray-450: #c0c0c0;
+  --color-app-gray-500: #d2d2d2;
+  --color-app-gray-550: #e2e2e2;
+  --color-app-gray-655: #fdfaf6;
   background-image:
     radial-gradient(ellipse 80% 50% at 10% 0%, rgba(232, 108, 26, 0.07) 0%, transparent 60%),
     radial-gradient(ellipse 70% 60% at 90% 100%, rgba(200, 82, 13, 0.05) 0%, transparent 60%),
@@ -463,14 +484,14 @@ hr.border-dashed {
   border-color: rgba(255, 255, 255, 0.05);
 }
 
-/* Dark transparent background utility overrides */
-.dark .bg-white\/50,
-.dark .bg-white\/80 {
+/* Dark transparent background custom utility mappings */
+.dark .premium-glass-white-50,
+.dark .premium-glass-white-80 {
   background-color: rgba(13, 21, 32, 0.45);
 }
 
-.dark .bg-gray-50,
-.dark .bg-gray-100 {
+.dark .premium-glass-gray-50,
+.dark .premium-glass-gray-100 {
   background-color: rgba(13, 21, 32, 0.3);
   backdrop-filter: blur(12px) saturate(150%);
   -webkit-backdrop-filter: blur(12px) saturate(150%);
@@ -639,29 +660,4 @@ hr.border-dashed {
   filter: drop-shadow(0 2px 8px rgba(232, 108, 26, 0.4));
 }
 
-/* Accessibility contrast improvements (WCAG AA compliant) */
-.text-gray-400 {
-  color: #6b6b6b !important;
-}
-.text-gray-450 {
-  color: #5d5d5d !important;
-}
-.text-gray-500 {
-  color: #555555 !important;
-}
-.text-gray-550 {
-  color: #4b4b4b !important;
-}
-.text-gray-655 {
-  color: #3b3b3b !important;
-}
 
-.dark .text-gray-400 {
-  color: #b0b0b0 !important;
-}
-.dark .text-gray-500 {
-  color: #d2d2d2 !important;
-}
-.dark .text-gray-550 {
-  color: #e2e2e2 !important;
-}

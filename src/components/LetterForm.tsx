@@ -34,7 +34,7 @@ export const LetterForm: React.FC = () => {
       </h2>
 
       {/* Tab Selector */}
-      <div className="flex bg-gray-100 p-1 rounded-xl mb-6">
+      <div className="flex bg-gray-100 dark:bg-slate-800/80 p-1 rounded-xl mb-6">
         <button
           type="button"
           onClick={() => setActiveSection('basic')}
