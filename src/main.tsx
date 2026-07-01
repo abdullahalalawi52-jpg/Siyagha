@@ -2,7 +2,7 @@ import {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
-import { AuthProvider } from './contexts/AuthContext';
+import ErrorBoundary from './components/ErrorBoundary';
 
 // Global fetch override to handle 429 Rate Limit Automatically
 const originalFetch = window.fetch;
@@ -22,8 +22,8 @@ window.fetch = async (...args) => {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <AuthProvider>
+    <ErrorBoundary>
       <App />
-    </AuthProvider>
+    </ErrorBoundary>
   </StrictMode>,
 );

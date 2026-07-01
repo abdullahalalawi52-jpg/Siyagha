@@ -9,10 +9,8 @@ describe('Helpers Utility Functions', () => {
     });
 
     it('returns empty string if input is not a string', () => {
-      // @ts-ignore
-      expect(escapeHtml(null)).toBe('');
-      // @ts-ignore
-      expect(escapeHtml(undefined)).toBe('');
+      expect(escapeHtml(null as any)).toBe('');
+      expect(escapeHtml(undefined as any)).toBe('');
     });
   });
 

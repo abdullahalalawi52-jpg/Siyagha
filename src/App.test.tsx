@@ -20,20 +20,12 @@ Object.defineProperty(window, 'matchMedia', {
 
 describe('App Component', () => {
   it('renders the main title correctly', () => {
-    render(
-      <AuthProvider>
-        <App />
-      </AuthProvider>
-    );
+    render(<App />);
     expect(screen.getByText('صياغة')).toBeInTheDocument();
   });
 
   it('contains the sender input field', () => {
-    render(
-      <AuthProvider>
-        <App />
-      </AuthProvider>
-    );
+    render(<App />);
     expect(screen.getByPlaceholderText(/اسمك أو اسم المؤسسة/i)).toBeInTheDocument();
   });
 });

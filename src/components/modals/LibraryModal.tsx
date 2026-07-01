@@ -53,7 +53,7 @@ export const LibraryModal: React.FC = () => {
             animate={{ x: 0 }}
             exit={{ x: appLang === 'ar' ? '-100%' : '100%' }}
             transition={{ type: 'spring', damping: 28, stiffness: 260 }}
-            className={`fixed top-0 bottom-0 ${appLang === 'ar' ? 'left-0 border-r dark:border-slate-800' : 'right-0 border-l dark:border-slate-800'} w-full sm:max-w-2xl md:max-w-3xl lg:max-w-5xl bg-white dark:bg-slate-900 shadow-2xl flex flex-col overflow-hidden border-gray-200 text-start z-50`}
+            className={`fixed top-0 bottom-0 ${appLang === 'ar' ? 'left-0 border-r dark:border-slate-800' : 'right-0 border-l dark:border-slate-800'} w-full sm:max-w-2xl md:max-w-3xl lg:max-w-5xl premium-card shadow-2xl flex flex-col overflow-hidden border-gray-200 text-start z-50`}
             dir={appLang === 'ar' ? 'rtl' : 'ltr'}
           >
             {/* Header */}
@@ -122,7 +122,7 @@ export const LibraryModal: React.FC = () => {
                             className={`bg-white dark:bg-slate-800/40 p-4 rounded-xl border transition-all cursor-pointer group flex items-start gap-3.5 relative ${
                               activeTemplate === template.id
                                 ? 'border-brown-500 dark:border-brown-500 shadow-md ring-1 ring-brown-500/20'
-                                : 'border-gray-200 dark:border-slate-800 hover:border-brown-300 dark:hover:border-brown-500/40 hover:shadow-sm'
+                                : 'border-gray-200 dark:border-slate-800 hover:border-brown-300 dark:hover:border-brown-500/40 hover:shadow-sm template-card-btn'
                             }`}
                             onClick={() => applyTemplate(template.id, false)}
                             aria-label={t(`تطبيق قالب ${template.name}`, `Apply template ${t(template.name, templateNameTranslations[template.name] || template.name)}`)}
@@ -165,7 +165,7 @@ export const LibraryModal: React.FC = () => {
                             className={`bg-white dark:bg-slate-800/40 p-4 rounded-xl border transition-all cursor-pointer group flex items-start gap-3.5 relative ${
                               activeTemplate === template.id
                                 ? 'border-brown-500 dark:border-brown-500 shadow-md ring-1 ring-brown-500/20'
-                                : 'border-gray-200 dark:border-slate-800 hover:border-brown-300 dark:hover:border-brown-500/40 hover:shadow-sm'
+                                : 'border-gray-200 dark:border-slate-800 hover:border-brown-300 dark:hover:border-brown-500/40 hover:shadow-sm template-card-btn'
                             }`}
                             onClick={() => applyTemplate(template.id, false)}
                             aria-label={t(`تطبيق قالب ${template.name}`, `Apply template ${t(template.name, templateNameTranslations[template.name] || template.name)}`)}
@@ -211,7 +211,7 @@ export const LibraryModal: React.FC = () => {
                           className={`bg-white dark:bg-slate-800/40 p-4 rounded-xl border transition-all cursor-pointer group flex items-center justify-between gap-4 ${
                             activeTemplate === template.id
                               ? 'border-brown-500 dark:border-brown-500 shadow-md ring-1 ring-brown-500/20'
-                              : 'border-gray-200 dark:border-slate-800 hover:border-brown-300 dark:hover:border-brown-500/40 hover:shadow-sm'
+                              : 'border-gray-200 dark:border-slate-800 hover:border-brown-300 dark:hover:border-brown-500/40 hover:shadow-sm template-card-btn'
                           }`}
                           onClick={() => applyTemplate(template.id, true)}
                           aria-label={t(`تطبيق قالب ${template.name}`, `Apply template ${template.name}`)}

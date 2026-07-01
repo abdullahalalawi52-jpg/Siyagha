@@ -107,7 +107,7 @@ export const BrandVoiceModal: React.FC = () => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.93, y: 20 }}
             transition={{ type: 'spring', damping: 28, stiffness: 320 }}
-            className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden text-start z-10 max-h-[85vh] flex flex-col"
+            className="relative w-full max-w-2xl premium-card rounded-2xl shadow-2xl overflow-hidden text-start z-10 max-h-[85vh] flex flex-col"
             dir={appLang === 'ar' ? 'rtl' : 'ltr'}
           >
             {/* Header */}

@@ -69,7 +69,7 @@ export const QuickTemplates: React.FC = () => {
             className={`group relative flex items-center gap-3 p-4 rounded-2xl border text-start transition-all hover:-translate-y-0.5 active:scale-[0.97] cursor-pointer ${
               activeTemplate === template.id
                 ? 'border-brown-400 bg-gradient-to-br from-brown-50 to-orange-50 text-brown-700 shadow-lg ring-2 ring-brown-400/25'
-                : 'border-gray-200/80 bg-white/80 hover:border-brown-300/70 text-gray-700 shadow-sm'
+                : 'border-gray-200/80 bg-white/80 hover:border-brown-300/70 text-gray-700 shadow-sm template-card-btn'
             }`}
           >
             <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all ${

@@ -78,6 +78,7 @@ export const Header: React.FC = () => {
             onClick={() => setIsAboutOpen(true)}
             className="h-7 sm:h-8 px-2 sm:px-2.5 text-xs font-bold text-brown-700 dark:text-brown-300 rounded-lg hover:bg-brown-500/10 dark:hover:bg-white/5 transition-all cursor-pointer flex items-center gap-1"
             title={t('من نحن', 'About Us')}
+            aria-label={t('من نحن', 'About Us')}
             type="button"
           >
             <Info className="w-4 h-4 text-brown-600 dark:text-brown-400" />
@@ -92,6 +93,7 @@ export const Header: React.FC = () => {
             onClick={() => setAppLang(appLang === 'ar' ? 'en' : 'ar')}
             className="h-7 sm:h-8 px-2 sm:px-2.5 text-[10px] sm:text-xs font-bold text-brown-700 dark:text-brown-300 rounded-lg hover:bg-brown-500/10 dark:hover:bg-white/5 transition-all cursor-pointer flex items-center justify-center"
             title={t('تغيير اللغة', 'Change Language')}
+            aria-label={t('تغيير اللغة', 'Change Language')}
             type="button"
           >
             {appLang === 'ar' ? 'EN' : 'عربي'}
@@ -105,6 +107,7 @@ export const Header: React.FC = () => {
             onClick={toggleDarkMode}
             className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center text-brown-700 dark:text-brown-300 rounded-lg hover:bg-brown-500/10 dark:hover:bg-white/5 transition-all cursor-pointer overflow-hidden"
             title={darkMode ? t('الوضع المضيء', 'Light Mode') : t('الوضع الداكن', 'Dark Mode')}
+            aria-label={darkMode ? t('الوضع المضيء', 'Light Mode') : t('الوضع الداكن', 'Dark Mode')}
             type="button"
           >
             <AnimatePresence mode="wait" initial={false}>
@@ -166,6 +169,7 @@ export const Header: React.FC = () => {
                 onClick={signOut}
                 className="h-7 sm:h-8 px-2 sm:px-2.5 text-[10px] sm:text-xs font-bold rounded-lg text-red-600 dark:text-red-400 hover:bg-red-500/10 dark:hover:bg-red-500/20 transition-all cursor-pointer flex items-center gap-1"
                 title={t('تسجيل الخروج', 'Log Out')}
+                aria-label={t('تسجيل الخروج', 'Log Out')}
                 type="button"
               >
                 <LogOut className="w-4 h-4" />
@@ -177,6 +181,7 @@ export const Header: React.FC = () => {
               onClick={signInWithGoogle}
               className="h-7 sm:h-8 px-2 sm:px-2.5 text-[10px] sm:text-xs font-bold rounded-lg text-orange-600 dark:text-orange-400 hover:bg-orange-500/10 dark:hover:bg-orange-500/20 transition-all flex items-center gap-1 cursor-pointer"
               title={t('تسجيل الدخول باستخدام جوجل', 'Sign In with Google')}
+              aria-label={t('تسجيل الدخول باستخدام جوجل', 'Sign In with Google')}
               type="button"
             >
               <LogIn className="w-4 h-4" />

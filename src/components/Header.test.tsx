@@ -114,7 +114,7 @@ describe('Header Component', () => {
     render(<Header />);
 
     // Click language toggle button
-    const langBtn = screen.getByRole('button', { name: /EN/i });
+    const langBtn = screen.getByRole('button', { name: /تغيير اللغة/i });
     fireEvent.click(langBtn);
     expect(setAppLangMock).toHaveBeenCalledWith('en');
 

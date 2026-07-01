@@ -3,6 +3,7 @@ import { useAuth } from './AuthContext';
 import { useUI } from './UIContext';
 import { syncUserDataToCloud } from '../lib/sync';
 import { toneOptions, formalityOptions, letterTypes, predefinedTemplates } from '../data/templates';
+import { LetterFormState, CustomTemplate } from '../types';
 
 const ObjectKeys = Object.keys(letterTypes);
 
@@ -39,11 +40,11 @@ export interface FormContextType {
     jobDescription?: string;
     resumeInfo?: string;
   };
-  setForm: React.Dispatch<React.SetStateAction<any>>;
+  setForm: React.Dispatch<React.SetStateAction<LetterFormState>>;
   careerProfile: CareerProfile;
   setCareerProfile: (profile: CareerProfile) => void;
-  customTemplates: any[];
-  setCustomTemplates: React.Dispatch<React.SetStateAction<any[]>>;
+  customTemplates: CustomTemplate[];
+  setCustomTemplates: React.Dispatch<React.SetStateAction<CustomTemplate[]>>;
   favoriteTemplates: { type: string; subType: string }[];
   setFavoriteTemplates: React.Dispatch<React.SetStateAction<{ type: string; subType: string }[]>>;
   favoritePredefined: string[];
@@ -77,7 +78,7 @@ export const useForm = () => {
 
 export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user } = useAuth();
-  const { appLang, setIsLibraryOpen } = useUI();
+  const { appLang, setIsLibraryOpen, addToast } = useUI();
 
   // Form states
   const [form, setForm] = useState({
@@ -344,7 +345,7 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const handleVoiceInput = () => {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognition) {
-      alert('متصفحك لا يدعم الإدخال الصوتي. استخدم Google Chrome للحصول على أفضل تجربة.');
+      addToast('متصفحك لا يدعم الإدخال الصوتي. استخدم Google Chrome للحصول على أفضل تجربة.', 'warning');
       return;
     }
 

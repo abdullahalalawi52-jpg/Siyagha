@@ -1,8 +1,9 @@
-import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore';
+import { doc, setDoc, onSnapshot } from 'firebase/firestore';
 import { db } from './firebase';
 import { User } from 'firebase/auth';
+import { UserCloudData } from '../types';
 
-export const syncUserDataToCloud = async (user: User, localData: any) => {
+export const syncUserDataToCloud = async (user: User, localData: Partial<UserCloudData>) => {
   if (!db || !user) return;
   try {
     const userRef = doc(db, 'users', user.uid);
@@ -15,7 +16,7 @@ export const syncUserDataToCloud = async (user: User, localData: any) => {
   }
 };
 
-export const listenToCloudData = (user: User, onDataUpdate: (data: any) => void) => {
+export const listenToCloudData = (user: User, onDataUpdate: (data: Partial<UserCloudData>) => void) => {
   if (!db || !user) return () => {};
   
   const userRef = doc(db, 'users', user.uid);

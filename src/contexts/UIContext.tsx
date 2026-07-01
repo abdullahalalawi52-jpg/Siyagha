@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { flushSync } from 'react-dom';
+import { motion, AnimatePresence } from 'motion/react';
+import { ToastMessage } from '../types';
 
 export interface UIContextType {
   appLang: 'ar' | 'en';
@@ -52,6 +54,9 @@ export interface UIContextType {
   newTemplateName: string;
   setNewTemplateName: (name: string) => void;
   t: (arText: string, enText: string) => string;
+  toasts: ToastMessage[];
+  addToast: (message: string, type?: 'success' | 'error' | 'info' | 'warning') => void;
+  removeToast: (id: string) => void;
 }
 
 const UIContext = createContext<UIContextType | undefined>(undefined);
@@ -75,8 +80,8 @@ export const UIProvider: React.FC<{ children: React.ReactNode }> = ({ children }
   });
 
   const toggleDarkMode = () => {
-    // @ts-ignore
-    if (!document.startViewTransition) {
+    const doc = document as any;
+    if (!doc.startViewTransition) {
       setDarkMode((prev) => !prev);
       return;
     }
@@ -89,8 +94,7 @@ export const UIProvider: React.FC<{ children: React.ReactNode }> = ({ children }
       ? 'polygon(100% 0, 100% 100%, 0 100%, 0 0)'
       : 'polygon(0 0, 100% 0, 100% 100%, 0 100%)';
 
-    // @ts-ignore
-    const transition = document.startViewTransition(() => {
+    const transition = doc.startViewTransition(() => {
       flushSync(() => {
         setDarkMode((prev) => !prev);
       });
@@ -161,7 +165,21 @@ export const UIProvider: React.FC<{ children: React.ReactNode }> = ({ children }
   const [isSavingTemplate, setIsSavingTemplate] = useState(false);
   const [newTemplateName, setNewTemplateName] = useState('');
 
-  // We expose setAppLangState but wrapping it so that children can call setAppLang
+  // Toast Notifications State
+  const [toasts, setToasts] = useState<ToastMessage[]>([]);
+
+  const addToast = (message: string, type: 'success' | 'error' | 'info' | 'warning' = 'info') => {
+    const id = Date.now().toString() + Math.random().toString(36).substring(2, 9);
+    setToasts((prev) => [...prev, { id, message, type }]);
+    setTimeout(() => {
+      removeToast(id);
+    }, 4500);
+  };
+
+  const removeToast = (id: string) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  };
+
   const setAppLang = (lang: 'ar' | 'en') => {
     setAppLangState(lang);
   };
@@ -219,9 +237,45 @@ export const UIProvider: React.FC<{ children: React.ReactNode }> = ({ children }
         newTemplateName,
         setNewTemplateName,
         t,
+        toasts,
+        addToast,
+        removeToast,
       }}
     >
       {children}
+
+      {/* Modern Animated Toasts Overlay */}
+      <div className="fixed bottom-6 right-6 left-6 md:left-auto md:right-6 z-55 flex flex-col gap-2.5 max-w-sm pointer-events-none" style={{ direction: appLang === 'ar' ? 'rtl' : 'ltr' }}>
+        <AnimatePresence>
+          {toasts.map((toast) => (
+            <motion.div
+              key={toast.id}
+              initial={{ opacity: 0, y: 50, scale: 0.93 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15, transition: { duration: 0.2 } }}
+              className={`p-3.5 rounded-xl shadow-xl text-xs font-bold text-white flex items-center justify-between gap-3 pointer-events-auto border backdrop-blur-md ${
+                toast.type === 'success' ? 'bg-emerald-600/95 border-emerald-500/30' :
+                toast.type === 'error' ? 'bg-rose-600/95 border-rose-500/30' :
+                toast.type === 'warning' ? 'bg-amber-600/95 border-amber-500/30' :
+                'bg-blue-600/95 border-blue-500/30'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <span>{toast.message}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => removeToast(toast.id)}
+                className="hover:opacity-75 cursor-pointer text-base leading-none font-black pl-1"
+                title="Close"
+              >
+                ×
+              </button>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </div>
     </UIContext.Provider>
   );
 };
+export default UIContext;

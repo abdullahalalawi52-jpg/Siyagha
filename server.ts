@@ -142,10 +142,17 @@ if (isFirebaseConfigured) {
   console.warn("VITE_FIREBASE_PROJECT_ID is missing. Firestore sharing is disabled.");
 }
 
+// Allowed origins for CORS and CSRF checks
+const ALLOWED_ORIGINS = [
+  "http://localhost:5173",
+  "http://localhost:3000",
+  "https://abdullahalalawi52-jpg.github.io"
+];
+
 // Secure PBKDF2 hashing helper for shared links passwords
 const hashPassword = (password: string): string => {
   const salt = crypto.randomBytes(16).toString("hex");
-  const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, "sha512").toString("hex");
+  const hash = crypto.pbkdf2Sync(password, salt, 600000, 64, "sha512").toString("hex");
   return `${salt}:${hash}`;
 };
 
@@ -153,8 +160,14 @@ const verifyPassword = (password: string, storedHash: string): boolean => {
   const parts = storedHash.split(":");
   if (parts.length !== 2) return storedHash === password; // Backwards compatible fallback for plain text
   const [salt, hash] = parts;
-  const checkHash = crypto.pbkdf2Sync(password, salt, 1000, 64, "sha512").toString("hex");
-  return hash === checkHash;
+  
+  // Try OWASP standard 600,000 iterations first
+  const checkHash600k = crypto.pbkdf2Sync(password, salt, 600000, 64, "sha512").toString("hex");
+  if (hash === checkHash600k) return true;
+  
+  // Fallback to legacy 1000 iterations for old links
+  const checkHash1k = crypto.pbkdf2Sync(password, salt, 1000, 64, "sha512").toString("hex");
+  return hash === checkHash1k;
 };
 
 // Middleware to validate Gemini API Key and attach the client instance to the request
@@ -170,29 +183,88 @@ const checkGeminiKey = (req: any, res: express.Response, next: express.NextFunct
   next();
 };
 
-// Basic Security Middleware
-  app.use(helmet({
-    contentSecurityPolicy: false // Disabled CSP for now to allow inline scripts/styles for React
-  }));
-  app.use(express.json({ limit: "50mb" })); // Increased limit to handle PDF base64 payloads
+// HTML and Script Sanitization helpers
+const sanitizeInput = (text: string): string => {
+  if (typeof text !== 'string') return '';
+  // Remove HTML tags to prevent HTML/XSS injection
+  return text.replace(/<[^>]*>/g, '').trim();
+};
 
-  // CORS Middleware to allow requests from frontend domains like GitHub Pages
-  app.use((req, res, next) => {
-    const origin = req.headers.origin;
-    if (origin) {
-      res.setHeader('Access-Control-Allow-Origin', origin);
+const sanitizeBody = (body: any): any => {
+  if (!body) return body;
+  const sanitized: any = {};
+  for (const key in body) {
+    if (typeof body[key] === 'string') {
+      sanitized[key] = sanitizeInput(body[key]);
+    } else if (typeof body[key] === 'object' && body[key] !== null) {
+      sanitized[key] = sanitizeBody(body[key]);
     } else {
-      res.setHeader('Access-Control-Allow-Origin', '*');
+      sanitized[key] = body[key];
     }
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,Content-Type,Authorization');
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
+  }
+  return sanitized;
+};
+
+const sanitizeRequestBody = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  if (req.body && typeof req.body === 'object') {
+    req.body = sanitizeBody(req.body);
+  }
+  next();
+};
+
+// CSRF Protection Middleware via Origin / Referer Validation (OWASP recommendation)
+const csrfCheck = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  if (['POST', 'PUT', 'DELETE', 'PATCH'].includes(req.method)) {
+    const origin = req.headers.origin;
+    const referer = req.headers.referer;
+    const targetOrigin = origin || (referer ? new URL(referer).origin : null);
     
-    if (req.method === 'OPTIONS') {
-      return res.sendStatus(200);
+    if (!targetOrigin || !ALLOWED_ORIGINS.includes(targetOrigin)) {
+      console.warn(`[Security Alert] Blocked CSRF request from origin: ${targetOrigin}`);
+      return res.status(403).json({ error: "Forbidden: CSRF origin verification failed" });
     }
-    next();
-  });
+  }
+  next();
+};
+
+// Enable Helmet with secure Content Security Policy (CSP) directives
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://apis.google.com"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
+      imgSrc: ["'self'", "data:", "https:", "blob:"],
+      connectSrc: ["'self'", "https://*", "wss://*"],
+      frameSrc: ["'self'", "https://*"],
+      objectSrc: ["'none'"],
+      upgradeInsecureRequests: [],
+    },
+  },
+}));
+
+app.use(express.json({ limit: "50mb" })); // Increased limit to handle PDF base64 payloads
+app.use(sanitizeRequestBody);
+app.use(csrfCheck);
+
+// CORS Middleware to allow requests only from trusted origins
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (origin && ALLOWED_ORIGINS.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', 'https://abdullahalalawi52-jpg.github.io');
+  }
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,Content-Type,Authorization');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
 
   // API routes
   app.post("/api/send-email", emailLimiter, async (req, res) => {
@@ -260,11 +332,6 @@ const checkGeminiKey = (req: any, res: express.Response, next: express.NextFunct
       const response = await safeGenerate(ai, {
         model: "gemini-flash-lite-latest",
         contents: prompt,
-        config: {
-          safetySettings: SAFETY_SETTINGS,
-          // @ts-ignore
-          safety_settings: SAFETY_SETTINGS,
-        },
       });
 
       res.json({ title: response.text?.trim() });
@@ -294,11 +361,6 @@ ${text}
       const response = await safeGenerate(ai, {
         model: "gemini-flash-lite-latest",
         contents: prompt,
-        config: {
-          safetySettings: SAFETY_SETTINGS,
-          // @ts-ignore
-          safety_settings: SAFETY_SETTINGS,
-        },
       });
 
       res.json({ letter: response.text });
@@ -326,11 +388,6 @@ Provide the analysis as a JSON object (no markdown formatting, no \`\`\`json blo
       const response = await safeGenerate(ai, {
         model: "gemini-flash-lite-latest",
         contents: prompt,
-        config: {
-          safetySettings: SAFETY_SETTINGS,
-          // @ts-ignore
-          safety_settings: SAFETY_SETTINGS,
-        },
       });
 
       let jsonStr = response.text || "{}";
@@ -375,11 +432,6 @@ Evaluate the match and provide the analysis as a JSON object (no markdown format
       const response = await safeGenerate(ai, {
         model: "gemini-flash-lite-latest",
         contents: prompt,
-        config: {
-          safetySettings: SAFETY_SETTINGS,
-          // @ts-ignore
-          safety_settings: SAFETY_SETTINGS,
-        },
       });
 
       let jsonStr = response.text || "{}";
@@ -412,11 +464,6 @@ Evaluate the match and provide the analysis as a JSON object (no markdown format
       const response = await safeGenerate(ai, {
         model: "gemini-flash-lite-latest",
         contents: prompt,
-        config: {
-          safetySettings: SAFETY_SETTINGS,
-          // @ts-ignore
-          safety_settings: SAFETY_SETTINGS,
-        },
       });
 
       res.json({ letter: response.text });
@@ -712,7 +759,7 @@ ${fewShotExamples}
   app.post("/api/share", shareLimiter, async (req, res) => {
     try {
       const { subject, content, branding, signatureImage, sealImage, language, password } = req.body;
-      const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      const token = crypto.randomBytes(16).toString("hex");
       
       const passwordHash = password ? hashPassword(password) : undefined;
       
@@ -971,7 +1018,7 @@ ${fewShotExamples}
 
 async function configureStaticAndListen() {
   // Vite middleware for development
-  if (process.env.NODE_ENV !== "production") {
+  if (process.env.NODE_ENV !== "production" && process.env.NODE_ENV !== "test") {
     const { createServer: createViteServer } = await import("vite");
     const vite = await createViteServer({
       server: { middlewareMode: true },

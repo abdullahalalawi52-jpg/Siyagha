@@ -1,40 +1,14 @@
-import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
+import React, { createContext, useContext } from 'react';
 import { useAuth } from './AuthContext';
 import { useUI } from './UIContext';
 import { useForm } from './FormContext';
-import { syncUserDataToCloud, listenToCloudData } from '../lib/sync';
-import { SavedLetter } from '../types';
+import { SavedLetter, BrandingConfig, EmailFormState, ToneAnalysisResult, AtsAnalysisResult } from '../types';
+import { useLetterHistory } from '../hooks/useLetterHistory';
+import { useLetterBranding } from '../hooks/useLetterBranding';
+import { useLetterPersistence } from '../hooks/useLetterPersistence';
+import { useLetterCanvas } from '../hooks/useLetterCanvas';
+import { useLetterApis } from '../hooks/useLetterApis';
 import { escapeHtml, sanitizeUrl, buildPrintElement } from '../utils/helpers';
-
-const handleResponse = async (res: Response, defaultError: string) => {
-  let responseText = '';
-  try {
-    responseText = await res.text();
-  } catch {}
-
-  if (!res.ok) {
-    let errorMsg = defaultError;
-    try {
-      const errData = JSON.parse(responseText);
-      errorMsg = errData.error || errData.message || errorMsg;
-    } catch {
-      if (responseText) errorMsg = responseText;
-    }
-    throw new Error(errorMsg);
-  }
-
-  try {
-    return JSON.parse(responseText);
-  } catch (e: any) {
-    throw new Error(`Invalid JSON response: ${e.message}`);
-  }
-};
-
-const getApiUrl = (path: string) => {
-  const baseUrl = import.meta.env.VITE_API_URL || '';
-  const cleanBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
-  return `${cleanBaseUrl}${path}`;
-};
 
 export interface LetterContextType {
   generatedLetter: string;
@@ -52,17 +26,8 @@ export interface LetterContextType {
   setFontSize: (size: string) => void;
   activeSection: 'basic' | 'branding' | 'signature';
   setActiveSection: (sec: 'basic' | 'branding' | 'signature') => void;
-  branding: {
-    enableHeader: boolean;
-    theme: string;
-    companyName: string;
-    companyDetails: string;
-    logoUrl: string;
-    enableFooter: boolean;
-    footerText: string;
-    footerTheme?: string;
-  };
-  setBranding: React.Dispatch<React.SetStateAction<any>>;
+  branding: BrandingConfig;
+  setBranding: React.Dispatch<React.SetStateAction<BrandingConfig>>;
   signatureImage: string | null;
   setSignatureImage: (img: string | null) => void;
   sealImage: string | null;
@@ -73,8 +38,8 @@ export interface LetterContextType {
   draftStatus: boolean;
   isProofreading: boolean;
   isSuggestingTitle: boolean;
-  emailForm: { to: string; subject: string; attachPdf: boolean };
-  setEmailForm: React.Dispatch<React.SetStateAction<any>>;
+  emailForm: EmailFormState;
+  setEmailForm: React.Dispatch<React.SetStateAction<EmailFormState>>;
   isSendingEmail: boolean;
   emailSuccess: string | null;
   setEmailSuccess: (msg: string | null) => void;
@@ -90,23 +55,12 @@ export interface LetterContextType {
   shareCopied: boolean;
   setShareCopied: (copied: boolean) => void;
   aiPolishing: boolean;
-  toneResult: {
-    toneName: string;
-    formalityScore: number;
-    summary: string;
-    suggestions: string[];
-  } | null;
-  setToneResult: (res: any) => void;
+  toneResult: ToneAnalysisResult | null;
+  setToneResult: React.Dispatch<React.SetStateAction<ToneAnalysisResult | null>>;
   toneLoading: boolean;
   atsLoading: boolean;
-  atsResult: {
-    matchScore: number;
-    matchedKeywords: string[];
-    missingKeywords: string[];
-    summary: string;
-    suggestions: string[];
-  } | null;
-  setAtsResult: (res: any) => void;
+  atsResult: AtsAnalysisResult | null;
+  setAtsResult: React.Dispatch<React.SetStateAction<AtsAnalysisResult | null>>;
   handleExportDOCX: () => void;
   handleExportPDF: () => Promise<void>;
   handlePolishLetter: () => Promise<void>;
@@ -147,185 +101,99 @@ export const useLetter = () => {
 export const LetterProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user } = useAuth();
   const ui = useUI();
-  const { form, setForm, favoriteTemplates, favoritePredefined, setFavoriteTemplates, setFavoritePredefined, autoGenerate } = useForm();
+  const {
+    form,
+    setForm,
+    favoriteTemplates,
+    favoritePredefined,
+    setFavoriteTemplates,
+    setFavoritePredefined,
+    autoGenerate,
+  } = useForm();
 
-  const [generatedLetter, setGeneratedLetterState] = useState<string>('');
-  const [history, setHistory] = useState<string[]>([]);
-  const [historyIndex, setHistoryIndex] = useState<number>(-1);
+  // 1. History Hook
+  const historyState = useLetterHistory();
 
-  const updateLetterContent = (newContent: string, addToHistory = true) => {
-    setGeneratedLetterState(newContent);
-    const currentHistItem = historyIndex >= 0 ? history.at(historyIndex) : undefined;
-    if (addToHistory && newContent !== currentHistItem) {
-      setHistory((prev) => {
-        const sliced = prev.slice(0, historyIndex + 1);
-        const newHistory = [...sliced, newContent].slice(-50);
-        setHistoryIndex(newHistory.length - 1);
-        return newHistory;
-      });
-    }
-  };
+  // 2. Branding Hook
+  const brandingState = useLetterBranding();
 
-  const handleUndo = () => {
-    if (historyIndex > 0) {
-      const prevIndex = historyIndex - 1;
-      setHistoryIndex(prevIndex);
-      setGeneratedLetterState(history.at(prevIndex) || '');
-    } else if (historyIndex === 0) {
-      setHistoryIndex(-1);
-      setGeneratedLetterState('');
-    }
-  };
-
-  const handleRedo = () => {
-    if (historyIndex < history.length - 1) {
-      const nextIndex = historyIndex + 1;
-      setHistoryIndex(nextIndex);
-      setGeneratedLetterState(history.at(nextIndex) || '');
-    }
-  };
-
-  // General App states
-  const [loading, setLoading] = useState(false);
-  const [copied, setCopied] = useState(false);
-  const [error, setError] = useState<string>('');
-  const [savedLetters, setSavedLetters] = useState<SavedLetter[]>([]);
-
-  // Formatting
-  const [fontFamily, setFontFamily] = useState('Cairo');
-  const [fontSize, setFontSize] = useState('15px');
-  const [activeSection, setActiveSection] = useState<'basic' | 'branding' | 'signature'>('basic');
-
-  const [savedStatus, setSavedStatus] = useState(false);
-  const [draftStatus, setDraftStatus] = useState(false);
-  const [isProofreading, setIsProofreading] = useState(false);
-  const [isSuggestingTitle, setIsSuggestingTitle] = useState(false);
-
-  // Email form
-  const [emailForm, setEmailForm] = useState({ to: '', subject: '', attachPdf: true });
-  const [isSendingEmail, setIsSendingEmail] = useState(false);
-  const [emailSuccess, setEmailSuccess] = useState<string | null>(null);
-
-  // Branding details
-  const [branding, setBranding] = useState({
-    enableHeader: false,
-    theme: 'classic',
-    companyName: '',
-    companyDetails: '',
-    logoUrl: '',
-    enableFooter: false,
-    footerText: '',
-    footerTheme: 'centered',
+  // 3. Canvas Hook
+  const canvasState = useLetterCanvas({
+    setSignatureImage: brandingState.setSignatureImage,
+    setIsSigningOpen: ui.setIsSigningOpen,
   });
 
-  const [signatureImage, setSignatureImage] = useState<string | null>(null);
-  const [sealImage, setSealImage] = useState<string | null>(null);
+  // 4. API Operations Hook
+  const apiState = useLetterApis({
+    form,
+    setForm,
+    generatedLetter: historyState.generatedLetter,
+    updateLetterContent: historyState.updateLetterContent,
+    ui,
+    branding: brandingState.branding,
+    signatureImage: brandingState.signatureImage,
+    setSignatureImage: brandingState.setSignatureImage,
+    sealImage: brandingState.sealImage,
+    fontFamily: brandingState.fontFamily,
+    fontSize: brandingState.fontSize,
+    setActiveSection: brandingState.setActiveSection,
+    autoGenerate,
+  });
 
-  // Signature canvas
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [isDrawing, setIsDrawing] = useState(false);
+  // 5. Persistence Hook
+  const persistenceState = useLetterPersistence({
+    user,
+    form,
+    setForm,
+    generatedLetter: historyState.generatedLetter,
+    updateLetterContent: historyState.updateLetterContent,
+    favoriteTemplates,
+    favoritePredefined,
+    setFavoriteTemplates,
+    setFavoritePredefined,
+    ui,
+  });
 
-  // OCR states
-  const [ocrLoading, setOcrLoading] = useState(false);
-  const [ocrError, setOcrError] = useState('');
-
-  // Sharing states
-  const [sharePassword, setSharePassword] = useState('');
-  const [shareUrl, setShareUrl] = useState('');
-  const [shareLoading, setShareLoading] = useState(false);
-  const [shareCopied, setShareCopied] = useState(false);
-
-  // AI Polishing and Tone states
-  const [aiPolishing, setAiPolishing] = useState(false);
-  const [toneResult, setToneResult] = useState<any>(null);
-  const [toneLoading, setToneLoading] = useState(false);
-  const [atsLoading, setAtsLoading] = useState(false);
-  const [atsResult, setAtsResult] = useState<any>(null);
-
-  // Load local saved letters
-  useEffect(() => {
-    try {
-      let saved = localStorage.getItem('saved_letters');
-      if (!saved) {
-        saved = localStorage.getItem('savedLetters');
-        if (saved) {
-          localStorage.setItem('saved_letters', saved);
-          localStorage.removeItem('savedLetters');
-        }
-      }
-      if (saved) {
-        setSavedLetters(JSON.parse(saved));
-      }
-    } catch (e) {
-      console.error('Error reading saved letters:', e);
-    }
-  }, []);
-
-  // Sync state to Local Storage and Firebase
-  const updateSavedLettersAndSync = (letters: SavedLetter[]) => {
-    setSavedLetters(letters);
-    localStorage.setItem('saved_letters', JSON.stringify(letters));
-    if (user) {
-      syncUserDataToCloud(user, {
-        savedLetters: letters,
-        favoriteTemplates,
-        favoritePredefined,
-      });
-    }
+  // 6. Clipboard action
+  const [copied, setCopied] = React.useState(false);
+  const handleCopy = () => {
+    navigator.clipboard.writeText(historyState.generatedLetter);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
-  // Sync from Firebase
-  useEffect(() => {
-    if (!user) return;
-    const unsubscribe = listenToCloudData(user, (data) => {
-      if (data.savedLetters) {
-        setSavedLetters(data.savedLetters);
-        localStorage.setItem('saved_letters', JSON.stringify(data.savedLetters));
-      }
-      if (data.favoriteTemplates) {
-        setFavoriteTemplates(data.favoriteTemplates);
-        localStorage.setItem('favoriteTemplates', JSON.stringify(data.favoriteTemplates));
-      }
-      if (data.favoritePredefined) {
-        setFavoritePredefined(data.favoritePredefined);
-        localStorage.setItem('favoritePredefined', JSON.stringify(data.favoritePredefined));
-      }
-    });
-    return () => unsubscribe();
-  }, [user, setFavoriteTemplates, setFavoritePredefined]);
-
-  // DOCX Export
+  // 7. DOCX Export logic (local helper)
   const handleExportDOCX = () => {
-    if (!generatedLetter) return;
+    if (!historyState.generatedLetter) return;
 
-    const headerHtml = branding.enableHeader
+    const headerHtml = brandingState.branding.enableHeader
       ? '<div style="border-bottom: 2px solid #a18072; padding-bottom: 10px; margin-bottom: 20px; font-family: Arial, sans-serif;">' +
         '<h3 style="color: #a18072; margin: 0; font-size: 16px;">' +
-        escapeHtml(branding.companyName || '') +
+        escapeHtml(brandingState.branding.companyName || '') +
         '</h3>' +
         '<p style="font-size: 11px; color: #555; margin: 5px 0 0 0; line-height: 1.4;">' +
-        escapeHtml(branding.companyDetails || '').replace(/\n/g, '<br />') +
+        escapeHtml(brandingState.branding.companyDetails || '').replace(/\n/g, '<br />') +
         '</p>' +
         '</div>'
       : '';
 
-    const footerHtml = branding.enableFooter
+    const footerHtml = brandingState.branding.enableFooter
       ? '<div style="border-top: 1px solid #ddd; padding-top: 10px; margin-top: 30px; text-align: center; font-size: 10px; color: #777; font-family: Arial, sans-serif;">' +
-        escapeHtml(branding.footerText || '') +
+        escapeHtml(brandingState.branding.footerText || '') +
         '</div>'
       : '';
 
     const signatureHtml =
-      signatureImage || sealImage
+      brandingState.signatureImage || brandingState.sealImage
         ? '<div style="margin-top: 40px; font-family: Arial, sans-serif;">' +
           '<p style="font-size: 12px; font-weight: bold; color: #222; margin-bottom: 8px;">' +
           (form.language === 'en' ? 'Signature & Seal:' : 'التوقيع والختم:') +
           '</p>' +
           '<div>' +
-          (signatureImage
-            ? '<img src="' + sanitizeUrl(signatureImage) + '" width="120" style="margin-right: 15px; vertical-align: middle;" />'
+          (brandingState.signatureImage
+            ? '<img src="' + sanitizeUrl(brandingState.signatureImage) + '" width="120" style="margin-right: 15px; vertical-align: middle;" />'
             : '') +
-          (sealImage ? '<img src="' + sanitizeUrl(sealImage) + '" width="90" style="vertical-align: middle;" />' : '') +
+          (brandingState.sealImage ? '<img src="' + sanitizeUrl(brandingState.sealImage) + '" width="90" style="vertical-align: middle;" />' : '') +
           '</div>' +
           '</div>'
         : '';
@@ -366,7 +234,7 @@ export const LetterProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       escapeHtml(form.subject) +
       '</h2>' +
       '<div class="main-content">' +
-      escapeHtml(generatedLetter) +
+      escapeHtml(historyState.generatedLetter) +
       '</div>' +
       signatureHtml +
       footerHtml +
@@ -387,22 +255,22 @@ export const LetterProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     URL.revokeObjectURL(url);
   };
 
-  // PDF Export
+  // 8. PDF Export logic (local helper)
   const handleExportPDF = async () => {
-    if (!generatedLetter) return;
+    if (!historyState.generatedLetter) return;
 
-    let parsedFontSize = parseInt(fontSize);
+    let parsedFontSize = parseInt(brandingState.fontSize);
     if (isNaN(parsedFontSize)) parsedFontSize = 15;
 
     const printElement = buildPrintElement({
-      fontFamily,
+      fontFamily: brandingState.fontFamily,
       fontSize: parsedFontSize + 2,
       isEn: form.language === 'en',
       subject: form.subject || 'خطاب',
-      letterContent: generatedLetter,
-      branding,
-      signatureImage,
-      sealImage,
+      letterContent: historyState.generatedLetter,
+      branding: brandingState.branding,
+      signatureImage: brandingState.signatureImage,
+      sealImage: brandingState.sealImage,
     });
 
     const opt: any = {
@@ -413,566 +281,89 @@ export const LetterProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
     };
 
-    // @ts-ignore
-    const html2pdf = (await import('html2pdf.js')).default;
+    const html2pdfModule = await import('html2pdf.js') as any;
+    const html2pdf = html2pdfModule.default;
     html2pdf().set(opt).from(printElement).save();
-  };
-
-  // AI polishing
-  const handlePolishLetter = async () => {
-    if (!generatedLetter) return;
-    if (!ui.isOnline) {
-      alert('أنت غير متصل بالإنترنت حالياً. يرجى الاتصال بالإنترنت لتحسين الصياغة بالذكاء الاصطناعي.');
-      return;
-    }
-    setAiPolishing(true);
-    try {
-      const response = await fetch(getApiUrl('/api/polish-letter'), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: generatedLetter, language: form.language }),
-      });
-
-      const data = await handleResponse(response, 'فشل تحسين الصياغة');
-      updateLetterContent(data.letter);
-    } catch (err: any) {
-      alert(err.message || 'حدث خطأ أثناء تحسين الصياغة');
-    } finally {
-      setAiPolishing(false);
-    }
-  };
-
-  // AI Tone Analysis
-  const handleAnalyzeTone = async () => {
-    if (!generatedLetter) return;
-    if (!ui.isOnline) {
-      alert('أنت غير متصل بالإنترنت حالياً. يرجى الاتصال بالإنترنت لتحليل نبرة الخطاب.');
-      return;
-    }
-    setToneLoading(true);
-    setToneResult(null);
-    try {
-      const response = await fetch(getApiUrl('/api/analyze-tone'), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: generatedLetter, language: form.language }),
-      });
-
-      const data = await handleResponse(response, 'فشل تحليل النبرة');
-      setToneResult(data);
-      ui.setIsAiModalOpen(true);
-    } catch (err: any) {
-      alert(err.message || 'حدث خطأ أثناء تحليل النبرة');
-    } finally {
-      setToneLoading(false);
-    }
-  };
-
-  // AI ATS analysis
-  const handleAnalyzeAts = async () => {
-    if (!generatedLetter) return;
-    if (!form.jobDescription) {
-      alert(ui.appLang === 'ar' ? 'يرجى إدخال الوصف الوظيفي أولاً لإجراء تحليل ATS.' : 'Please enter a job description first to analyze ATS.');
-      return;
-    }
-    if (!ui.isOnline) {
-      alert(ui.appLang === 'ar' ? 'أنت غير متصل بالإنترنت حالياً. يرجى الاتصال بالإنترنت لتحليل مطابقة ATS.' : 'You are currently offline. Please connect to the internet to analyze ATS match.');
-      return;
-    }
-    setAtsLoading(true);
-    setAtsResult(null);
-    try {
-      const response = await fetch(getApiUrl('/api/analyze-ats'), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: generatedLetter, jobDescription: form.jobDescription }),
-      });
-
-      const data = await handleResponse(response, 'فشل تحليل مطابقة ATS');
-      setAtsResult(data);
-      ui.setIsAiModalOpen(true);
-    } catch (err: any) {
-      alert(err.message || 'حدث خطأ أثناء تحليل ATS');
-    } finally {
-      setAtsLoading(false);
-    }
-  };
-
-  // AI Sharing Link
-  const handleCreateShareLink = async () => {
-    if (!generatedLetter) return;
-    setShareLoading(true);
-    setShareUrl('');
-    try {
-      const response = await fetch(getApiUrl('/api/share'), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          subject: form.subject || 'خطاب رسمي',
-          content: generatedLetter,
-          branding,
-          signatureImage,
-          sealImage,
-          language: form.language,
-          password: sharePassword || undefined,
-        }),
-      });
-
-      const data = await handleResponse(response, 'فشل إنشاء رابط المشاركة');
-      setShareUrl(data.url);
-    } catch (err: any) {
-      alert(err.message || 'حدث خطأ غير متوقع');
-    } finally {
-      setShareLoading(false);
-    }
-  };
-
-  // OCR Upload
-  const handleOcrUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setOcrLoading(true);
-    setOcrError('');
-
-    try {
-      const reader = new FileReader();
-      reader.onload = async () => {
-        if (typeof reader.result !== 'string') {
-          setOcrError('فشل قراءة ملف الصورة');
-          setOcrLoading(false);
-          return;
-        }
-
-        try {
-          const res = await fetch(getApiUrl('/api/ocr'), {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ image: reader.result }),
-          });
-
-          const data = await handleResponse(res, 'فشل استخراج النصوص');
-
-          if (data.text) {
-            if (ui.ocrTargetField === 'replyToText') {
-              setForm((prev: any) => ({ ...prev, replyToText: data.text }));
-            } else if (ui.ocrTargetField === 'jobDescription') {
-              setForm((prev: any) => ({ ...prev, jobDescription: data.text }));
-            } else if (ui.ocrTargetField === 'resumeInfo') {
-              setForm((prev: any) => ({ ...prev, resumeInfo: data.text }));
-            } else {
-              setForm((prev: any) => ({ ...prev, details: data.text }));
-            }
-            setActiveSection('basic');
-            ui.setIsOcrOpen(false);
-          } else {
-            setOcrError('لم يتم العثور على نصوص واضحة في الصورة');
-          }
-        } catch (err: any) {
-          setOcrError(err.message || 'حدث خطأ أثناء معالجة الصورة');
-        } finally {
-          setOcrLoading(false);
-        }
-      };
-
-      reader.onerror = () => {
-        setOcrError('حدث خطأ أثناء قراءة ملف الصورة');
-        setOcrLoading(false);
-      };
-
-      reader.readAsDataURL(file);
-    } catch (err) {
-      setOcrError('فشل تحميل الصورة');
-      setOcrLoading(false);
-    }
-  };
-
-  // Toggle pin
-  const handleTogglePin = (e: React.MouseEvent, letterId: string) => {
-    e.stopPropagation();
-    const updated = savedLetters.map((l) =>
-      l.id === letterId ? { ...l, isPinned: !l.isPinned } : l
-    );
-    updateSavedLettersAndSync(updated);
-  };
-
-  // Save letters
-  const handleSave = () => {
-    if (!generatedLetter) return;
-    const newLetter: SavedLetter = {
-      id: Date.now().toString(),
-      subject: form.subject || 'خطاب بدون عنوان',
-      date: new Date().toLocaleDateString('ar-SA', { year: 'numeric', month: 'long', day: 'numeric' }),
-      content: generatedLetter,
-      type: form.type,
-      isDraft: false,
-      formData: form,
-      tags: ui.pendingTags.length > 0 ? [...ui.pendingTags] : undefined,
-      savedAt: Date.now(),
-    };
-    const updated = [newLetter, ...savedLetters];
-    updateSavedLettersAndSync(updated);
-    ui.setPendingTags([]);
-    setSavedStatus(true);
-    setTimeout(() => setSavedStatus(false), 2000);
-  };
-
-  const handleSaveDraft = () => {
-    const newLetter: SavedLetter = {
-      id: Date.now().toString(),
-      subject: form.subject || 'مسودة خطاب',
-      date: new Date().toLocaleDateString('ar-SA', { year: 'numeric', month: 'long', day: 'numeric' }),
-      content: generatedLetter || '',
-      type: form.type,
-      isDraft: true,
-      formData: form,
-    };
-    const updated = [newLetter, ...savedLetters];
-    updateSavedLettersAndSync(updated);
-    setDraftStatus(true);
-    setTimeout(() => setDraftStatus(false), 2000);
-  };
-
-  const handleLoadSaved = (letter: SavedLetter) => {
-    updateLetterContent(letter.content);
-    if (letter.formData) {
-      setForm(letter.formData);
-    }
-    ui.setIsArchiveOpen(false);
-  };
-
-  // Suggest title AI
-  const handleSuggestTitle = async () => {
-    if (!ui.isOnline) {
-      alert('أنت غير متصل بالإنترنت حالياً. لا يمكن اقتراح عنوان للخطاب بدون اتصال.');
-      return;
-    }
-    setIsSuggestingTitle(true);
-    try {
-      const response = await fetch(getApiUrl('/api/suggest-title'), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: form.type,
-          subType: form.subType,
-          details: form.details,
-          language: form.language,
-        }),
-      });
-
-      const data = await handleResponse(response, 'فشل في اقتراح العنوان');
-      if (data.title) {
-        setForm((prev: any) => ({ ...prev, subject: data.title }));
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsSuggestingTitle(false);
-    }
-  };
-
-  // Proofread spelling AI
-  const handleProofread = async () => {
-    if (!generatedLetter) return;
-    if (!ui.isOnline) {
-      setError('أنت غير متصل بالإنترنت حالياً. يرجى الاتصال بالإنترنت لتشغيل التدقيق الإملائي بالذكاء الاصطناعي.');
-      return;
-    }
-    setIsProofreading(true);
-    setError('');
-
-    try {
-      const response = await fetch(getApiUrl('/api/proofread-letter'), {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          text: generatedLetter,
-          language: form.language,
-        }),
-      });
-
-      const data = await handleResponse(response, 'حدث خطأ أثناء التدقيق اللغوي');
-      updateLetterContent(data.letter);
-    } catch (err) {
-      console.error(err);
-      setError('فشل التحديث. يرجى المحاولة مرة أخرى.');
-    } finally {
-      setIsProofreading(false);
-    }
-  };
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(generatedLetter);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  // Send Email
-  const handleSendEmail = async () => {
-    if (!emailForm.to || !emailForm.subject) return;
-
-    setIsSendingEmail(true);
-    setEmailSuccess(null);
-    let pdfAttachmentBase64 = null;
-
-    try {
-      if (emailForm.attachPdf) {
-        let parsedFontSize = parseInt(fontSize);
-        if (isNaN(parsedFontSize)) parsedFontSize = 15;
-        const pdfFontSize = parsedFontSize + 2;
-
-        const printElement = buildPrintElement({
-          fontFamily,
-          fontSize: pdfFontSize,
-          isEn: form.language === 'en',
-          subject: form.subject || 'خطاب',
-          letterContent: generatedLetter,
-          branding,
-          signatureImage,
-          sealImage,
-        });
-
-        const opt: any = {
-          margin: 15,
-          filename: 'letter.pdf',
-          image: { type: 'jpeg', quality: 0.98 },
-          html2canvas: { scale: 2, useCORS: true },
-          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        };
-
-        // @ts-ignore
-        const html2pdf = (await import('html2pdf.js')).default;
-        pdfAttachmentBase64 = await html2pdf().set(opt).from(printElement).outputPdf('datauristring');
-      }
-
-      const res = await fetch(getApiUrl('/api/send-email'), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          to: emailForm.to,
-          subject: emailForm.subject,
-          text: generatedLetter,
-          pdfAttachment: pdfAttachmentBase64,
-        }),
-      });
-
-      const data = await handleResponse(res, 'Failed to send email');
-
-      if (data.previewUrl) {
-        setEmailSuccess(`تم الإرسال بنجاح (Ethereal test email). رابط المعاينة: ${data.previewUrl}`);
-      } else {
-        setEmailSuccess('تم إرسال البريد الإلكتروني بنجاح!');
-      }
-
-      setTimeout(() => {
-        ui.setIsEmailModalOpen(false);
-        setEmailSuccess(null);
-      }, 5000);
-    } catch (err: any) {
-      setEmailSuccess(null);
-      console.error(err);
-      alert('حدث خطأ أثناء إرسال البريد الإلكتروني');
-    } finally {
-      setIsSendingEmail(false);
-    }
-  };
-
-  // Generate Letter fetch call
-  const generateLetter = async (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
-    if (!form.senderName || !form.recipientName || !form.subject) {
-      setError('يرجى تعبئة الحقول الإلزامية الأساسية');
-      return;
-    }
-    if (!ui.isOnline) {
-      setError('أنت غير متصل بالإنترنت حالياً. يمكنك كتابة وتعديل النص يدوياً وحفظ الخطاب كمسودة.');
-      return;
-    }
-    setError('');
-    setLoading(true);
-    try {
-      const res = await fetch(getApiUrl('/api/generate-letter'), {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(form),
-      });
-      const data = await handleResponse(res, 'حدث خطأ أثناء الإنشاء');
-      updateLetterContent(data.text);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Auto-generation logic (with cleanup/debouncing)
-  useEffect(() => {
-    if (!autoGenerate) return;
-    if (!form.senderName || !form.recipientName || !form.subject) return;
-
-    const timer = setTimeout(() => {
-      generateLetter();
-    }, 5000);
-
-    return () => clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [form, autoGenerate]);
-
-  // Drawing Canvas helpers
-  const startDrawing = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    ctx.lineWidth = 2.5;
-    ctx.lineCap = 'round';
-    ctx.strokeStyle = '#000000';
-
-    const rect = canvas.getBoundingClientRect();
-    const x = 'touches' in e ? e.touches[0].clientX - rect.left : e.clientX - rect.left;
-    const y = 'touches' in e ? e.touches[0].clientY - rect.top : e.clientY - rect.top;
-
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    setIsDrawing(true);
-  };
-
-  const draw = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
-    if (!isDrawing) return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const rect = canvas.getBoundingClientRect();
-    const x = 'touches' in e ? e.touches[0].clientX - rect.left : e.clientX - rect.left;
-    const y = 'touches' in e ? e.touches[0].clientY - rect.top : e.clientY - rect.top;
-
-    ctx.lineTo(x, y);
-    ctx.stroke();
-  };
-
-  const stopDrawing = () => {
-    setIsDrawing(false);
-  };
-
-  const clearCanvas = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-  };
-
-  const saveSignature = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const dataUrl = canvas.toDataURL('image/png');
-    setSignatureImage(dataUrl);
-    ui.setIsSigningOpen(false);
-  };
-
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>, type: 'logo' | 'signature' | 'seal') => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === 'string') {
-        if (type === 'logo') {
-          setBranding((prev) => ({ ...prev, logoUrl: reader.result as string }));
-        } else if (type === 'signature') {
-          setSignatureImage(reader.result);
-        } else if (type === 'seal') {
-          setSealImage(reader.result);
-        }
-      }
-    };
-    reader.readAsDataURL(file);
   };
 
   return (
     <LetterContext.Provider
       value={{
-        generatedLetter,
-        updateLetterContent,
-        loading,
-        error,
-        setError,
-        history,
-        historyIndex,
-        handleUndo,
-        handleRedo,
-        fontFamily,
-        setFontFamily,
-        fontSize,
-        setFontSize,
-        activeSection,
-        setActiveSection,
-        branding,
-        setBranding,
-        signatureImage,
-        setSignatureImage,
-        sealImage,
-        setSealImage,
-        savedLetters,
-        setSavedLetters,
-        savedStatus,
-        draftStatus,
-        isProofreading,
-        isSuggestingTitle,
-        emailForm,
-        setEmailForm,
-        isSendingEmail,
-        emailSuccess,
-        setEmailSuccess,
-        ocrLoading,
-        ocrError,
-        setOcrError,
-        handleOcrUpload,
-        sharePassword,
-        setSharePassword,
-        shareUrl,
-        setShareUrl,
-        shareLoading,
-        shareCopied,
-        setShareCopied,
-        aiPolishing,
-        toneResult,
-        setToneResult,
-        toneLoading,
-        atsLoading,
-        atsResult,
-        setAtsResult,
+        generatedLetter: historyState.generatedLetter,
+        updateLetterContent: historyState.updateLetterContent,
+        history: historyState.history,
+        historyIndex: historyState.historyIndex,
+        handleUndo: historyState.handleUndo,
+        handleRedo: historyState.handleRedo,
+        fontFamily: brandingState.fontFamily,
+        setFontFamily: brandingState.setFontFamily,
+        fontSize: brandingState.fontSize,
+        setFontSize: brandingState.setFontSize,
+        activeSection: brandingState.activeSection,
+        setActiveSection: brandingState.setActiveSection,
+        branding: brandingState.branding,
+        setBranding: brandingState.setBranding,
+        signatureImage: brandingState.signatureImage,
+        setSignatureImage: brandingState.setSignatureImage,
+        sealImage: brandingState.sealImage,
+        setSealImage: brandingState.setSealImage,
+        handleImageUpload: brandingState.handleImageUpload,
+        canvasRef: canvasState.canvasRef,
+        isDrawing: canvasState.isDrawing,
+        setIsDrawing: canvasState.setIsDrawing,
+        startDrawing: canvasState.startDrawing,
+        draw: canvasState.draw,
+        stopDrawing: canvasState.stopDrawing,
+        clearCanvas: canvasState.clearCanvas,
+        saveSignature: canvasState.saveSignature,
+        loading: apiState.loading,
+        error: apiState.error,
+        setError: apiState.setError,
+        emailForm: apiState.emailForm,
+        setEmailForm: apiState.setEmailForm,
+        isSendingEmail: apiState.isSendingEmail,
+        emailSuccess: apiState.emailSuccess,
+        setEmailSuccess: apiState.setEmailSuccess,
+        isProofreading: apiState.isProofreading,
+        isSuggestingTitle: apiState.isSuggestingTitle,
+        ocrLoading: apiState.ocrLoading,
+        ocrError: apiState.ocrError,
+        setOcrError: apiState.setOcrError,
+        sharePassword: apiState.sharePassword,
+        setSharePassword: apiState.setSharePassword,
+        shareUrl: apiState.shareUrl,
+        setShareUrl: apiState.setShareUrl,
+        shareLoading: apiState.shareLoading,
+        shareCopied: apiState.shareCopied,
+        setShareCopied: apiState.setShareCopied,
+        aiPolishing: apiState.aiPolishing,
+        toneResult: apiState.toneResult,
+        setToneResult: apiState.setToneResult,
+        toneLoading: apiState.toneLoading,
+        atsLoading: apiState.atsLoading,
+        atsResult: apiState.atsResult,
+        setAtsResult: apiState.setAtsResult,
+        generateLetter: apiState.generateLetter,
+        handlePolishLetter: apiState.handlePolishLetter,
+        handleAnalyzeTone: apiState.handleAnalyzeTone,
+        handleAnalyzeAts: apiState.handleAnalyzeAts,
+        handleCreateShareLink: apiState.handleCreateShareLink,
+        handleOcrUpload: apiState.handleOcrUpload,
+        handleSuggestTitle: apiState.handleSuggestTitle,
+        handleProofread: apiState.handleProofread,
+        handleSendEmail: apiState.handleSendEmail,
+        savedLetters: persistenceState.savedLetters,
+        setSavedLetters: persistenceState.setSavedLetters,
+        savedStatus: persistenceState.savedStatus,
+        draftStatus: persistenceState.draftStatus,
+        handleTogglePin: persistenceState.handleTogglePin,
+        handleSave: persistenceState.handleSave,
+        handleSaveDraft: persistenceState.handleSaveDraft,
+        handleLoadSaved: persistenceState.handleLoadSaved,
         handleExportDOCX,
         handleExportPDF,
-        handlePolishLetter,
-        handleAnalyzeTone,
-        handleAnalyzeAts,
-        handleCreateShareLink,
-        handleTogglePin,
-        handleSave,
-        handleSaveDraft,
-        handleLoadSaved,
-        handleSuggestTitle,
-        handleProofread,
-        handleCopy,
         copied,
-        handleSendEmail,
-        generateLetter,
-        canvasRef,
-        isDrawing,
-        setIsDrawing,
-        startDrawing,
-        draw,
-        stopDrawing,
-        clearCanvas,
-        saveSignature,
-        handleImageUpload,
+        handleCopy,
       }}
     >
       {children}

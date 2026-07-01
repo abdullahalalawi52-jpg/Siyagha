@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, onAuthStateChanged, signInWithPopup, signOut as firebaseSignOut } from 'firebase/auth';
 import { auth, googleProvider } from '../lib/firebase';
+import { useUI } from './UIContext';
 
-interface AuthContextType {
+export interface AuthContextType {
   user: User | null;
   loading: boolean;
   signInWithGoogle: () => Promise<void>;
@@ -21,6 +22,7 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const { addToast } = useUI();
 
   useEffect(() => {
     // If Firebase isn't initialized (missing config), stop loading immediately
@@ -39,7 +41,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signInWithGoogle = async () => {
     if (!auth) {
-      alert("الرجاء إعداد مفاتيح Firebase أولاً في ملف .env");
+      addToast("الرجاء إعداد مفاتيح Firebase أولاً في ملف .env", "error");
       return;
     }
     try {
@@ -59,7 +61,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       } else if (error && error.message) {
         message += `: ${error.message}`;
       }
-      alert(message);
+      addToast(message, "error");
     }
   };
 

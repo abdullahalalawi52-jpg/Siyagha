@@ -6,22 +6,80 @@ import StatsDashboard from './components/StatsDashboard';
 import LetterForm from './components/LetterForm';
 import LetterPreview from './components/LetterPreview';
 
-// Modals
-import ArchiveModal from './components/modals/ArchiveModal';
-import LibraryModal from './components/modals/LibraryModal';
-import EmailModal from './components/modals/EmailModal';
-import ShareModal from './components/modals/ShareModal';
-import OcrModal from './components/modals/OcrModal';
-import SignatureModal from './components/modals/SignatureModal';
-import AiModal from './components/modals/AiModal';
-import AboutModal from './components/modals/AboutModal';
-import BrandVoiceModal from './components/modals/BrandVoiceModal';
-import { CareerProfileModal } from './components/modals/CareerProfileModal';
-import { CloudStorageModal } from './components/modals/CloudStorageModal';
+// Lazy-loaded Modals
+const ArchiveModal = React.lazy(() => import('./components/modals/ArchiveModal'));
+const LibraryModal = React.lazy(() => import('./components/modals/LibraryModal'));
+const EmailModal = React.lazy(() => import('./components/modals/EmailModal'));
+const ShareModal = React.lazy(() => import('./components/modals/ShareModal'));
+const OcrModal = React.lazy(() => import('./components/modals/OcrModal'));
+const SignatureModal = React.lazy(() => import('./components/modals/SignatureModal'));
+const AiModal = React.lazy(() => import('./components/modals/AiModal'));
+const AboutModal = React.lazy(() => import('./components/modals/AboutModal'));
+const BrandVoiceModal = React.lazy(() => import('./components/modals/BrandVoiceModal'));
+const CareerProfileModal = React.lazy(() =>
+  import('./components/modals/CareerProfileModal').then((m) => ({ default: m.CareerProfileModal }))
+);
+const CloudStorageModal = React.lazy(() =>
+  import('./components/modals/CloudStorageModal').then((m) => ({ default: m.CloudStorageModal }))
+);
 
 function MainAppContent() {
-  const { appLang, form, generatedLetter, t } = useApp();
+  const {
+    appLang,
+    form,
+    generatedLetter,
+    t,
+    isArchiveOpen,
+    isLibraryOpen,
+    isEmailModalOpen,
+    isShareModalOpen,
+    isOcrOpen,
+    isSigningOpen,
+    isAiModalOpen,
+    isAboutOpen,
+    isBrandVoiceModalOpen,
+    isCareerProfileModalOpen,
+    isCloudStorageOpen,
+  } = useApp();
+
   const [activeMobileTab, setActiveMobileTab] = React.useState<'form' | 'preview'>('form');
+
+  // Track which modals have been opened at least once to load them lazily and keep them mounted for exit animations
+  const [openedModals, setOpenedModals] = React.useState<Record<string, boolean>>({});
+
+  React.useEffect(() => {
+    setOpenedModals((prev) => {
+      const updates: Record<string, boolean> = {};
+      if (isArchiveOpen && !prev.archive) updates.archive = true;
+      if (isLibraryOpen && !prev.library) updates.library = true;
+      if (isEmailModalOpen && !prev.email) updates.email = true;
+      if (isShareModalOpen && !prev.share) updates.share = true;
+      if (isOcrOpen && !prev.ocr) updates.ocr = true;
+      if (isSigningOpen && !prev.signing) updates.signing = true;
+      if (isAiModalOpen && !prev.ai) updates.ai = true;
+      if (isAboutOpen && !prev.about) updates.about = true;
+      if (isBrandVoiceModalOpen && !prev.brandVoice) updates.brandVoice = true;
+      if (isCareerProfileModalOpen && !prev.careerProfile) updates.careerProfile = true;
+      if (isCloudStorageOpen && !prev.cloudStorage) updates.cloudStorage = true;
+
+      if (Object.keys(updates).length > 0) {
+        return { ...prev, ...updates };
+      }
+      return prev;
+    });
+  }, [
+    isArchiveOpen,
+    isLibraryOpen,
+    isEmailModalOpen,
+    isShareModalOpen,
+    isOcrOpen,
+    isSigningOpen,
+    isAiModalOpen,
+    isAboutOpen,
+    isBrandVoiceModalOpen,
+    isCareerProfileModalOpen,
+    isCloudStorageOpen,
+  ]);
 
   // Switch to preview tab when a letter is generated
   React.useEffect(() => {
@@ -46,9 +104,15 @@ function MainAppContent() {
 
   return (
     <div className="min-h-screen bg-transparent text-gray-900 font-sans pb-20" dir={appLang === 'ar' ? 'rtl' : 'ltr'}>
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-brown-700 text-white px-4 py-2 rounded-xl z-50 font-bold"
+      >
+        {appLang === 'ar' ? 'تجاوز إلى المحتوى الرئيسي' : 'Skip to main content'}
+      </a>
       <Header />
       
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-7 flex flex-col gap-8">
+      <main id="main-content" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-7 flex flex-col gap-8">
         <QuickTemplates />
         <StatsDashboard />
 
@@ -89,18 +153,20 @@ function MainAppContent() {
         </div>
       </main>
 
-      {/* Render all modal overlays */}
-      <ArchiveModal />
-      <LibraryModal />
-      <EmailModal />
-      <ShareModal />
-      <OcrModal />
-      <SignatureModal />
-      <AiModal />
-      <AboutModal />
-      <BrandVoiceModal />
-      <CareerProfileModal />
-      <CloudStorageModal />
+      {/* Render modal overlays on demand via React.Suspense */}
+      <React.Suspense fallback={null}>
+        {openedModals.archive && <ArchiveModal />}
+        {openedModals.library && <LibraryModal />}
+        {openedModals.email && <EmailModal />}
+        {openedModals.share && <ShareModal />}
+        {openedModals.ocr && <OcrModal />}
+        {openedModals.signing && <SignatureModal />}
+        {openedModals.ai && <AiModal />}
+        {openedModals.about && <AboutModal />}
+        {openedModals.brandVoice && <BrandVoiceModal />}
+        {openedModals.careerProfile && <CareerProfileModal />}
+        {openedModals.cloudStorage && <CloudStorageModal />}
+      </React.Suspense>
     </div>
   );
 }

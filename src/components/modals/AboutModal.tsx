@@ -81,7 +81,7 @@ export const AboutModal: React.FC = () => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.93, y: 20 }}
             transition={{ type: 'spring', damping: 28, stiffness: 320 }}
-            className="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl overflow-hidden text-start z-10 border border-slate-100 dark:border-slate-800"
+            className="relative w-full max-w-2xl premium-card rounded-2xl shadow-2xl overflow-hidden text-start z-10 border border-slate-100 dark:border-slate-800"
             dir={appLang === 'ar' ? 'rtl' : 'ltr'}
           >
             <div className="p-6 md:p-8">

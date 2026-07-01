@@ -68,7 +68,7 @@ export const ArchiveModal: React.FC = () => {
             animate={{ x: 0 }}
             exit={{ x: appLang === 'ar' ? '100%' : '-100%' }}
             transition={{ type: 'spring', damping: 28, stiffness: 260 }}
-            className={`absolute top-0 bottom-0 ${appLang === 'ar' ? 'right-0 border-l' : 'left-0 border-r'} w-full max-w-sm bg-white shadow-2xl flex flex-col border-gray-200 text-start z-10`}
+            className={`absolute top-0 bottom-0 ${appLang === 'ar' ? 'right-0 border-l' : 'left-0 border-r'} w-full max-w-sm premium-card shadow-2xl flex flex-col border-gray-200 text-start z-10`}
             dir={appLang === 'ar' ? 'rtl' : 'ltr'}
           >
             <div className="h-20 border-b border-gray-100 flex items-center justify-between px-6 bg-gray-50/50">
