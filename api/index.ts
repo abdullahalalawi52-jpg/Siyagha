@@ -3,10 +3,9 @@ export default async function handler(req: any, res: any) {
     const { default: app } = await import("../server.js");
     return app(req, res);
   } catch (error: any) {
+    console.error("Failed to load backend server:", error);
     res.status(500).json({
-      error: `Failed to load backend server: ${error.message || error}\nStack: ${error.stack || 'No stack trace available'}`,
-      message: error.message,
-      stack: error.stack
+      error: "Internal server error"
     });
   }
 }
