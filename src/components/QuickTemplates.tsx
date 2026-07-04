@@ -68,7 +68,7 @@ export const QuickTemplates: React.FC = () => {
             className={`text-xs font-bold flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
               isStatsOpen
                 ? 'bg-brown-600 text-white'
-                : 'text-brown-700 hover:text-brown-800 bg-brown-50 hover:bg-brown-100'
+                : 'text-brown-700 hover:text-brown-800 bg-brown-50 hover:bg-brown-100 dark:text-brown-400 dark:hover:text-brown-300 dark:bg-brown-900/40 dark:hover:bg-brown-900/60'
             }`}
             type="button"
           >
@@ -77,7 +77,7 @@ export const QuickTemplates: React.FC = () => {
           </button>
           <button 
             onClick={() => setIsLibraryOpen(true)}
-            className="text-xs font-bold text-brown-700 hover:text-brown-800 flex items-center gap-1.5 bg-brown-50 hover:bg-brown-100 px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
+            className="text-xs font-bold text-brown-700 hover:text-brown-800 flex items-center gap-1.5 bg-brown-50 hover:bg-brown-100 px-3 py-1.5 rounded-lg transition-colors cursor-pointer dark:text-brown-400 dark:hover:text-brown-300 dark:bg-brown-900/40 dark:hover:bg-brown-900/60"
             type="button"
           >
             <Library className="w-4 h-4" />
@@ -112,14 +112,14 @@ export const QuickTemplates: React.FC = () => {
                 favoritePredefined.includes(template.id) ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer'
               } ${
                 activeTemplate === template.id
-                  ? 'border-brown-400 bg-gradient-to-br from-brown-50 to-orange-50 text-brown-700 shadow-lg ring-2 ring-brown-400/25'
-                  : 'border-gray-200/80 premium-glass-white-80 hover:border-brown-300/70 text-gray-700 shadow-sm template-card-btn bg-white'
+                  ? 'border-brown-400 bg-gradient-to-br from-brown-50 to-orange-50 dark:from-brown-950/50 dark:to-orange-950/50 text-brown-700 dark:text-brown-400 shadow-lg ring-2 ring-brown-400/25'
+                  : 'border-gray-200/80 dark:border-slate-800 premium-glass-white-80 dark:bg-slate-800/80 hover:border-brown-300/70 dark:hover:border-brown-500/40 text-gray-700 dark:text-gray-300 shadow-sm template-card-btn bg-white'
               }`}
             >
               <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all ${
                 activeTemplate === template.id
-                  ? 'bg-white text-brown-600 shadow-sm'
-                  : 'bg-gray-100 text-gray-500 group-hover:bg-brown-100 group-hover:text-brown-600'
+                  ? 'bg-white dark:bg-slate-800 text-brown-600 dark:text-brown-400 shadow-sm'
+                  : 'bg-gray-100 dark:bg-slate-700/50 text-gray-500 dark:text-gray-400 group-hover:bg-brown-100 dark:group-hover:bg-brown-900/40 group-hover:text-brown-600 dark:group-hover:text-brown-400'
               }`}>
                 {template.icon}
               </div>
@@ -137,8 +137,8 @@ export const QuickTemplates: React.FC = () => {
                 </button>
               )}
               <div className="flex flex-col min-w-0 text-start select-none pointer-events-none">
-                <span className="font-bold text-sm truncate">{t(template.name, templateNameTranslations[template.name] || template.name)}</span>
-                <span className="text-[10px] text-gray-400 font-medium">{t(template.category, categoryTranslations[template.category] || template.category)}</span>
+                <span className="font-bold text-sm truncate dark:text-gray-200">{t(template.name, templateNameTranslations[template.name] || template.name)}</span>
+                <span className="text-[10px] text-gray-400 dark:text-gray-500 font-medium">{t(template.category, categoryTranslations[template.category] || template.category)}</span>
               </div>
             </Reorder.Item>
           ))}
@@ -147,10 +147,10 @@ export const QuickTemplates: React.FC = () => {
         <button
           onClick={() => setIsLibraryOpen(true)}
           type="button"
-          className="w-full sm:w-[90px] sm:shrink-0 group relative flex sm:flex-col items-center justify-center gap-3 sm:gap-2 p-4 sm:p-2 rounded-2xl border border-dashed border-brown-300/80 bg-white/60 hover:bg-brown-50 hover:border-brown-400 text-brown-600 hover:text-brown-700 transition-all cursor-pointer shadow-sm template-card-btn"
+          className="w-full sm:w-[90px] sm:shrink-0 group relative flex sm:flex-col items-center justify-center gap-3 sm:gap-2 p-4 sm:p-2 rounded-2xl border border-dashed border-brown-300/80 dark:border-brown-500/40 bg-white/60 dark:bg-slate-800/40 hover:bg-brown-50 dark:hover:bg-brown-950/40 hover:border-brown-400 dark:hover:border-brown-500/60 text-brown-600 dark:text-brown-400 hover:text-brown-700 dark:hover:text-brown-300 transition-all cursor-pointer shadow-sm template-card-btn"
           title={t('المزيد من القوالب', 'More Templates')}
         >
-          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 bg-brown-50/80 group-hover:bg-white text-brown-600 group-hover:scale-110 shadow-sm transition-all">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 bg-brown-50/80 dark:bg-brown-950/50 group-hover:bg-white dark:group-hover:bg-slate-800 text-brown-600 dark:text-brown-400 group-hover:scale-110 shadow-sm transition-all">
             <Library className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
           <span className="font-bold text-sm sm:text-xs">{t('المزيد', 'More')}</span>
