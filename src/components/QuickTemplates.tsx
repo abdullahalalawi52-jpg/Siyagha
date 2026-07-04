@@ -43,10 +43,15 @@ export const QuickTemplates: React.FC = () => {
   };
 
   const handleDragEnd = () => {
-    const newIds = displayTemplates.map((t) => t.id);
-    const otherFavorites = favoritePredefined.filter((id) => !newIds.includes(id));
-    // We make all top 4 templates as favorites in the new order, to persist their position
-    setFavoritePredefined([...newIds, ...otherFavorites]);
+    // Only reorder items that are ALREADY favorites
+    const displayedFavoriteIds = displayTemplates
+      .map((t) => t.id)
+      .filter((id) => favoritePredefined.includes(id));
+      
+    const otherFavorites = favoritePredefined.filter((id) => !displayedFavoriteIds.includes(id));
+    
+    // Save the new order of favorites without adding non-favorites
+    setFavoritePredefined([...displayedFavoriteIds, ...otherFavorites]);
   };
 
   return (
@@ -102,7 +107,10 @@ export const QuickTemplates: React.FC = () => {
               }}
               tabIndex={0}
               role="button"
-              className={`w-[calc(50%-0.375rem)] sm:w-full group relative flex items-center gap-3 p-4 rounded-2xl border text-start transition-colors cursor-grab active:cursor-grabbing ${
+              dragListener={favoritePredefined.includes(template.id)}
+              className={`w-[calc(50%-0.375rem)] sm:w-full group relative flex items-center gap-3 p-4 rounded-2xl border text-start transition-colors ${
+                favoritePredefined.includes(template.id) ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer'
+              } ${
                 activeTemplate === template.id
                   ? 'border-brown-400 bg-gradient-to-br from-brown-50 to-orange-50 text-brown-700 shadow-lg ring-2 ring-brown-400/25'
                   : 'border-gray-200/80 premium-glass-white-80 hover:border-brown-300/70 text-gray-700 shadow-sm template-card-btn bg-white'
