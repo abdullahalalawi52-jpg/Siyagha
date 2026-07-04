@@ -6,8 +6,8 @@
 
 # Test info
 
-- Name: accessibility.spec.ts >> Usability & Accessibility Testing >> should not have any automatically detectable accessibility issues
-- Location: tests\e2e\accessibility.spec.ts:5:3
+- Name: accessibility.spec.ts >> Usability & Accessibility Testing (WCAG 2.1 AA) >> should maintain accessible focus management when opening library modal
+- Location: tests\e2e\accessibility.spec.ts:20:3
 
 # Error details
 

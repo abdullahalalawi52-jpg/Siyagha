@@ -31,7 +31,6 @@ export const PreviewToolbar: React.FC = () => {
     copied,
     handleExportDOCX,
     handleExportPDF,
-    setIsShareModalOpen,
     setIsEmailModalOpen,
     setIsCloudStorageOpen,
     t,
@@ -291,17 +290,6 @@ export const PreviewToolbar: React.FC = () => {
                     <span>{t('نسخ الخطاب للحافظة', 'Copy to Clipboard')}</span>
                   </button>
 
-                  <button
-                    onClick={() => {
-                      setIsShareModalOpen(true);
-                      setShowShareMenu(false);
-                    }}
-                    className="w-full text-start text-xs font-bold text-gray-700 dark:text-gray-300 hover:text-brown-600 dark:hover:text-brown-400 hover:bg-gray-50 dark:hover:bg-gray-700 px-3 py-2.5 rounded-lg flex items-center gap-2 cursor-pointer"
-                    type="button"
-                  >
-                    <Send className="w-4 h-4 text-brown-600 dark:text-brown-400" />
-                    <span>{t('مشاركة برابط آمن', 'Share via Secure Link')}</span>
-                  </button>
 
                   <a
                     href={`https://api.whatsapp.com/send?text=${encodeURIComponent((form.subject ? form.subject + ':\n\n' : '') + generatedLetter)}`}

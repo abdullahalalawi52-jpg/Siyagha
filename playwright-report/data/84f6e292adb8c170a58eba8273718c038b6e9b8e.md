@@ -1,0 +1,595 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: accessibility.spec.ts >> Usability & Accessibility Testing (WCAG 2.1 AA) >> should maintain accessible focus management when opening library modal
+- Location: tests\e2e\accessibility.spec.ts:20:3
+
+# Error details
+
+```
+Error: page.evaluate: No elements found for include in page Context
+Yp@debugger eval code line 302 > eval line 1 > eval:12:291223
+Rv@debugger eval code line 302 > eval line 1 > eval:12:467292
+a/axe.run@debugger eval code line 302 > eval line 1 > eval:12:473857
+@debugger eval code line 302 > eval:2:27
+evaluate@debugger eval code:304:16
+@debugger eval code:1:44
+@debugger eval code:1:62
+
+```
+
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - link "تجاوز إلى المحتوى الرئيسي" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e5]:
+    - generic [ref=e6]:
+      - generic [ref=e7]:
+        - generic [ref=e8] [cursor=pointer]:
+          - img [ref=e10]
+          - heading "صياغة" [level=1] [ref=e16]
+        - generic [ref=e17]:
+          - img [ref=e18]
+          - generic [ref=e23]: متصل
+      - generic [ref=e24]:
+        - paragraph [ref=e25]: خطابات رسمية واحترافية
+        - button "من نحن" [ref=e27] [cursor=pointer]:
+          - img [ref=e28]
+          - generic [ref=e32]: من نحن
+        - button "تغيير اللغة" [ref=e34] [cursor=pointer]: EN
+        - button "الوضع الداكن" [ref=e36] [cursor=pointer]:
+          - img [ref=e38]
+        - button "الأرشيف" [ref=e41] [cursor=pointer]:
+          - img [ref=e42]
+          - generic [ref=e46]: الأرشيف
+        - button "تسجيل الدخول باستخدام جوجل" [ref=e48] [cursor=pointer]:
+          - img [ref=e49]
+          - generic [ref=e53]: دخول
+  - main [ref=e54]:
+    - generic [ref=e55]:
+      - generic [ref=e56]:
+        - heading "نماذج الاستخدام السريع" [level=2] [ref=e57]: نماذج الاستخدام السريع
+        - generic [ref=e59]:
+          - button "إحصائياتي" [ref=e60] [cursor=pointer]:
+            - img [ref=e61]
+            - text: إحصائياتي
+          - button "مكتبة القوالب" [ref=e63] [cursor=pointer]:
+            - img [ref=e64]
+            - text: مكتبة القوالب
+      - list [ref=e69]:
+        - button "خطاب تغطية (Cover Letter) توظيف وتطوير مهني" [ref=e70]:
+          - img [ref=e72]
+          - generic:
+            - generic: خطاب تغطية (Cover Letter)
+            - generic: توظيف وتطوير مهني
+        - button "رسالة تواصل LinkedIn توظيف وتطوير مهني" [ref=e78]:
+          - img [ref=e80]
+          - generic:
+            - generic: رسالة تواصل LinkedIn
+            - generic: توظيف وتطوير مهني
+        - button "رسالة شكر بعد المقابلة توظيف وتطوير مهني" [ref=e83]:
+          - img [ref=e85]
+          - generic:
+            - generic: رسالة شكر بعد المقابلة
+            - generic: توظيف وتطوير مهني
+        - button "طلب وظيفة شركات خاصة" [ref=e87]:
+          - img [ref=e89]
+          - generic:
+            - generic: طلب وظيفة
+            - generic: شركات خاصة
+    - generic [ref=e92]:
+      - generic [ref=e94]:
+        - heading "التخصيص والتفاصيل" [level=2] [ref=e96]:
+          - img [ref=e98]
+          - text: التخصيص والتفاصيل
+        - generic [ref=e101]:
+          - button "بيانات الخطاب" [ref=e102] [cursor=pointer]
+          - button "الهوية والترويسة" [ref=e103] [cursor=pointer]
+          - button "التوقيع والختم" [ref=e104] [cursor=pointer]
+        - generic [ref=e107]:
+          - generic [ref=e108]:
+            - generic [ref=e109]:
+              - generic [ref=e110]: نوع الخطاب
+              - button "إداري/رسمي" [ref=e111]:
+                - generic [ref=e112]:
+                  - img [ref=e113]
+                  - generic [ref=e119]: إداري/رسمي
+                - img [ref=e120]
+            - generic [ref=e122]:
+              - generic [ref=e124]:
+                - generic [ref=e125]: التصنيف
+                - button "إضافة للمفضلة" [ref=e126] [cursor=pointer]:
+                  - img [ref=e127]
+              - button "خطاب طلب (وظيفة، إجازة، مساعدة)" [ref=e129]:
+                - generic [ref=e130]:
+                  - img [ref=e131]
+                  - generic [ref=e134]: خطاب طلب (وظيفة، إجازة، مساعدة)
+                - img [ref=e135]
+          - generic [ref=e137]:
+            - generic [ref=e138]:
+              - generic [ref=e139] [cursor=pointer]:
+                - img [ref=e140]
+                - text: بصمة الأسلوب اللغوي الخاص
+              - generic [ref=e145]:
+                - button "الملف المهني" [ref=e146] [cursor=pointer]:
+                  - img [ref=e147]
+                  - text: الملف المهني
+                - button "إدارة البصمات" [ref=e150] [cursor=pointer]:
+                  - img [ref=e151]
+                  - text: إدارة البصمات
+            - button "بصمة الأسلوب اللغوي الخاص" [ref=e155]:
+              - generic [ref=e157]: توليد تلقائي افتراضي (Default)
+              - img [ref=e158]
+          - generic [ref=e160]:
+            - generic [ref=e161] [cursor=pointer]: تفعيل وضع الرد الذكي على خطاب وارد
+            - checkbox "تفعيل وضع الرد الذكي على خطاب وارد" [ref=e162] [cursor=pointer]
+          - separator [ref=e163]
+          - generic [ref=e164]:
+            - generic [ref=e165]:
+              - generic [ref=e166]: تاريخ الخطاب
+              - textbox "تاريخ الخطاب" [ref=e167]: 2026-07-04
+            - generic [ref=e169]:
+              - generic [ref=e170]: لغة الخطاب (Language)
+              - button "العربية (Arabic)" [ref=e171]:
+                - generic [ref=e173]: العربية (Arabic)
+                - img [ref=e174]
+          - separator [ref=e176]
+          - generic [ref=e177]:
+            - generic [ref=e178]:
+              - text: اسم المرسل
+              - generic [ref=e179]: "*"
+            - textbox "اسم المرسل *" [ref=e180]:
+              - /placeholder: اسمك أو اسم المؤسسة
+          - generic [ref=e181]:
+            - generic [ref=e182]:
+              - generic [ref=e183]: رقم الهاتف
+              - textbox "رقم الهاتف" [ref=e184]:
+                - /placeholder: "مثال: 0501234567"
+            - generic [ref=e185]:
+              - generic [ref=e186]: البريد الإلكتروني
+              - textbox "البريد الإلكتروني" [ref=e187]:
+                - /placeholder: name@example.com
+          - generic [ref=e188]:
+            - generic [ref=e189]:
+              - generic [ref=e190]:
+                - text: اسم الموجه إليه
+                - generic [ref=e191]: "*"
+              - textbox "اسم الموجه إليه *" [ref=e192]:
+                - /placeholder: المؤسسة أو الشخص المتلقي
+            - generic [ref=e193]:
+              - generic [ref=e194]: صفة الموجه إليه
+              - textbox "صفة الموجه إليه" [ref=e195]:
+                - /placeholder: مدير الموارد البشرية
+          - separator [ref=e196]
+          - generic [ref=e197]:
+            - generic [ref=e198]:
+              - generic [ref=e199]:
+                - text: موضوع الخطاب / عنوانه
+                - generic [ref=e200]: "*"
+              - button "اقتراح عنوان ذكي" [ref=e201] [cursor=pointer]:
+                - img [ref=e202]
+                - text: اقتراح عنوان ذكي
+            - textbox "موضوع الخطاب / عنوانه *" [ref=e207]:
+              - /placeholder: "اتركه فارغاً، أو ادخل مثال: طلب الموافقة على رصيد إجازة"
+          - separator [ref=e208]
+          - generic [ref=e209]:
+            - generic [ref=e210]: نبرة الخطاب (بنقرة زر)
+            - group "نبرة الخطاب (بنقرة زر)" [ref=e211]:
+              - button "رسمي" [ref=e212] [cursor=pointer]
+              - button "مهني جداً" [ref=e213] [cursor=pointer]
+              - button "ودود" [ref=e214] [cursor=pointer]
+              - button "حماسي" [ref=e215] [cursor=pointer]
+              - button "إقناعي" [ref=e216] [cursor=pointer]
+              - button "حازم" [ref=e217] [cursor=pointer]
+          - separator [ref=e218]
+          - generic [ref=e221]:
+            - generic [ref=e222]: مستوى الرسمية
+            - button "رسمي" [ref=e223]:
+              - generic [ref=e225]: رسمي
+              - img [ref=e226]
+          - generic [ref=e228]:
+            - generic [ref=e229]:
+              - generic [ref=e230]: "الصياغة الذكية: تفاصيل الخطاب / المبررات"
+              - generic [ref=e231]:
+                - button "صوت" [ref=e232] [cursor=pointer]:
+                  - img [ref=e233]
+                  - text: صوت
+                - button "OCR" [ref=e237] [cursor=pointer]:
+                  - img [ref=e238]
+                  - text: OCR
+            - 'textbox "الصياغة الذكية: تفاصيل الخطاب / المبررات" [ref=e241]':
+              - /placeholder: اكتب الغرض، وبعض نقاط القوة أو المبررات ليقوم الذكاء الاصطناعي بكتابة وتنسيق الخطاب بالكامل لك...
+          - generic [ref=e242]:
+            - generic [ref=e243]:
+              - generic [ref=e244] [cursor=pointer]: توليد الخطاب تلقائياً أثناء الكتابة
+              - checkbox "توليد الخطاب تلقائياً أثناء الكتابة" [ref=e245] [cursor=pointer]
+            - button "صياغة الخطاب بالذكاء الاصطناعي" [disabled] [ref=e246]:
+              - img [ref=e247]
+              - generic [ref=e252]: صياغة الخطاب بالذكاء الاصطناعي
+            - button "حفظ كقالب مخصص" [ref=e254] [cursor=pointer]:
+              - img [ref=e255]
+              - text: حفظ كقالب مخصص
+      - generic [ref=e260]:
+        - generic [ref=e261]:
+          - heading "الخطاب الناتج" [level=2] [ref=e262]
+          - generic [ref=e263]:
+            - generic [ref=e264]:
+              - button "تراجع" [disabled] [ref=e265]:
+                - img [ref=e266]
+              - button "إعادة" [disabled] [ref=e269]:
+                - img [ref=e270]
+            - button "مساعد الذكاء الاصطناعي" [disabled] [ref=e273]:
+              - img [ref=e274]
+              - generic [ref=e279]: مساعد الذكاء الاصطناعي
+            - button "حفظ الخطاب" [ref=e281] [cursor=pointer]:
+              - img [ref=e282]
+              - generic [ref=e286]: حفظ الخطاب
+              - img [ref=e287]
+            - button "تنزيل وتصدير" [disabled] [ref=e290]:
+              - img [ref=e291]
+              - generic [ref=e295]: تنزيل وتصدير
+              - img [ref=e296]
+            - button "مشاركة الخطاب" [disabled] [ref=e299]:
+              - img [ref=e300]
+              - generic [ref=e306]: مشاركة الخطاب
+              - img [ref=e307]
+        - generic [ref=e311]:
+          - img [ref=e313]
+          - paragraph [ref=e319]: لا يوجد خطاب بعد
+          - paragraph [ref=e320]: املأ التفاصيل واضغط على زر الإنشاء لتحصل على صياغة رسمية جاهزة للاستخدام.
+  - dialog "مكتبة القوالب" [ref=e322]:
+    - generic [ref=e323]:
+      - generic [ref=e324]:
+        - img [ref=e326]
+        - generic [ref=e331]:
+          - heading "مكتبة القوالب" [level=3] [ref=e332]
+          - paragraph [ref=e333]: اختر قالباً جاهزاً أو من قوالبك المخصصة
+      - button "إغلاق المكتبة" [active] [ref=e334] [cursor=pointer]:
+        - img [ref=e335]
+    - generic [ref=e338]:
+      - generic [ref=e339]:
+        - tab "القوالب الجاهزة" [selected] [ref=e340] [cursor=pointer]
+        - tab "قوالبي المخصصة" [ref=e341] [cursor=pointer]
+      - generic [ref=e343]:
+        - img [ref=e344]
+        - textbox "بحث ذكي عن قالب..." [ref=e347]
+    - generic [ref=e349]:
+      - generic [ref=e350]:
+        - heading "توظيف وتطوير مهني" [level=4] [ref=e351]: توظيف وتطوير مهني
+        - generic [ref=e353]:
+          - button "تطبيق قالب خطاب تغطية (Cover Letter)" [ref=e354] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e355]:
+              - img [ref=e356]
+            - img [ref=e359]
+            - generic [ref=e365]:
+              - heading "خطاب تغطية (Cover Letter)" [level=5] [ref=e366]
+              - paragraph [ref=e367]: طلب الانضمام لفريق عملكم المميز
+          - button "تطبيق قالب رسالة تواصل LinkedIn" [ref=e368] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e369]:
+              - img [ref=e370]
+            - img [ref=e373]
+            - generic [ref=e376]:
+              - heading "رسالة تواصل LinkedIn" [level=5] [ref=e377]
+              - paragraph [ref=e378]: طلب تواصل مهني
+          - button "تطبيق قالب رسالة شكر بعد المقابلة" [ref=e379] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e380]:
+              - img [ref=e381]
+            - img [ref=e384]
+            - generic [ref=e386]:
+              - heading "رسالة شكر بعد المقابلة" [level=5] [ref=e387]
+              - paragraph [ref=e388]: شكر وتقدير على وقتكم الثمين في المقابلة الشخصية
+      - generic [ref=e389]:
+        - heading "شركات خاصة" [level=4] [ref=e390]: شركات خاصة
+        - generic [ref=e392]:
+          - button "تطبيق قالب طلب وظيفة" [ref=e393] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e394]:
+              - img [ref=e395]
+            - img [ref=e398]
+            - generic [ref=e401]:
+              - heading "طلب وظيفة" [level=5] [ref=e402]
+              - paragraph [ref=e403]: طلب التوظيف لشواغركم المتاحة
+          - button "تطبيق قالب طلب إجازة" [ref=e404] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e405]:
+              - img [ref=e406]
+            - img [ref=e409]
+            - generic [ref=e414]:
+              - heading "طلب إجازة" [level=5] [ref=e415]
+              - paragraph [ref=e416]: طلب الموافقة على إجازة سنوية
+          - button "تطبيق قالب طلب استقالة" [ref=e417] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e418]:
+              - img [ref=e419]
+            - img [ref=e422]
+            - generic [ref=e425]:
+              - heading "طلب استقالة" [level=5] [ref=e426]
+              - paragraph [ref=e427]: طلب قبول استقالة
+          - button "تطبيق قالب طلب رعاية" [ref=e428] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e429]:
+              - img [ref=e430]
+            - img [ref=e433]
+            - generic [ref=e438]:
+              - heading "طلب رعاية" [level=5] [ref=e439]
+              - paragraph [ref=e440]: طلب رعاية لفعالية [اسم الفعالية]
+          - button "تطبيق قالب طلب ترقية" [ref=e441] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e442]:
+              - img [ref=e443]
+            - img [ref=e446]
+            - generic [ref=e449]:
+              - heading "طلب ترقية" [level=5] [ref=e450]
+              - paragraph [ref=e451]: طلب النظر في ترقية وظيفية
+          - button "تطبيق قالب طلب نقل" [ref=e452] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e453]:
+              - img [ref=e454]
+            - img [ref=e457]
+            - generic [ref=e460]:
+              - heading "طلب نقل" [level=5] [ref=e461]
+              - paragraph [ref=e462]: طلب نقل داخلي إلى قسم [اسم القسم]
+          - button "تطبيق قالب إنهاء خدمة موظف" [ref=e463] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e464]:
+              - img [ref=e465]
+            - img [ref=e468]
+            - generic [ref=e472]:
+              - heading "إنهاء خدمة موظف" [level=5] [ref=e473]
+              - paragraph [ref=e474]: إشعار رسمي بإنهاء خدمة/عقد العمل
+          - button "تطبيق قالب طلب زيادة راتب" [ref=e475] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e476]:
+              - img [ref=e477]
+            - img [ref=e480]
+            - generic [ref=e483]:
+              - heading "طلب زيادة راتب" [level=5] [ref=e484]
+              - paragraph [ref=e485]: طلب إعادة النظر في الراتب والمزايا الوظيفية
+          - button "تطبيق قالب طلب شهادة خبرة" [ref=e486] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e487]:
+              - img [ref=e488]
+            - img [ref=e491]
+            - generic [ref=e497]:
+              - heading "طلب شهادة خبرة" [level=5] [ref=e498]
+              - paragraph [ref=e499]: طلب إصدار شهادة خبرة وخدمة
+          - button "تطبيق قالب خطاب شكر للموظف المتميز" [ref=e500] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e501]:
+              - img [ref=e502]
+            - img [ref=e505]
+            - generic [ref=e507]:
+              - heading "خطاب شكر للموظف المتميز" [level=5] [ref=e508]
+              - paragraph [ref=e509]: خطاب شكر وتقدير للأداء المتميز والتفاني
+          - button "تطبيق قالب خطاب إخلاء طرف" [ref=e510] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e511]:
+              - img [ref=e512]
+            - img [ref=e515]
+            - generic [ref=e518]:
+              - heading "خطاب إخلاء طرف" [level=5] [ref=e519]
+              - paragraph [ref=e520]: شهادة إخلاء طرف وبراءة ذمة للموظف
+      - generic [ref=e521]:
+        - heading "جهات حكومية" [level=4] [ref=e522]: جهات حكومية
+        - generic [ref=e524]:
+          - button "تطبيق قالب خطاب شكوى" [ref=e525] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e526]:
+              - img [ref=e527]
+            - img [ref=e530]
+            - generic [ref=e534]:
+              - heading "خطاب شكوى" [level=5] [ref=e535]
+              - paragraph [ref=e536]: شكوى بخصوص [موضوع الشكوى]
+          - button "تطبيق قالب طلب مساعدة مالية" [ref=e537] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e538]:
+              - img [ref=e539]
+            - img [ref=e542]
+            - generic [ref=e544]:
+              - heading "طلب مساعدة مالية" [level=5] [ref=e545]
+              - paragraph [ref=e546]: طلب تقديم مساعدة مالية عاجلة
+          - button "تطبيق قالب طلب تقرير طبي" [ref=e547] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e548]:
+              - img [ref=e549]
+            - img [ref=e552]
+            - generic [ref=e554]:
+              - heading "طلب تقرير طبي" [level=5] [ref=e555]
+              - paragraph [ref=e556]: طلب الحصول على تقرير طبي مفصل
+          - button "تطبيق قالب طلب استفسار رسمي" [ref=e557] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e558]:
+              - img [ref=e559]
+            - img [ref=e562]
+            - generic [ref=e564]:
+              - heading "طلب استفسار رسمي" [level=5] [ref=e565]
+              - paragraph [ref=e566]: طلب استفسار بشأن معاملة رقم [رقم المعاملة]
+      - generic [ref=e567]:
+        - heading "شخصي" [level=4] [ref=e568]: شخصي
+        - generic [ref=e570]:
+          - button "تطبيق قالب خطاب شكر" [ref=e571] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e572]:
+              - img [ref=e573]
+            - img [ref=e576]
+            - generic [ref=e578]:
+              - heading "خطاب شكر" [level=5] [ref=e579]
+              - paragraph [ref=e580]: شكر وتقدير
+          - button "تطبيق قالب خطاب اعتذار" [ref=e581] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e582]:
+              - img [ref=e583]
+            - img [ref=e586]
+            - generic [ref=e590]:
+              - heading "خطاب اعتذار" [level=5] [ref=e591]
+              - paragraph [ref=e592]: رسالة اعتذار عن [سبب الاعتذار]
+          - button "تطبيق قالب تهنئة بترقية" [ref=e593] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e594]:
+              - img [ref=e595]
+            - img [ref=e598]
+            - generic [ref=e603]:
+              - heading "تهنئة بترقية" [level=5] [ref=e604]
+              - paragraph [ref=e605]: تهنئة حارة بمناسبة الترقية الجديدة
+          - button "تطبيق قالب خطاب تعزية ومواساة" [ref=e606] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e607]:
+              - img [ref=e608]
+            - img [ref=e611]
+            - generic [ref=e613]:
+              - heading "خطاب تعزية ومواساة" [level=5] [ref=e614]
+              - paragraph [ref=e615]: رسالة تعزية ومواساة بوفاة [اسم الفقيد]
+      - generic [ref=e616]:
+        - heading "جامعات" [level=4] [ref=e617]: جامعات
+        - generic [ref=e619]:
+          - button "تطبيق قالب طلب قبول جامعي" [ref=e620] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e621]:
+              - img [ref=e622]
+            - img [ref=e625]
+            - generic [ref=e631]:
+              - heading "طلب قبول جامعي" [level=5] [ref=e632]
+              - paragraph [ref=e633]: طلب التحاق ببرنامج [اسم البرنامج]
+          - button "تطبيق قالب طلب تدريب تعاوني/صيفي" [ref=e634] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e635]:
+              - img [ref=e636]
+            - img [ref=e639]
+            - generic [ref=e645]:
+              - heading "طلب تدريب تعاوني/صيفي" [level=5] [ref=e646]
+              - paragraph [ref=e647]: طلب فرصة تدريب تعاوني/عملي
+      - generic [ref=e648]:
+        - heading "إداري/رسمي" [level=4] [ref=e649]: إداري/رسمي
+        - generic [ref=e651]:
+          - button "تطبيق قالب دعوة رسمية" [ref=e652] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e653]:
+              - img [ref=e654]
+            - img [ref=e657]
+            - generic [ref=e660]:
+              - heading "دعوة رسمية" [level=5] [ref=e661]
+              - paragraph [ref=e662]: دعوة لحضور [اسم المناسبة]
+          - button "تطبيق قالب إنذار موظف" [ref=e663] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e664]:
+              - img [ref=e665]
+            - img [ref=e668]
+            - generic [ref=e672]:
+              - heading "إنذار موظف" [level=5] [ref=e673]
+              - paragraph [ref=e674]: إنذار كتابي بسبب [سبب الإنذار]
+          - button "تطبيق قالب تفويض رسمي" [ref=e675] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e676]:
+              - img [ref=e677]
+            - img [ref=e680]
+            - generic [ref=e683]:
+              - heading "تفويض رسمي" [level=5] [ref=e684]
+              - paragraph [ref=e685]: خطاب تفويض رسمي لإتمام إجراءات [موضوع التفويض]
+          - button "تطبيق قالب إقرار وتعهد" [ref=e686] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e687]:
+              - img [ref=e688]
+            - img [ref=e691]
+            - generic [ref=e697]:
+              - heading "إقرار وتعهد" [level=5] [ref=e698]
+              - paragraph [ref=e699]: إقرار وتعهد بالالتزام بـ [موضوع التعهد]
+          - button "تطبيق قالب طلب دعم فني / تقني" [ref=e700] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e701]:
+              - img [ref=e702]
+            - img [ref=e705]
+            - generic [ref=e708]:
+              - heading "طلب دعم فني / تقني" [level=5] [ref=e709]
+              - paragraph [ref=e710]: طلب صيانة ودعم فني طارئ لأنظمة [اسم النظام]
+      - generic [ref=e711]:
+        - heading "أعمال" [level=4] [ref=e712]: أعمال
+        - generic [ref=e714]:
+          - button "تطبيق قالب عرض سعر" [ref=e715] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e716]:
+              - img [ref=e717]
+            - img [ref=e720]
+            - generic [ref=e726]:
+              - heading "عرض سعر" [level=5] [ref=e727]
+              - paragraph [ref=e728]: عرض سعر لتقديم خدمات [نوع الخدمة]
+          - button "تطبيق قالب خطاب تعريف بالشركة" [ref=e729] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e730]:
+              - img [ref=e731]
+            - img [ref=e734]
+            - generic [ref=e740]:
+              - heading "خطاب تعريف بالشركة" [level=5] [ref=e741]
+              - paragraph [ref=e742]: نبذة تعريفية عن شركة [اسم شركتك]
+          - button "تطبيق قالب مطالبة مالية" [ref=e743] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e744]:
+              - img [ref=e745]
+            - img [ref=e748]
+            - generic [ref=e754]:
+              - heading "مطالبة مالية" [level=5] [ref=e755]
+              - paragraph [ref=e756]: مطالبة مالية بشأن الفاتورة رقم [رقم الفاتورة]
+          - button "تطبيق قالب طلب شراكة استراتيجية" [ref=e757] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e758]:
+              - img [ref=e759]
+            - img [ref=e762]
+            - generic [ref=e765]:
+              - heading "طلب شراكة استراتيجية" [level=5] [ref=e766]
+              - paragraph [ref=e767]: طلب بناء شراكة استراتيجية وتعاون مشترك
+          - button "تطبيق قالب طلب تسهيلات بنكية/تمويل" [ref=e768] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e769]:
+              - img [ref=e770]
+            - img [ref=e773]
+            - generic [ref=e779]:
+              - heading "طلب تسهيلات بنكية/تمويل" [level=5] [ref=e780]
+              - paragraph [ref=e781]: طلب الحصول على تمويل / تسهيلات بنكية لمشروع [اسم المشروع]
+          - button "تطبيق قالب دعوة لاجتماع مجلس إدارة" [ref=e782] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e783]:
+              - img [ref=e784]
+            - img [ref=e787]
+            - generic [ref=e792]:
+              - heading "دعوة لاجتماع مجلس إدارة" [level=5] [ref=e793]
+              - paragraph [ref=e794]: دعوة لحضور اجتماع مجلس الإدارة رقم [رقم الاجتماع]
+      - generic [ref=e795]:
+        - heading "القطاع القانوني" [level=4] [ref=e796]: القطاع القانوني
+        - generic [ref=e798]:
+          - button "تطبيق قالب إنذار قانوني رسمي" [ref=e799] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e800]:
+              - img [ref=e801]
+            - img [ref=e804]
+            - generic [ref=e810]:
+              - heading "إنذار قانوني رسمي" [level=5] [ref=e811]
+              - paragraph [ref=e812]: إشعار وإنذار قانوني بضرورة تسوية [الموضوع]
+          - button "تطبيق قالب عقد تقديم خدمات" [ref=e813] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e814]:
+              - img [ref=e815]
+            - img [ref=e818]
+            - generic [ref=e824]:
+              - heading "عقد تقديم خدمات" [level=5] [ref=e825]
+              - paragraph [ref=e826]: اتفاقية تقديم خدمات استشارية ومهنية
+          - button "تطبيق قالب إشعار بفسخ عقد" [ref=e827] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e828]:
+              - img [ref=e829]
+            - img [ref=e832]
+            - generic [ref=e836]:
+              - heading "إشعار بفسخ عقد" [level=5] [ref=e837]
+              - paragraph [ref=e838]: إشعار رسمي بإنهاء وفسخ العقد المبرم
+          - button "تطبيق قالب خطاب مطالبة حقوقية" [ref=e839] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e840]:
+              - img [ref=e841]
+            - img [ref=e844]
+            - generic [ref=e850]:
+              - heading "خطاب مطالبة حقوقية" [level=5] [ref=e851]
+              - paragraph [ref=e852]: مطالبة حقوقية ودية بسداد الالتزامات المالية المتأخرة
+      - generic [ref=e853]:
+        - heading "القطاع الطبي" [level=4] [ref=e854]: القطاع الطبي
+        - generic [ref=e856]:
+          - button "تطبيق قالب خطاب إجازة مرضية" [ref=e857] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e858]:
+              - img [ref=e859]
+            - img [ref=e862]
+            - generic [ref=e867]:
+              - heading "خطاب إجازة مرضية" [level=5] [ref=e868]
+              - paragraph [ref=e869]: تقرير إجازة مرضية وعذر طبي
+          - button "تطبيق قالب طلب إحالة طبية" [ref=e870] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e871]:
+              - img [ref=e872]
+            - img [ref=e875]
+            - generic [ref=e881]:
+              - heading "طلب إحالة طبية" [level=5] [ref=e882]
+              - paragraph [ref=e883]: طلب إحالة طبية لمستشفى تخصصي
+      - generic [ref=e884]:
+        - heading "القطاع الأكاديمي" [level=4] [ref=e885]: القطاع الأكاديمي
+        - generic [ref=e887]:
+          - button "تطبيق قالب توصية أكاديمية" [ref=e888] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e889]:
+              - img [ref=e890]
+            - img [ref=e893]
+            - generic [ref=e897]:
+              - heading "توصية أكاديمية" [level=5] [ref=e898]
+              - paragraph [ref=e899]: خطاب توصية أكاديمية للطالب [اسم الطالب]
+          - button "تطبيق قالب طلب تأجيل دراسي" [ref=e900] [cursor=pointer]:
+            - button "إضافة للمفضلة" [ref=e901]:
+              - img [ref=e902]
+            - img [ref=e905]
+            - generic [ref=e910]:
+              - heading "طلب تأجيل دراسي" [level=5] [ref=e911]
+              - paragraph [ref=e912]: طلب تأجيل الدراسة للفصل الدراسي [اسم الفصل]
+```

@@ -1,0 +1,211 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: accessibility.spec.ts >> Usability & Accessibility Testing (WCAG 2.1 AA) >> should not have critical accessibility violations on homepage
+- Location: tests\e2e\accessibility.spec.ts:5:3
+
+# Error details
+
+```
+AssertionError: 2 accessibility violations were detected
+
+2 !== 0
+
+```
+
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - link "تجاوز إلى المحتوى الرئيسي" [ref=e4] [cursor=pointer]:
+      - /url: "#main-content"
+    - banner [ref=e5]:
+      - generic [ref=e6]:
+        - generic [ref=e8] [cursor=pointer]:
+          - img [ref=e10]
+          - heading "صياغة" [level=1] [ref=e15]
+        - generic [ref=e16]:
+          - button "من نحن" [ref=e17] [cursor=pointer]:
+            - img [ref=e18]
+          - button "تغيير اللغة" [ref=e21] [cursor=pointer]: EN
+          - button "الوضع الداكن" [ref=e23] [cursor=pointer]:
+            - img [ref=e25]
+          - button "الأرشيف" [ref=e28] [cursor=pointer]:
+            - img [ref=e29]
+          - button "تسجيل الدخول باستخدام جوجل" [ref=e33] [cursor=pointer]:
+            - img [ref=e34]
+    - main [ref=e37]:
+      - generic [ref=e38]:
+        - generic [ref=e39]:
+          - heading "نماذج الاستخدام السريع" [level=2] [ref=e40]: نماذج الاستخدام السريع
+          - generic [ref=e42]:
+            - button "إحصائياتي" [ref=e43] [cursor=pointer]:
+              - img [ref=e44]
+              - text: إحصائياتي
+            - button "مكتبة القوالب" [ref=e46] [cursor=pointer]:
+              - img [ref=e47]
+              - text: مكتبة القوالب
+        - list [ref=e49]:
+          - button "خطاب تغطية (Cover Letter) توظيف وتطوير مهني" [ref=e50]:
+            - img [ref=e52]
+            - generic:
+              - generic: خطاب تغطية (Cover Letter)
+              - generic: توظيف وتطوير مهني
+          - button "رسالة تواصل LinkedIn توظيف وتطوير مهني" [ref=e55]:
+            - img [ref=e57]
+            - generic:
+              - generic: رسالة تواصل LinkedIn
+              - generic: توظيف وتطوير مهني
+          - button "رسالة شكر بعد المقابلة توظيف وتطوير مهني" [ref=e60]:
+            - img [ref=e62]
+            - generic:
+              - generic: رسالة شكر بعد المقابلة
+              - generic: توظيف وتطوير مهني
+          - button "طلب وظيفة شركات خاصة" [ref=e64]:
+            - img [ref=e66]
+            - generic:
+              - generic: طلب وظيفة
+              - generic: شركات خاصة
+      - generic [ref=e69]:
+        - button "تعبئة البيانات" [ref=e70] [cursor=pointer]
+        - button "معاينة الخطاب" [ref=e71] [cursor=pointer]
+      - generic [ref=e74]:
+        - heading "التخصيص والتفاصيل" [level=2] [ref=e76]:
+          - img [ref=e78]
+          - text: التخصيص والتفاصيل
+        - generic [ref=e80]:
+          - button "بيانات الخطاب" [ref=e81] [cursor=pointer]
+          - button "الهوية والترويسة" [ref=e82] [cursor=pointer]
+          - button "التوقيع والختم" [ref=e83] [cursor=pointer]
+        - generic [ref=e86]:
+          - generic [ref=e87]:
+            - generic [ref=e88]:
+              - generic [ref=e89]: نوع الخطاب
+              - button "إداري/رسمي" [ref=e90]:
+                - generic [ref=e91]:
+                  - img [ref=e92]
+                  - generic [ref=e96]: إداري/رسمي
+                - img [ref=e97]
+            - generic [ref=e99]:
+              - generic [ref=e101]:
+                - generic [ref=e102]: التصنيف
+                - button "إضافة للمفضلة" [ref=e103] [cursor=pointer]:
+                  - img [ref=e104]
+              - button "خطاب طلب (وظيفة، إجازة، مساعدة)" [ref=e106]:
+                - generic [ref=e107]:
+                  - img [ref=e108]
+                  - generic [ref=e111]: خطاب طلب (وظيفة، إجازة، مساعدة)
+                - img [ref=e112]
+          - generic [ref=e114]:
+            - generic [ref=e115]:
+              - generic [ref=e116] [cursor=pointer]:
+                - img [ref=e117]
+                - text: بصمة الأسلوب اللغوي الخاص
+              - generic [ref=e120]:
+                - button "الملف المهني" [ref=e121] [cursor=pointer]:
+                  - img [ref=e122]
+                  - text: الملف المهني
+                - button "إدارة البصمات" [ref=e125] [cursor=pointer]:
+                  - img [ref=e126]
+                  - text: إدارة البصمات
+            - button "بصمة الأسلوب اللغوي الخاص" [ref=e130]:
+              - generic [ref=e132]: توليد تلقائي افتراضي (Default)
+              - img [ref=e133]
+          - generic [ref=e135]:
+            - generic [ref=e136] [cursor=pointer]: تفعيل وضع الرد الذكي على خطاب وارد
+            - checkbox "تفعيل وضع الرد الذكي على خطاب وارد" [ref=e137] [cursor=pointer]
+          - separator [ref=e138]
+          - generic [ref=e139]:
+            - generic [ref=e140]:
+              - generic [ref=e141]: تاريخ الخطاب
+              - textbox "تاريخ الخطاب" [ref=e142]: 2026-07-04
+            - generic [ref=e144]:
+              - generic [ref=e145]: لغة الخطاب (Language)
+              - button "العربية (Arabic)" [ref=e146]:
+                - generic [ref=e148]: العربية (Arabic)
+                - img [ref=e149]
+          - separator [ref=e151]
+          - generic [ref=e152]:
+            - generic [ref=e153]:
+              - text: اسم المرسل
+              - generic [ref=e154]: "*"
+            - textbox "اسم المرسل *" [ref=e155]:
+              - /placeholder: اسمك أو اسم المؤسسة
+          - generic [ref=e156]:
+            - generic [ref=e157]:
+              - generic [ref=e158]: رقم الهاتف
+              - textbox "رقم الهاتف" [ref=e159]:
+                - /placeholder: "مثال: 0501234567"
+            - generic [ref=e160]:
+              - generic [ref=e161]: البريد الإلكتروني
+              - textbox "البريد الإلكتروني" [ref=e162]:
+                - /placeholder: name@example.com
+          - generic [ref=e163]:
+            - generic [ref=e164]:
+              - generic [ref=e165]:
+                - text: اسم الموجه إليه
+                - generic [ref=e166]: "*"
+              - textbox "اسم الموجه إليه *" [ref=e167]:
+                - /placeholder: المؤسسة أو الشخص المتلقي
+            - generic [ref=e168]:
+              - generic [ref=e169]: صفة الموجه إليه
+              - textbox "صفة الموجه إليه" [ref=e170]:
+                - /placeholder: مدير الموارد البشرية
+          - separator [ref=e171]
+          - generic [ref=e172]:
+            - generic [ref=e173]:
+              - generic [ref=e174]:
+                - text: موضوع الخطاب / عنوانه
+                - generic [ref=e175]: "*"
+              - button "اقتراح عنوان ذكي" [ref=e176] [cursor=pointer]:
+                - img [ref=e177]
+                - text: اقتراح عنوان ذكي
+            - textbox "موضوع الخطاب / عنوانه *" [ref=e180]:
+              - /placeholder: "اتركه فارغاً، أو ادخل مثال: طلب الموافقة على رصيد إجازة"
+          - separator [ref=e181]
+          - generic [ref=e182]:
+            - generic [ref=e183]: نبرة الخطاب (بنقرة زر)
+            - group "نبرة الخطاب (بنقرة زر)" [ref=e184]:
+              - button "رسمي" [ref=e185] [cursor=pointer]
+              - button "مهني جداً" [ref=e186] [cursor=pointer]
+              - button "ودود" [ref=e187] [cursor=pointer]
+              - button "حماسي" [ref=e188] [cursor=pointer]
+              - button "إقناعي" [ref=e189] [cursor=pointer]
+              - button "حازم" [ref=e190] [cursor=pointer]
+          - separator [ref=e191]
+          - generic [ref=e194]:
+            - generic [ref=e195]: مستوى الرسمية
+            - button "رسمي" [ref=e196]:
+              - generic [ref=e198]: رسمي
+              - img [ref=e199]
+          - generic [ref=e201]:
+            - generic [ref=e202]:
+              - generic [ref=e203]: "الصياغة الذكية: تفاصيل الخطاب / المبررات"
+              - generic [ref=e204]:
+                - button "صوت" [ref=e205] [cursor=pointer]:
+                  - img [ref=e206]
+                  - text: صوت
+                - button "OCR" [ref=e209] [cursor=pointer]:
+                  - img [ref=e210]
+                  - text: OCR
+            - 'textbox "الصياغة الذكية: تفاصيل الخطاب / المبررات" [ref=e213]':
+              - /placeholder: اكتب الغرض، وبعض نقاط القوة أو المبررات ليقوم الذكاء الاصطناعي بكتابة وتنسيق الخطاب بالكامل لك...
+          - generic [ref=e214]:
+            - generic [ref=e215]:
+              - generic [ref=e216] [cursor=pointer]: توليد الخطاب تلقائياً أثناء الكتابة
+              - checkbox "توليد الخطاب تلقائياً أثناء الكتابة" [ref=e217] [cursor=pointer]
+            - button "صياغة الخطاب بالذكاء الاصطناعي" [disabled] [ref=e218]:
+              - img [ref=e219]
+              - generic [ref=e222]: صياغة الخطاب بالذكاء الاصطناعي
+            - button "حفظ كقالب مخصص" [ref=e224] [cursor=pointer]:
+              - img [ref=e225]
+              - text: حفظ كقالب مخصص
+  - iframe [ref=e227]:
+    
+```

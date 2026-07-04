@@ -10,7 +10,6 @@ import LetterPreview from './components/LetterPreview';
 const ArchiveModal = React.lazy(() => import('./components/modals/ArchiveModal'));
 const LibraryModal = React.lazy(() => import('./components/modals/LibraryModal'));
 const EmailModal = React.lazy(() => import('./components/modals/EmailModal'));
-const ShareModal = React.lazy(() => import('./components/modals/ShareModal'));
 const OcrModal = React.lazy(() => import('./components/modals/OcrModal'));
 const SignatureModal = React.lazy(() => import('./components/modals/SignatureModal'));
 const AiModal = React.lazy(() => import('./components/modals/AiModal'));
@@ -32,7 +31,6 @@ function MainAppContent() {
     isArchiveOpen,
     isLibraryOpen,
     isEmailModalOpen,
-    isShareModalOpen,
     isOcrOpen,
     isSigningOpen,
     isAiModalOpen,
@@ -53,7 +51,6 @@ function MainAppContent() {
       if (isArchiveOpen && !prev.archive) updates.archive = true;
       if (isLibraryOpen && !prev.library) updates.library = true;
       if (isEmailModalOpen && !prev.email) updates.email = true;
-      if (isShareModalOpen && !prev.share) updates.share = true;
       if (isOcrOpen && !prev.ocr) updates.ocr = true;
       if (isSigningOpen && !prev.signing) updates.signing = true;
       if (isAiModalOpen && !prev.ai) updates.ai = true;
@@ -71,7 +68,6 @@ function MainAppContent() {
     isArchiveOpen,
     isLibraryOpen,
     isEmailModalOpen,
-    isShareModalOpen,
     isOcrOpen,
     isSigningOpen,
     isAiModalOpen,
@@ -158,7 +154,6 @@ function MainAppContent() {
         {openedModals.archive && <ArchiveModal />}
         {openedModals.library && <LibraryModal />}
         {openedModals.email && <EmailModal />}
-        {openedModals.share && <ShareModal />}
         {openedModals.ocr && <OcrModal />}
         {openedModals.signing && <SignatureModal />}
         {openedModals.ai && <AiModal />}

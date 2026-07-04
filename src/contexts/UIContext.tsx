@@ -17,8 +17,6 @@ export interface UIContextType {
   setIsStatsOpen: (open: boolean) => void;
   isEmailModalOpen: boolean;
   setIsEmailModalOpen: (open: boolean) => void;
-  isShareModalOpen: boolean;
-  setIsShareModalOpen: (open: boolean) => void;
   isSigningOpen: boolean;
   setIsSigningOpen: (open: boolean) => void;
   isOcrOpen: boolean;
@@ -151,7 +149,6 @@ export const UIProvider: React.FC<{ children: React.ReactNode }> = ({ children }
   const [isLibraryOpen, setIsLibraryOpen] = useState(false);
   const [isStatsOpen, setIsStatsOpen] = useState(false);
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
-  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isSigningOpen, setIsSigningOpen] = useState(false);
   const [isOcrOpen, setIsOcrOpen] = useState(false);
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
@@ -205,8 +202,6 @@ export const UIProvider: React.FC<{ children: React.ReactNode }> = ({ children }
         setIsStatsOpen,
         isEmailModalOpen,
         setIsEmailModalOpen,
-        isShareModalOpen,
-        setIsShareModalOpen,
         isSigningOpen,
         setIsSigningOpen,
         isOcrOpen,
