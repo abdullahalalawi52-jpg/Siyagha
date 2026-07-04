@@ -22,7 +22,7 @@ export const SignatureTab: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsSigningOpen(true)}
-            className="flex-1 py-2 px-3 border border-brown-200 text-brown-700 bg-brown-50 hover:bg-brown-100 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+            className="flex-1 py-2 px-3 border border-brown-200 dark:border-slate-700 text-brown-700 dark:text-brown-400 bg-brown-50 dark:bg-slate-800 hover:bg-brown-100 dark:hover:bg-slate-700 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer"
           >
             <PenLine className="w-4 h-4" />
             {t('ارسم توقيعك', 'Draw Signature')}
@@ -37,7 +37,7 @@ export const SignatureTab: React.FC = () => {
             />
             <label
               htmlFor="sig-file-upload"
-              className="w-full py-2 px-3 border border-gray-200 text-gray-600 bg-white hover:bg-gray-50 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer text-center"
+              className="w-full py-2 px-3 border border-gray-200 dark:border-slate-700 text-gray-600 dark:text-gray-200 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer text-center"
             >
               <Upload className="w-4 h-4" />
               {t('ارفع صورة التوقيع', 'Upload Signature Image')}
@@ -46,7 +46,7 @@ export const SignatureTab: React.FC = () => {
         </div>
 
         {signatureImage && (
-          <div className="relative mt-2 inline-block border border-gray-200 rounded p-2 bg-white">
+          <div className="relative mt-2 inline-block border border-gray-200 dark:border-slate-700 rounded p-2 bg-white dark:bg-slate-800">
             <img src={signatureImage} alt="Signature preview" className="max-h-16 max-w-[120px] object-contain" />
             <button
               type="button"
@@ -75,7 +75,7 @@ export const SignatureTab: React.FC = () => {
           />
           <label
             htmlFor="seal-file-upload"
-            className="w-full py-2.5 px-3 border border-gray-200 text-gray-600 bg-white hover:bg-gray-50 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer text-center"
+            className="w-full py-2.5 px-3 border border-gray-200 dark:border-slate-700 text-gray-600 dark:text-gray-200 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer text-center"
           >
             <Upload className="w-4 h-4" />
             {t('ارفع صورة الختم الدائري', 'Upload Seal Image')}
@@ -83,7 +83,7 @@ export const SignatureTab: React.FC = () => {
         </div>
 
         {sealImage && (
-          <div className="relative mt-2 inline-block border border-gray-250 rounded p-2 bg-white">
+          <div className="relative mt-2 inline-block border border-gray-200 dark:border-slate-700 rounded p-2 bg-white dark:bg-slate-800">
             <img src={sealImage} alt="Seal preview" className="max-h-16 max-w-[100px] object-contain" />
             <button
               type="button"
