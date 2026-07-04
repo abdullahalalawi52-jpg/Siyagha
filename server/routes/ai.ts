@@ -225,10 +225,40 @@ router.post("/analyze-style", async (req: GoogleAiRequest, res: Response) => {
 // 8. Generate Letter
 router.post("/generate-letter", async (req: GoogleAiRequest, res: Response) => {
   try {
-    const { sender, recipient, subject, details, type, subType, tone, lang, brandVoicePrompt, careerProfile } = req.body;
+    const {
+      senderName,
+      senderPhone,
+      senderEmail,
+      recipientName,
+      recipientRole,
+      subject,
+      details,
+      type,
+      subType,
+      tone,
+      language,
+      brandVoiceProfile,
+      resumeInfo,
+      isReplyMode,
+      replyToText,
+      replyStance
+    } = req.body;
+    
+    const sender = [senderName, senderPhone, senderEmail].filter(Boolean).join(' - ');
+    const recipient = [recipientName, recipientRole].filter(Boolean).join(' - ');
+    const lang = language;
+    const brandVoicePrompt = brandVoiceProfile;
+    const careerProfile = resumeInfo ? { summary: resumeInfo } : undefined;
+    
+    // Incorporate reply context into details if it's reply mode
+    let finalDetails = details || "";
+    if (isReplyMode && replyToText) {
+      finalDetails += `\n\n[Context: This is a reply to the following letter: "${replyToText}".\nStance/Direction of reply: ${replyStance || 'Neutral/Appropriate'}]`;
+    }
+
     const ai = req.ai!;
 
-    if (!validateInputLength(details, 20000)) {
+    if (!validateInputLength(finalDetails, 20000)) {
       return res.status(400).json({ error: "تفاصيل الخطاب تتجاوز الحد الأقصى المسموح به" });
     }
 
@@ -236,7 +266,7 @@ router.post("/generate-letter", async (req: GoogleAiRequest, res: Response) => {
       sender,
       recipient,
       subject,
-      details,
+      details: finalDetails,
       type,
       subType,
       tone,
