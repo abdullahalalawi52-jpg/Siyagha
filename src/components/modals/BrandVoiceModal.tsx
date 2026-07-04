@@ -96,7 +96,7 @@ export const BrandVoiceModal: React.FC = () => {
   return (
     <AnimatePresence>
       {isBrandVoiceModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
+        <div key="brand-voice-modal" className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
