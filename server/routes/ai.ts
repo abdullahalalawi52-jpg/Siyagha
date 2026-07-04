@@ -1,8 +1,8 @@
 import express, { Router, Response } from "express";
-import { geminiLimiter, checkGeminiKey } from "../middleware";
-import { handleApiError } from "../config";
-import { safeGenerate } from "../services/gemini";
-import { GoogleAiRequest } from "../types";
+import { geminiLimiter, checkGeminiKey } from "../middleware.js";
+import { handleApiError } from "../config.js";
+import { safeGenerate } from "../services/gemini.js";
+import { GoogleAiRequest } from "../types.js";
 import {
   getSuggestTitlePrompt,
   getProofreadPrompt,
@@ -11,7 +11,7 @@ import {
   getPolishLetterPrompt,
   getAnalyzeStylePrompt,
   getGenerateLetterPrompt
-} from "../prompts/aiPrompts";
+} from "../prompts/aiPrompts.js";
 
 const router = Router();
 

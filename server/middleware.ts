@@ -1,6 +1,6 @@
 import express from "express";
 import { GoogleGenAI } from "@google/genai";
-import { ALLOWED_ORIGINS, isAllowedOrigin } from "./config";
+import { ALLOWED_ORIGINS, isAllowedOrigin } from "./config.js";
 
 const ipCache = new Map<string, { count: number; resetTime: number }>();
 
@@ -56,7 +56,7 @@ export const shareLimiter = rateLimiter({
   message: "لقد تجاوزت الحد المسموح به لإنشاء الروابط (10 روابط في الدقيقة). يرجى المحاولة لاحقاً."
 });
 
-import { GoogleAiRequest } from "./types";
+import { GoogleAiRequest } from "./types.js";
 
 export const checkGeminiKey = (req: GoogleAiRequest, res: express.Response, next: express.NextFunction) => {
   const apiKey = process.env.GEMINI_API_KEY;
