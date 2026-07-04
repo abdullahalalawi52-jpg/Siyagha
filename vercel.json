@@ -12,6 +12,12 @@
   ],
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api" },
-    { "source": "/share/(.*)", "destination": "/api" }
-  ]
+    { "source": "/share/(.*)", "destination": "/api" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ],
+  "functions": {
+    "api/**/*": {
+      "maxDuration": 60
+    }
+  }
 }
