@@ -114,7 +114,10 @@ export const LibraryModal: React.FC = () => {
                         {t('المفضلة', 'Favorites')}
                       </h4>
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {predefinedTemplates.filter((t) => favoritePredefined.includes(t.id)).map((template) => (
+                        {favoritePredefined
+                          .map(id => predefinedTemplates.find(t => t.id === id))
+                          .filter((t): t is typeof predefinedTemplates[0] => t !== undefined)
+                          .map((template) => (
                           <div
                             key={template.id}
                             role="button"

@@ -18,11 +18,14 @@ export const QuickTemplates: React.FC = () => {
     t,
   } = useApp();
 
-  // Sort templates so favorites come first
-  const sortedTemplates = [
-    ...predefinedTemplates.filter((t) => favoritePredefined.includes(t.id)),
-    ...predefinedTemplates.filter((t) => !favoritePredefined.includes(t.id)),
-  ];
+  // Sort templates so favorites come first, and respect their custom dragged order
+  const favoriteTemplatesList = favoritePredefined
+    .map(id => predefinedTemplates.find(t => t.id === id))
+    .filter((t): t is typeof predefinedTemplates[0] => t !== undefined);
+
+  const nonFavoriteTemplatesList = predefinedTemplates.filter(t => !favoritePredefined.includes(t.id));
+
+  const sortedTemplates = [...favoriteTemplatesList, ...nonFavoriteTemplatesList];
 
   const initialTop4 = sortedTemplates.slice(0, 4);
   const [displayTemplates, setDisplayTemplates] = useState(initialTop4);
