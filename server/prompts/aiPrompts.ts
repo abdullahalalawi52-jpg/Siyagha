@@ -17,10 +17,21 @@ export interface GenerateLetterParams {
   };
 }
 
-export const getSuggestTitlePrompt = (letterContent: string, isEn: boolean): string => {
+export const getSuggestTitlePrompt = (type: string, subType: string, details: string, isEn: boolean): string => {
   return isEn
-    ? `You are an expert formal letter writing assistant. Suggest a concise, highly formal Subject line for the following letter text. Return ONLY the suggested subject title without quotes, markdown formatting, or preamble.\n\nLetter Content:\n"${letterContent}"`
-    : `أنت خبير في صياغة الخطابات الرسمية باللغة العربية.\nقم باقتراح عنوان موضوع (Subject) قصير ورسمي جداً ومناسب للخطاب التالي.\nالشرط الوحيد: أرجع فقط عنوان الموضوع بدون أي مقدمات أو علامات تنصيص أو نصوص إضافية.\n\nنص الخطاب:\n"${letterContent}"`;
+    ? `You are an expert formal letter writing assistant. Suggest a concise, highly formal Subject line for a letter based on the following details.
+Category: ${type}
+Sub-category: ${subType}
+Details: ${details}
+
+Return ONLY the suggested subject title without quotes, markdown formatting, or preamble.`
+    : `أنت خبير في صياغة الخطابات الرسمية باللغة العربية.
+قم باقتراح عنوان موضوع (Subject) قصير ورسمي جداً ومناسب لخطاب بناءً على التفاصيل التالية.
+التصنيف: ${type}
+النوع الفرعي: ${subType}
+التفاصيل: ${details}
+
+الشرط الوحيد: أرجع فقط عنوان الموضوع بدون أي مقدمات أو علامات تنصيص أو نصوص إضافية.`;
 };
 
 export const getProofreadPrompt = (letterContent: string, isEn: boolean): string => {
