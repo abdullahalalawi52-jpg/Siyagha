@@ -65,7 +65,7 @@ export const PreviewToolbar: React.FC = () => {
   return (
     <>
       <div className="flex items-center justify-between mb-10 pb-4 border-b border-gray-100 flex-wrap gap-4 text-start">
-        <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+        <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
           {t('الخطاب الناتج', 'Generated Letter')}
         </h2>
         <div className="flex items-center gap-2 flex-wrap justify-start">

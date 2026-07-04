@@ -87,9 +87,9 @@ export const BasicInfoTab: React.FC = () => {
       </div>
 
       {/* Custom Brand Voice Dropdown */}
-      <div className="space-y-1.5 mt-2 bg-gray-50/50 border border-gray-100 p-3 rounded-xl">
+      <div className="space-y-1.5 mt-2 bg-gray-50/50 dark:bg-slate-800/80 border border-gray-100 dark:border-slate-700 p-3 rounded-xl">
         <div className="flex items-center justify-between">
-          <label htmlFor="brand-voice-select" className="text-xs font-bold text-gray-700 flex items-center gap-1.5 cursor-pointer">
+          <label htmlFor="brand-voice-select" className="text-xs font-bold text-gray-700 dark:text-gray-200 flex items-center gap-1.5 cursor-pointer">
             <Sparkles className="w-3.5 h-3.5 text-brown-600 animate-pulse" />
             {t('بصمة الأسلوب اللغوي الخاص', 'Custom Brand Voice')}
           </label>
@@ -97,7 +97,7 @@ export const BasicInfoTab: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsCareerProfileModalOpen(true)}
-              className="flex items-center gap-1 text-[10px] text-brown-700 hover:text-brown-850 bg-brown-100/40 hover:bg-brown-100/80 px-2 py-0.5 rounded transition-colors font-bold cursor-pointer"
+              className="flex items-center gap-1 text-[10px] text-brown-700 dark:text-brown-300 hover:text-brown-850 dark:hover:text-brown-200 bg-brown-100/40 dark:bg-slate-700 hover:bg-brown-100/80 dark:hover:bg-slate-600 px-2 py-0.5 rounded transition-colors font-bold cursor-pointer"
             >
               <Briefcase className="w-3 h-3" />
               {t('الملف المهني', 'Career Profile')}
@@ -105,7 +105,7 @@ export const BasicInfoTab: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsBrandVoiceModalOpen(true)}
-              className="flex items-center gap-1 text-[10px] text-brown-750 hover:text-brown-850 bg-brown-100/40 hover:bg-brown-100/80 px-2 py-0.5 rounded transition-colors font-bold cursor-pointer"
+              className="flex items-center gap-1 text-[10px] text-brown-750 dark:text-brown-300 hover:text-brown-850 dark:hover:text-brown-200 bg-brown-100/40 dark:bg-slate-700 hover:bg-brown-100/80 dark:hover:bg-slate-600 px-2 py-0.5 rounded transition-colors font-bold cursor-pointer"
             >
               <Settings className="w-3 h-3" />
               {t('إدارة البصمات', 'Manage Voices')}
@@ -288,7 +288,7 @@ export const BasicInfoTab: React.FC = () => {
                 type="button"
                 onClick={handleSuggestTitle}
                 disabled={isSuggestingTitle}
-                className="text-xs text-brown-700 dark:text-brown-400 hover:text-brown-800 dark:hover:text-brown-300 bg-brown-50 dark:bg-brown-900/40 hover:bg-brown-100 dark:hover:bg-brown-900/60 flex items-center gap-1.5 px-2 py-1 rounded transition-colors disabled:opacity-50 cursor-pointer"
+                className="text-xs text-brown-700 dark:text-brown-400 hover:text-brown-800 dark:hover:text-brown-300 bg-brown-50 dark:bg-slate-700 hover:bg-brown-100 dark:hover:bg-slate-600 flex items-center gap-1.5 px-2 py-1 rounded transition-colors disabled:opacity-50 cursor-pointer"
                 title={t('الذكاء الاصطناعي سيقوم باقتراح عنوان مناسب بناءً على التفاصيل', 'AI will suggest a suitable title based on details')}
               >
                 {isSuggestingTitle ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
@@ -501,7 +501,7 @@ export const BasicInfoTab: React.FC = () => {
               className={`text-xs flex items-center gap-1.5 px-2 py-1 rounded transition-all cursor-pointer ${
                 isListening
                   ? 'bg-red-500 text-white animate-pulse'
-                  : 'text-brown-700 hover:text-brown-800 bg-brown-50 hover:bg-brown-100'
+                  : 'text-brown-700 hover:text-brown-800 bg-brown-50 hover:bg-brown-100 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-brown-400 dark:hover:text-brown-300'
               }`}
               title={isListening ? t('إيقاف الإدخال الصوتي', 'Stop Voice Input') : t('إدخال صوتي', 'Voice Input')}
             >
@@ -511,7 +511,7 @@ export const BasicInfoTab: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsOcrOpen(true)}
-              className="text-xs text-brown-700 hover:text-brown-800 bg-brown-50 hover:bg-brown-100 flex items-center gap-1.5 px-2 py-1 rounded transition-colors cursor-pointer"
+              className="text-xs text-brown-700 hover:text-brown-800 bg-brown-50 hover:bg-brown-100 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-brown-400 dark:hover:text-brown-300 flex items-center gap-1.5 px-2 py-1 rounded transition-colors cursor-pointer"
               title={t('قم بتحميل صورة لخطاب ورقي قديم لاستخراج النص منه بالذكاء الاصطناعي', 'Upload an image of an old paper letter to extract its text using AI')}
             >
               <Camera className="w-3.5 h-3.5" />

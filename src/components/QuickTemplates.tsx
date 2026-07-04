@@ -119,7 +119,7 @@ export const QuickTemplates: React.FC = () => {
               <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all ${
                 activeTemplate === template.id
                   ? 'bg-white dark:bg-slate-800 text-brown-600 dark:text-brown-400 shadow-sm'
-                  : 'bg-gray-100 dark:bg-slate-700/50 text-gray-500 dark:text-gray-400 group-hover:bg-brown-100 dark:group-hover:bg-brown-900/40 group-hover:text-brown-600 dark:group-hover:text-brown-400'
+                  : 'bg-gray-100 dark:bg-slate-700/50 text-gray-500 dark:text-gray-400 group-hover:bg-brown-100 dark:group-hover:bg-slate-600 group-hover:text-brown-600 dark:group-hover:text-brown-400'
               }`}>
                 {template.icon}
               </div>

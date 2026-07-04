@@ -55,7 +55,7 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({ options, value, onCh
               <button
                 key={opt.value}
                 type="button"
-                className={`w-full flex items-center gap-2 px-3 py-2.5 text-sm text-start hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors ${value === opt.value ? 'bg-brown-50 dark:bg-brown-900/40 text-brown-700 dark:text-brown-400 font-bold' : 'text-gray-700 dark:text-gray-300 font-medium'} flex-1 min-w-0`}
+                className={`w-full flex items-center gap-2 px-3 py-2.5 text-sm text-start hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors ${value === opt.value ? 'bg-brown-50 dark:bg-slate-700/50 text-brown-700 dark:text-brown-400 font-bold' : 'text-gray-700 dark:text-gray-300 font-medium'} flex-1 min-w-0`}
                 onClick={() => { onChange(opt.value); setIsOpen(false); }}
               >
                 {opt.icon && React.createElement(opt.icon, { className: `w-4 h-4 shrink-0 ${value === opt.value ? 'text-brown-600' : 'text-gray-400'}` })}
