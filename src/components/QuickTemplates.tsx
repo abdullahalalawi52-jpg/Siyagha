@@ -37,7 +37,10 @@ export const QuickTemplates: React.FC = () => {
 
   const handleReorder = (newOrder: typeof displayTemplates) => {
     setDisplayTemplates(newOrder);
-    const newIds = newOrder.map((t) => t.id);
+  };
+
+  const handleDragEnd = () => {
+    const newIds = displayTemplates.map((t) => t.id);
     const otherFavorites = favoritePredefined.filter((id) => !newIds.includes(id));
     // We make all top 4 templates as favorites in the new order, to persist their position
     setFavoritePredefined([...newIds, ...otherFavorites]);
@@ -80,12 +83,13 @@ export const QuickTemplates: React.FC = () => {
         axis="x" 
         values={displayTemplates} 
         onReorder={handleReorder} 
-        className="grid grid-cols-2 sm:grid-cols-4 gap-3 list-none p-0 m-0"
+        className="flex flex-wrap sm:flex-nowrap gap-3 list-none p-0 m-0"
       >
         {displayTemplates.map((template) => (
           <Reorder.Item
             key={template.id}
             value={template}
+            onDragEnd={handleDragEnd}
             onClick={() => applyTemplate(template.id)}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
@@ -94,7 +98,7 @@ export const QuickTemplates: React.FC = () => {
             }}
             tabIndex={0}
             role="button"
-            className={`group relative flex items-center gap-3 p-4 rounded-2xl border text-start transition-colors cursor-grab active:cursor-grabbing ${
+            className={`w-[calc(50%-0.375rem)] sm:w-full group relative flex items-center gap-3 p-4 rounded-2xl border text-start transition-colors cursor-grab active:cursor-grabbing ${
               activeTemplate === template.id
                 ? 'border-brown-400 bg-gradient-to-br from-brown-50 to-orange-50 text-brown-700 shadow-lg ring-2 ring-brown-400/25'
                 : 'border-gray-200/80 premium-glass-white-80 hover:border-brown-300/70 text-gray-700 shadow-sm template-card-btn bg-white'
