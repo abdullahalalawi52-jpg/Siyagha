@@ -103,15 +103,6 @@ export const EmailModal: React.FC = () => {
                         Outlook
                       </button>
                     </div>
-                    <button
-                      onClick={() => handleSendEmail('default')}
-                      disabled={!emailForm.to || !emailForm.subject}
-                      className="w-full mt-2 bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-200 font-semibold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-                      type="button"
-                    >
-                      <Mail className="w-4 h-4" />
-                      {t('تطبيق افتراضي آخر', 'Other Default App')}
-                    </button>
                   </div>
                 </div>
             </div>
