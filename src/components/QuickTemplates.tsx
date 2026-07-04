@@ -82,58 +82,72 @@ export const QuickTemplates: React.FC = () => {
       </div>
 
       {/* Render top 4 templates */}
-      <Reorder.Group 
-        axis="x" 
-        values={displayTemplates} 
-        onReorder={handleReorder} 
-        className="flex flex-wrap sm:flex-nowrap gap-3 list-none p-0 m-0"
-      >
-        {displayTemplates.map((template) => (
-          <Reorder.Item
-            key={template.id}
-            value={template}
-            onDragEnd={handleDragEnd}
-            onClick={() => applyTemplate(template.id)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                applyTemplate(template.id);
-              }
-            }}
-            tabIndex={0}
-            role="button"
-            className={`w-[calc(50%-0.375rem)] sm:w-full group relative flex items-center gap-3 p-4 rounded-2xl border text-start transition-colors cursor-grab active:cursor-grabbing ${
-              activeTemplate === template.id
-                ? 'border-brown-400 bg-gradient-to-br from-brown-50 to-orange-50 text-brown-700 shadow-lg ring-2 ring-brown-400/25'
-                : 'border-gray-200/80 premium-glass-white-80 hover:border-brown-300/70 text-gray-700 shadow-sm template-card-btn bg-white'
-            }`}
-          >
-            <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all ${
-              activeTemplate === template.id
-                ? 'bg-white text-brown-600 shadow-sm'
-                : 'bg-gray-100 text-gray-500 group-hover:bg-brown-100 group-hover:text-brown-600'
-            }`}>
-              {template.icon}
-            </div>
-            {favoritePredefined.includes(template.id) && (
-              <button 
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  toggleFavoritePredefined(template.id, e);
-                }}
-                className="absolute top-2 left-2 p-1 transition-transform hover:scale-110 z-10 cursor-pointer"
-                title={t('إزالة من المفضلة', 'Remove from Favorites')}
-              >
-                <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400 drop-shadow-sm" />
-              </button>
-            )}
-            <div className="flex flex-col min-w-0 text-start select-none pointer-events-none">
-              <span className="font-bold text-sm truncate">{t(template.name, templateNameTranslations[template.name] || template.name)}</span>
-              <span className="text-[10px] text-gray-400 font-medium">{t(template.category, categoryTranslations[template.category] || template.category)}</span>
-            </div>
-          </Reorder.Item>
-        ))}
-      </Reorder.Group>
+      <div className="flex flex-col sm:flex-row gap-3">
+        <Reorder.Group 
+          axis="x" 
+          values={displayTemplates} 
+          onReorder={handleReorder} 
+          className="flex flex-wrap sm:flex-nowrap gap-3 list-none p-0 m-0 flex-1"
+        >
+          {displayTemplates.map((template) => (
+            <Reorder.Item
+              key={template.id}
+              value={template}
+              onDragEnd={handleDragEnd}
+              onClick={() => applyTemplate(template.id)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  applyTemplate(template.id);
+                }
+              }}
+              tabIndex={0}
+              role="button"
+              className={`w-[calc(50%-0.375rem)] sm:w-full group relative flex items-center gap-3 p-4 rounded-2xl border text-start transition-colors cursor-grab active:cursor-grabbing ${
+                activeTemplate === template.id
+                  ? 'border-brown-400 bg-gradient-to-br from-brown-50 to-orange-50 text-brown-700 shadow-lg ring-2 ring-brown-400/25'
+                  : 'border-gray-200/80 premium-glass-white-80 hover:border-brown-300/70 text-gray-700 shadow-sm template-card-btn bg-white'
+              }`}
+            >
+              <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all ${
+                activeTemplate === template.id
+                  ? 'bg-white text-brown-600 shadow-sm'
+                  : 'bg-gray-100 text-gray-500 group-hover:bg-brown-100 group-hover:text-brown-600'
+              }`}>
+                {template.icon}
+              </div>
+              {favoritePredefined.includes(template.id) && (
+                <button 
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleFavoritePredefined(template.id, e);
+                  }}
+                  className="absolute top-2 left-2 p-1 transition-transform hover:scale-110 z-10 cursor-pointer"
+                  title={t('إزالة من المفضلة', 'Remove from Favorites')}
+                >
+                  <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400 drop-shadow-sm" />
+                </button>
+              )}
+              <div className="flex flex-col min-w-0 text-start select-none pointer-events-none">
+                <span className="font-bold text-sm truncate">{t(template.name, templateNameTranslations[template.name] || template.name)}</span>
+                <span className="text-[10px] text-gray-400 font-medium">{t(template.category, categoryTranslations[template.category] || template.category)}</span>
+              </div>
+            </Reorder.Item>
+          ))}
+        </Reorder.Group>
+
+        <button
+          onClick={() => setIsLibraryOpen(true)}
+          type="button"
+          className="w-full sm:w-[90px] sm:shrink-0 group relative flex sm:flex-col items-center justify-center gap-3 sm:gap-2 p-4 sm:p-2 rounded-2xl border border-dashed border-brown-300/80 bg-white/60 hover:bg-brown-50 hover:border-brown-400 text-brown-600 hover:text-brown-700 transition-all cursor-pointer shadow-sm template-card-btn"
+          title={t('المزيد من القوالب', 'More Templates')}
+        >
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 bg-brown-50/80 group-hover:bg-white text-brown-600 group-hover:scale-110 shadow-sm transition-all">
+            <Library className="w-4 h-4 sm:w-5 sm:h-5" />
+          </div>
+          <span className="font-bold text-sm sm:text-xs">{t('المزيد', 'More')}</span>
+        </button>
+      </div>
     </div>
   );
 };
