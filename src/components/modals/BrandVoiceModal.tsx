@@ -150,7 +150,7 @@ export const BrandVoiceModal: React.FC = () => {
                   {t('البصمات اللغوية المحفوظة', 'Saved Style Profiles')}
                 </h4>
                 {brandVoiceProfiles.length === 0 ? (
-                  <div className="p-4 border border-dashed border-gray-200 rounded-xl text-center text-xs text-gray-400 bg-gray-50/50">
+                  <div className="p-4 border border-dashed border-gray-200 rounded-xl text-center text-xs text-gray-400 bg-gray-50/50 dark:bg-slate-800/50 dark:border-slate-700">
                     {t('لا يوجد بصمات محفوظة بعد. أنشئ بصمتك الأولى بالأسفل.', 'No saved profiles yet. Create your first profile below.')}
                   </div>
                 ) : (
@@ -169,8 +169,8 @@ export const BrandVoiceModal: React.FC = () => {
                           }}
                           className={`p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col justify-between gap-3 relative group ${
                             isActive
-                              ? 'bg-brown-50/50 border-brown-500 shadow-sm'
-                              : 'bg-white border-gray-200 hover:border-brown-300'
+                              ? 'bg-brown-50/50 dark:bg-slate-700/50 border-brown-500 dark:border-brown-400 shadow-sm'
+                              : 'bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 hover:border-brown-300'
                           }`}
                         >
                           <div className="flex items-start justify-between">
@@ -215,7 +215,7 @@ export const BrandVoiceModal: React.FC = () => {
                     placeholder={t('مثال: الأسلوب الرسمي، أسلوب الشؤون القانونية', 'e.g., Legal Department Style, Friendly tone')}
                     value={profileName}
                     onChange={(e) => setProfileName(e.target.value)}
-                    className="w-full rounded-xl border border-gray-200 px-3 py-2 text-xs focus:ring-2 focus:ring-brown-505 outline-none focus:border-brown-500"
+                    className="w-full rounded-xl border border-gray-200 px-3 py-2 text-xs dark:bg-slate-800 dark:border-slate-700 dark:text-white focus:ring-2 focus:ring-brown-505 outline-none focus:border-brown-500"
                     disabled={loading}
                   />
                 </div>
@@ -231,7 +231,7 @@ export const BrandVoiceModal: React.FC = () => {
                       placeholder={t('الصق نص خطابك السابق هنا...', 'Paste your previous letter text here...')}
                       value={sample1}
                       onChange={(e) => setSample1(e.target.value)}
-                      className="w-full rounded-xl border border-gray-200 p-2.5 text-xs focus:ring-2 focus:ring-brown-500 outline-none resize-none leading-relaxed"
+                      className="w-full rounded-xl border border-gray-200 p-2.5 text-xs dark:bg-slate-800 dark:border-slate-700 dark:text-white focus:ring-2 focus:ring-brown-500 outline-none resize-none leading-relaxed"
                       disabled={loading}
                     />
                   </div>
@@ -245,7 +245,7 @@ export const BrandVoiceModal: React.FC = () => {
                       placeholder={t('الصق نص خطابك السابق هنا...', 'Paste your previous letter text here...')}
                       value={sample2}
                       onChange={(e) => setSample2(e.target.value)}
-                      className="w-full rounded-xl border border-gray-200 p-2.5 text-xs focus:ring-2 focus:ring-brown-500 outline-none resize-none leading-relaxed"
+                      className="w-full rounded-xl border border-gray-200 p-2.5 text-xs dark:bg-slate-800 dark:border-slate-700 dark:text-white focus:ring-2 focus:ring-brown-500 outline-none resize-none leading-relaxed"
                       disabled={loading}
                     />
                   </div>
@@ -261,7 +261,7 @@ export const BrandVoiceModal: React.FC = () => {
                     placeholder={t('الصق نص خطاب إضافي لزيادة دقة التحليل (اختياري)...', 'Paste an optional additional letter for better precision...')}
                     value={sample3}
                     onChange={(e) => setSample3(e.target.value)}
-                    className="w-full rounded-xl border border-gray-200 p-2.5 text-xs focus:ring-2 focus:ring-brown-500 outline-none resize-none leading-relaxed"
+                    className="w-full rounded-xl border border-gray-200 p-2.5 text-xs dark:bg-slate-800 dark:border-slate-700 dark:text-white focus:ring-2 focus:ring-brown-500 outline-none resize-none leading-relaxed"
                     disabled={loading}
                   />
                 </div>

@@ -434,7 +434,7 @@ export const BasicInfoTab: React.FC = () => {
               id="job-desc-textarea"
               rows={3}
               placeholder={t('قم بلصق متمتطلبات الوظيفة أو الوصف الوظيفي هنا ليتطابق الخطاب معها...', 'Paste job requirements or Job Description here...')}
-              className="w-full rounded-xl border border-gray-200 p-2.5 text-xs focus:ring-2 focus:ring-brown-500 outline-none resize-none leading-relaxed bg-white dark:bg-slate-850 dark:text-white dark:border-slate-700 text-gray-800"
+              className="w-full rounded-xl border border-gray-200 p-2.5 text-xs focus:ring-2 focus:ring-brown-500 outline-none resize-none leading-relaxed bg-white dark:bg-slate-800 dark:text-white dark:border-slate-700 text-gray-800"
               value={form.jobDescription || ''}
               onChange={(e) => setForm({ ...form, jobDescription: e.target.value })}
             />

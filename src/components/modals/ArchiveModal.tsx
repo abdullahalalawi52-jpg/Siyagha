@@ -71,12 +71,12 @@ export const ArchiveModal: React.FC = () => {
             className={`absolute top-0 bottom-0 ${appLang === 'ar' ? 'right-0 border-l' : 'left-0 border-r'} w-full max-w-sm premium-card shadow-2xl flex flex-col border-gray-200 text-start z-10`}
             dir={appLang === 'ar' ? 'rtl' : 'ltr'}
           >
-            <div className="h-20 border-b border-gray-100 flex items-center justify-between px-6 bg-gray-50/50">
+            <div className="h-20 border-b border-gray-100 flex items-center justify-between px-6 bg-gray-50/50 dark:bg-slate-800/80 dark:border-slate-700">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-brown-100 rounded-lg flex items-center justify-center text-brown-600">
                   <Archive className="w-4 h-4" />
                 </div>
-                <h3 id="archive-modal-title" className="font-bold text-gray-900">{t('الأرشيف المحلي', 'Local Archive')}</h3>
+                <h3 id="archive-modal-title" className="font-bold text-gray-900 dark:text-white">{t('الأرشيف المحلي', 'Local Archive')}</h3>
               </div>
               <button
                 onClick={handleClose}
@@ -88,11 +88,11 @@ export const ArchiveModal: React.FC = () => {
               </button>
             </div>
 
-            <div className="p-4 border-b border-gray-100 bg-white flex flex-col gap-3 shrink-0">
+            <div className="p-4 border-b border-gray-100 bg-white dark:bg-slate-900 flex flex-col dark:border-slate-700 gap-3 shrink-0">
               <div className="flex bg-gray-100 dark:bg-slate-800/80 p-1 rounded-lg" role="tablist" aria-label="تبويبات الأرشيف">
                 <button
                   onClick={() => setArchiveTab('all')}
-                  className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-all cursor-pointer ${archiveTab === 'all' ? 'bg-white text-brown-900 shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'}`}
+                  className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-all cursor-pointer ${archiveTab === 'all' ? 'bg-white dark:bg-slate-700 text-brown-900 dark:text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'}`}
                   type="button"
                   role="tab"
                   aria-selected={archiveTab === 'all'}
@@ -101,7 +101,7 @@ export const ArchiveModal: React.FC = () => {
                 </button>
                 <button
                   onClick={() => setArchiveTab('saved')}
-                  className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-all cursor-pointer ${archiveTab === 'saved' ? 'bg-white text-brown-900 shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'}`}
+                  className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-all cursor-pointer ${archiveTab === 'saved' ? 'bg-white dark:bg-slate-700 text-brown-900 dark:text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'}`}
                   type="button"
                   role="tab"
                   aria-selected={archiveTab === 'saved'}
@@ -110,7 +110,7 @@ export const ArchiveModal: React.FC = () => {
                 </button>
                 <button
                   onClick={() => setArchiveTab('drafts')}
-                  className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-all cursor-pointer ${archiveTab === 'drafts' ? 'bg-white text-brown-900 shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'}`}
+                  className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-all cursor-pointer ${archiveTab === 'drafts' ? 'bg-white dark:bg-slate-700 text-brown-900 dark:text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'}`}
                   type="button"
                   role="tab"
                   aria-selected={archiveTab === 'drafts'}
@@ -125,7 +125,7 @@ export const ArchiveModal: React.FC = () => {
                   placeholder={t('ابحث في الخطابات...', 'Search letters...')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className={`w-full ${appLang === 'ar' ? 'pl-3 pr-9' : 'pl-9 pr-3'} py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:bg-white focus:ring-2 focus:ring-brown-500/20 focus:border-brown-500 outline-none transition-all`}
+                  className={`w-full ${appLang === 'ar' ? 'pl-3 pr-9' : 'pl-9 pr-3'} py-2 bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 dark:text-white rounded-lg text-sm focus:bg-white dark:focus:bg-slate-700 focus:ring-2 focus:ring-brown-500/20 focus:border-brown-500 outline-none transition-all`}
                   aria-label={t('ابحث في الخطابات', 'Search letters')}
                 />
               </div>
