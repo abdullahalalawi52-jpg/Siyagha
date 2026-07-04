@@ -35,7 +35,6 @@ function MainAppContent() {
     isAboutOpen,
     isBrandVoiceModalOpen,
     isCareerProfileModalOpen,
-    isCloudStorageOpen,
   } = useApp();
 
   const [activeMobileTab, setActiveMobileTab] = React.useState<'form' | 'preview'>('form');
