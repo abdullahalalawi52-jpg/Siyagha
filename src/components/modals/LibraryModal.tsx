@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Library, X, Star, Bookmark } from 'lucide-react';
+import { Library, X, Star, Bookmark, Search } from 'lucide-react';
 import { useApp } from '../../contexts/AppContext';
 import { templateNameTranslations, categoryTranslations } from '../../data/templateTranslations';
 import { predefinedTemplates } from '../../data/predefinedTemplates';
