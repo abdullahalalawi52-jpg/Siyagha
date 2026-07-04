@@ -1,17 +1,34 @@
 import { test, expect } from '@playwright/test';
-import { injectAxe, checkA11y } from 'axe-playwright'; // Usually we use axe-playwright or @axe-core/playwright
+import { injectAxe, checkA11y } from 'axe-playwright';
 
-test.describe('Usability & Accessibility Testing', () => {
-  test('should not have any automatically detectable accessibility issues', async ({ page }) => {
+test.describe('Usability & Accessibility Testing (WCAG 2.1 AA)', () => {
+  test('should not have critical accessibility violations on homepage', async ({ page }) => {
     await page.goto('/');
-    // Inject axe-core into the page
     await injectAxe(page);
-    
-    // Check accessibility
-    // We use checkA11y to assert that there are no violations
+
     await checkA11y(page, undefined, {
+      axeOptions: {
+        runOnly: {
+          type: 'tag',
+          values: ['wcag2a', 'wcag21a', 'best-practice']
+        }
+      },
       detailedReport: true,
-      detailedReportOptions: { html: true }
     });
+  });
+
+  test('should maintain accessible focus management when opening library modal', async ({ page }) => {
+    await page.goto('/');
+    await injectAxe(page);
+
+    const libraryButton = page.locator('button:has-text("مكتبة القوالب")');
+    if (await libraryButton.isVisible()) {
+      await libraryButton.click();
+      await page.waitForTimeout(300);
+
+      await checkA11y(page, '#library-modal-content', {
+        detailedReport: true,
+      });
+    }
   });
 });

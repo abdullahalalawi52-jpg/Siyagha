@@ -2,6 +2,7 @@ import {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
+import './i18n';
 import ErrorBoundary from './components/ErrorBoundary';
 
 // Global fetch override to handle 429 Rate Limit Automatically
@@ -27,3 +28,17 @@ createRoot(document.getElementById('root')!).render(
     </ErrorBoundary>
   </StrictMode>,
 );
+
+// Register Service Worker for offline capabilities and caching
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').then(
+      (reg) => {
+        reg.update();
+        console.log('ServiceWorker registered & updated:', reg.scope);
+      },
+      (err) => console.warn('ServiceWorker registration failed:', err)
+    );
+  });
+}
+

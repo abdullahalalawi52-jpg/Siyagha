@@ -2,7 +2,8 @@ import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Library, X, Star, Bookmark } from 'lucide-react';
 import { useApp } from '../../contexts/AppContext';
-import { predefinedTemplates, templateNameTranslations, categoryTranslations } from '../../data/templates';
+import { templateNameTranslations, categoryTranslations } from '../../data/templateTranslations';
+import { predefinedTemplates } from '../../data/predefinedTemplates';
 import { useModalAccessibility } from '../../hooks/useModalAccessibility';
 
 export const LibraryModal: React.FC = () => {

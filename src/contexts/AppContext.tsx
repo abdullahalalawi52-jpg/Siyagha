@@ -1,11 +1,8 @@
 import React from 'react';
 import { UIProvider, useUI, UIContextType } from './UIContext';
-import { AuthProvider, useAuth } from './AuthContext';
+import { AuthProvider, useAuth, AuthContextType } from './AuthContext';
 import { FormProvider, useForm, FormContextType } from './FormContext';
 import { LetterProvider, useLetter, LetterContextType } from './LetterContext';
-
-// We combine AuthContextType into AppContextType as well to expose useAuth fields through useApp
-import { AuthContextType } from './AuthContext';
 
 export interface AppContextType extends UIContextType, AuthContextType, FormContextType, LetterContextType {}
 
@@ -28,10 +25,14 @@ export const useApp = (): AppContextType => {
   const auth = useAuth();
   const form = useForm();
   const letter = useLetter();
-  return {
-    ...ui,
-    ...auth,
-    ...form,
-    ...letter,
-  };
+
+  return React.useMemo(
+    () => ({
+      ...ui,
+      ...auth,
+      ...form,
+      ...letter,
+    }),
+    [ui, auth, form, letter]
+  );
 };

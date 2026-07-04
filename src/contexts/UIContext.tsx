@@ -69,9 +69,18 @@ export const useUI = () => {
   return context;
 };
 
+import i18n from '../i18n';
+
 export const UIProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // App Language State
-  const [appLang, setAppLangState] = useState<'ar' | 'en'>('ar');
+  const [appLang, setAppLangState] = useState<'ar' | 'en'>(() => (i18n.language === 'en' ? 'en' : 'ar'));
+  
+  const setAppLang = (lang: 'ar' | 'en') => {
+    setAppLangState(lang);
+    i18n.changeLanguage(lang);
+    localStorage.setItem('siyagha_lang', lang);
+  };
+
   const t = (arText: string, enText: string) => (appLang === 'ar' ? arText : enText);
 
   // Theme
@@ -178,10 +187,6 @@ export const UIProvider: React.FC<{ children: React.ReactNode }> = ({ children }
 
   const removeToast = (id: string) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
-  };
-
-  const setAppLang = (lang: 'ar' | 'en') => {
-    setAppLangState(lang);
   };
 
   return (

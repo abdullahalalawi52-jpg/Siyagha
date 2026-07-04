@@ -44,7 +44,13 @@ const handleResponse = async (res: Response, defaultError: string) => {
 };
 
 const getApiUrl = (path: string) => {
-  const baseUrl = import.meta.env.VITE_API_URL || '';
+  let baseUrl = import.meta.env.VITE_API_URL || '';
+  // In live production (e.g. Vercel / GitHub Pages), ignore localhost VITE_API_URL and use relative /api paths
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    if (baseUrl.includes('localhost') || baseUrl.includes('127.0.0.1')) {
+      baseUrl = '';
+    }
+  }
   const cleanBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
   return `${cleanBaseUrl}${path}`;
 };

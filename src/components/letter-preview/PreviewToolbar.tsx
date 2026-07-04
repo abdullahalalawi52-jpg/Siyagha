@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { Undo as UndoIcon, Redo as RedoIcon, Sparkles, Check, Save, FileText, Download, ChevronDown, Cloud, Share2, Send, Mail, Copy } from 'lucide-react';
 import { useApp } from '../../contexts/AppContext';
 import { CustomSelect } from '../CustomSelect';
-import { fontFamilies, fontSizes } from '../../data/templates';
+import { fontFamilies, fontSizes } from '../../data/templateTypes';
 
 export const PreviewToolbar: React.FC = () => {
   const {
@@ -348,7 +348,7 @@ export const PreviewToolbar: React.FC = () => {
             <label className="text-xs font-bold text-gray-500">{t('حجم النص:', 'Font Size:')}</label>
             <div className="w-36">
               <CustomSelect
-                value={fontSize}
+                value={String(fontSize)}
                 onChange={(val) => setFontSize(val)}
                 options={fontSizes}
               />

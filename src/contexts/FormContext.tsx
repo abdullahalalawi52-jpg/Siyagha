@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useRef } from 'r
 import { useAuth } from './AuthContext';
 import { useUI } from './UIContext';
 import { syncUserDataToCloud } from '../lib/sync';
-import { toneOptions, formalityOptions, letterTypes, predefinedTemplates } from '../data/templates';
+import { toneOptions, formalityOptions, letterTypes } from '../data/templateTypes';
 import { LetterFormState, CustomTemplate } from '../types';
 
 const ObjectKeys = Object.keys(letterTypes);
@@ -328,8 +328,12 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   // Template applier
-  const applyTemplate = (templateId: string, isCustom = false) => {
-    const templateList = isCustom ? customTemplates : predefinedTemplates;
+  const applyTemplate = async (templateId: string, isCustom = false) => {
+    let templateList = customTemplates;
+    if (!isCustom) {
+      const { predefinedTemplates } = await import('../data/predefinedTemplates');
+      templateList = predefinedTemplates as any;
+    }
     const template = templateList.find((t) => t.id === templateId);
     if (template) {
       setForm((prev) => ({ ...prev, ...template.data }));

@@ -1,7 +1,8 @@
 import React from 'react';
 import { Library, Star } from 'lucide-react';
 import { useApp } from '../contexts/AppContext';
-import { predefinedTemplates, templateNameTranslations, categoryTranslations } from '../data/templates';
+import { templateNameTranslations, categoryTranslations } from '../data/templateTranslations';
+import { predefinedTemplates } from '../data/predefinedTemplates';
 
 export const QuickTemplates: React.FC = () => {
   const {

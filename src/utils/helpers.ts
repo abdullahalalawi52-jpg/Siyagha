@@ -1,5 +1,15 @@
 import { PrintElementOptions } from '../types';
 
+export const PRINT_COLORS = {
+  textPrimary: '#43302b',
+  textSecondary: '#777777',
+  textMuted: '#999999',
+  accent: '#846358',
+  border: '#ebdcd5',
+  bgCard: '#fcfaf9',
+  textBlack: '#000000',
+} as const;
+
 export const escapeHtml = (unsafe: string): string => {
   if (typeof unsafe !== 'string') return '';
   return unsafe
@@ -39,7 +49,7 @@ export const buildPrintElement = (opts: PrintElementOptions): HTMLElement => {
     textAlign: align,
     direction: dir,
     lineHeight: '1.8',
-    color: '#000',
+    color: PRINT_COLORS.textBlack,
     fontSize: `${fontSize}px`,
     minHeight: '297mm',
     display: 'flex',
@@ -61,7 +71,7 @@ export const buildPrintElement = (opts: PrintElementOptions): HTMLElement => {
         flexDirection: 'column',
         alignItems: 'center',
         textAlign: 'center',
-        borderBottom: '1px solid #ebdcd5',
+        borderBottom: `1px solid ${PRINT_COLORS.border}`,
         paddingBottom: '20px',
         marginBottom: '30px',
         direction: dir,
@@ -79,12 +89,12 @@ export const buildPrintElement = (opts: PrintElementOptions): HTMLElement => {
       }
 
       const companyNameEl = document.createElement('h1');
-      applyStyles(companyNameEl, { fontSize: '20px', margin: '0', color: '#43302b', fontWeight: 'bold', fontFamily: `'${fontFamily}', sans-serif` });
+      applyStyles(companyNameEl, { fontSize: '20px', margin: '0', color: PRINT_COLORS.textPrimary, fontWeight: 'bold', fontFamily: `'${fontFamily}', sans-serif` });
       companyNameEl.textContent = branding.companyName || 'المؤسسة';
       header.appendChild(companyNameEl);
 
       const companyDetailsEl = document.createElement('p');
-      applyStyles(companyDetailsEl, { fontSize: '11px', color: '#777', margin: '0', whiteSpace: 'pre-line', fontFamily: `'${fontFamily}', sans-serif`, lineHeight: '1.6' });
+      applyStyles(companyDetailsEl, { fontSize: '11px', color: PRINT_COLORS.textSecondary, margin: '0', whiteSpace: 'pre-line', fontFamily: `'${fontFamily}', sans-serif`, lineHeight: '1.6' });
       companyDetailsEl.textContent = branding.companyDetails || '';
       header.appendChild(companyDetailsEl);
 
@@ -95,8 +105,8 @@ export const buildPrintElement = (opts: PrintElementOptions): HTMLElement => {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          backgroundColor: '#fcfaf9',
-          border: '1px solid #ebdcd5',
+          backgroundColor: PRINT_COLORS.bgCard,
+          border: `1px solid ${PRINT_COLORS.border}`,
           borderRadius: '12px',
           padding: '20px',
           marginBottom: '30px',
@@ -108,7 +118,7 @@ export const buildPrintElement = (opts: PrintElementOptions): HTMLElement => {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          borderTop: '4px solid #846358',
+          borderTop: `4px solid ${PRINT_COLORS.accent}`,
           paddingTop: '15px',
           paddingBottom: '10px',
           marginBottom: '30px',
@@ -121,7 +131,7 @@ export const buildPrintElement = (opts: PrintElementOptions): HTMLElement => {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          borderBottom: '2.5px solid #846358',
+          borderBottom: `2.5px solid ${PRINT_COLORS.accent}`,
           paddingBottom: '15px',
           marginBottom: '30px',
           direction: dir,
@@ -134,12 +144,12 @@ export const buildPrintElement = (opts: PrintElementOptions): HTMLElement => {
       applyStyles(headerText, { textAlign: align });
 
       const companyNameEl = document.createElement('h1');
-      applyStyles(companyNameEl, { fontSize: '20px', margin: '0', color: '#43302b', fontWeight: 'bold', fontFamily: `'${fontFamily}', sans-serif` });
+      applyStyles(companyNameEl, { fontSize: '20px', margin: '0', color: PRINT_COLORS.textPrimary, fontWeight: 'bold', fontFamily: `'${fontFamily}', sans-serif` });
       companyNameEl.textContent = branding.companyName || 'المؤسسة';
       headerText.appendChild(companyNameEl);
 
       const companyDetailsEl = document.createElement('p');
-      applyStyles(companyDetailsEl, { fontSize: '11px', color: '#777', margin: '5px 0 0 0', whiteSpace: 'pre-line', fontFamily: `'${fontFamily}', sans-serif`, lineHeight: '1.5' });
+      applyStyles(companyDetailsEl, { fontSize: '11px', color: PRINT_COLORS.textSecondary, margin: '5px 0 0 0', whiteSpace: 'pre-line', fontFamily: `'${fontFamily}', sans-serif`, lineHeight: '1.5' });
       companyDetailsEl.textContent = branding.companyDetails || '';
       headerText.appendChild(companyDetailsEl);
 
@@ -192,7 +202,7 @@ export const buildPrintElement = (opts: PrintElementOptions): HTMLElement => {
     applyStyles(sigInner, { textAlign: 'center' });
 
     const sigLabel = document.createElement('p');
-    applyStyles(sigLabel, { fontSize: '13px', fontWeight: 'bold', marginBottom: '10px', color: '#43302b', fontFamily: `'${fontFamily}', sans-serif` });
+    applyStyles(sigLabel, { fontSize: '13px', fontWeight: 'bold', marginBottom: '10px', color: PRINT_COLORS.textPrimary, fontFamily: `'${fontFamily}', sans-serif` });
     sigLabel.textContent = isEn ? 'Signature & Seal:' : 'التوقيع والختم:';
     sigInner.appendChild(sigLabel);
 
@@ -235,20 +245,20 @@ export const buildPrintElement = (opts: PrintElementOptions): HTMLElement => {
         paddingTop: '5px',
         textAlign: 'center',
         fontSize: '9px',
-        color: '#999',
+        color: PRINT_COLORS.textMuted,
         marginTop: '40px',
         fontFamily: `'${fontFamily}', sans-serif`,
       });
       footer.textContent = branding.footerText || '';
     } else if (footerTheme === 'split') {
       applyStyles(footer, {
-        borderTop: '1px solid #ebdcd5',
+        borderTop: `1px solid ${PRINT_COLORS.border}`,
         paddingTop: '12px',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
         fontSize: '11px',
-        color: '#846358',
+        color: PRINT_COLORS.accent,
         marginTop: '40px',
         fontFamily: `'${fontFamily}', sans-serif`,
         direction: dir,
@@ -269,11 +279,11 @@ export const buildPrintElement = (opts: PrintElementOptions): HTMLElement => {
     } else {
       // centered
       applyStyles(footer, {
-        borderTop: '1px solid #ebdcd5',
+        borderTop: `1px solid ${PRINT_COLORS.border}`,
         paddingTop: '12px',
         textAlign: 'center',
         fontSize: '11px',
-        color: '#846358',
+        color: PRINT_COLORS.accent,
         marginTop: '40px',
         fontFamily: `'${fontFamily}', sans-serif`,
       });

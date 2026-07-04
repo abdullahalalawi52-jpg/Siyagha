@@ -40,7 +40,7 @@ export class ErrorBoundary extends Component<Props, State> {
       const isAr = !navigator.language.startsWith('en');
 
       return (
-        <div className="min-h-screen bg-[#faf8f6] dark:bg-[#0c0d12] flex items-center justify-center p-6 text-start select-none">
+        <div className="min-h-screen bg-cream-50 dark:bg-teal-900 flex items-center justify-center p-6 text-start select-none">
           <div className="w-full max-w-md premium-card p-8 rounded-2xl shadow-2xl border border-red-100/40 relative overflow-hidden">
             <div className="absolute top-0 left-0 right-0 h-1 bg-red-500" />
             <div className="flex flex-col items-center text-center gap-4">

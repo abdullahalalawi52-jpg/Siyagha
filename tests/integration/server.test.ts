@@ -1,12 +1,12 @@
 import { describe, it, expect, beforeAll, vi } from 'vitest';
 import request from 'supertest';
-// Set environment variables before importing app
+import * as geminiService from '../../server/services/gemini';
+
 process.env.GEMINI_API_KEY = 'test_key';
 import app from '../../server';
 
 describe('Server Security & Integration Tests', () => {
   beforeAll(() => {
-    // Mock global fetch to intercept Firestore REST write requests
     vi.spyOn(global, 'fetch').mockImplementation(async (url) => {
       if (url.toString().includes('firestore.googleapis.com')) {
         return {
@@ -22,6 +22,28 @@ describe('Server Security & Integration Tests', () => {
         text: async () => JSON.stringify({}),
         json: async () => ({}),
       } as Response;
+    });
+
+    vi.spyOn(geminiService, 'safeGenerate').mockImplementation(async (_ai, params) => {
+      if (params.config?.responseMimeType === 'application/json') {
+        return {
+          text: JSON.stringify({
+            detectedTone: 'رسمية صريحة',
+            formalityScore: 95,
+            suggestions: ['نصيحة لتحسين الخطاب'],
+            score: 85,
+            matchedKeywords: ['خبرة', 'إدارة'],
+            missingKeywords: ['قيادة'],
+            improvements: ['إضافة مهام أسلوبية'],
+            voiceName: 'أسلوب إداري محترف',
+            characteristics: ['مباشر', 'موجز'],
+            summaryPrompt: 'اكتب بنبرة رسمية دقيقة'
+          })
+        } as any;
+      }
+      return {
+        text: 'نص موصل ومحلل مسبقاً لاختبار السيرفر'
+      } as any;
     });
   });
 
@@ -101,6 +123,105 @@ describe('Server Security & Integration Tests', () => {
 
       expect(res.status).toBe(200);
       expect(res.body.url).toBeDefined();
+    });
+  });
+
+  describe('AI Endpoint Integrations', () => {
+    it('/api/suggest-title should return suggested title', async () => {
+      const res = await request(app)
+        .post('/api/suggest-title')
+        .set('Origin', 'http://localhost:5173')
+        .send({ letterContent: 'محتوى الخطاب الرسمي لاقتراح عنوان' });
+
+      expect(res.status).toBe(200);
+      expect(res.body.suggestedTitle).toBeDefined();
+    });
+
+    it('/api/proofread-letter should return proofread text', async () => {
+      const res = await request(app)
+        .post('/api/proofread-letter')
+        .set('Origin', 'http://localhost:5173')
+        .send({ letterContent: 'نص خطاب يحتوي اخصاء املائية' });
+
+      expect(res.status).toBe(200);
+      expect(res.body.proofreadText).toBeDefined();
+    });
+
+    it('/api/analyze-tone should analyze tone and return JSON structure', async () => {
+      const res = await request(app)
+        .post('/api/analyze-tone')
+        .set('Origin', 'http://localhost:5173')
+        .send({ letterContent: 'نص الخطاب المراد تحليل نبرته' });
+
+      expect(res.status).toBe(200);
+      expect(res.body.detectedTone).toBe('رسمية صريحة');
+      expect(res.body.formalityScore).toBe(95);
+    });
+
+    it('/api/analyze-ats should evaluate ATS keywords', async () => {
+      const res = await request(app)
+        .post('/api/analyze-ats')
+        .set('Origin', 'http://localhost:5173')
+        .send({ letterContent: 'السيرة الذاتية والمهارات', jobTitle: 'مدير تنفيذي' });
+
+      expect(res.status).toBe(200);
+      expect(res.body.score).toBe(85);
+    });
+
+    it('/api/polish-letter should polish text with target tone', async () => {
+      const res = await request(app)
+        .post('/api/polish-letter')
+        .set('Origin', 'http://localhost:5173')
+        .send({ letterContent: 'نص الخطاب', targetTone: 'حازمة' });
+
+      expect(res.status).toBe(200);
+      expect(res.body.polishedText).toBeDefined();
+    });
+
+    it('/api/analyze-style should extract brand voice', async () => {
+      const res = await request(app)
+        .post('/api/analyze-style')
+        .set('Origin', 'http://localhost:5173')
+        .send({ sampleText: 'نموذج من كتاباتي السابقة' });
+
+      expect(res.status).toBe(200);
+      expect(res.body.voiceName).toBeDefined();
+    });
+
+    it('/api/generate-letter should generate a full formal letter', async () => {
+      const res = await request(app)
+        .post('/api/generate-letter')
+        .set('Origin', 'http://localhost:5173')
+        .send({
+          sender: 'عبدالله العلي',
+          recipient: 'مدير الشركة',
+          subject: 'طلب ترقية',
+          details: 'تفاصيل الإنجازات والخبرة المكتسبة',
+          type: 'شركات خاصة',
+          tone: 'مهني جداً'
+        });
+
+      expect(res.status).toBe(200);
+      expect(res.body.text).toBeDefined();
+    });
+
+    it('/api/ocr should extract text from base64 document', async () => {
+      const res = await request(app)
+        .post('/api/ocr')
+        .set('Origin', 'http://localhost:5173')
+        .send({ imageBase64: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==', mimeType: 'image/png' });
+
+      expect(res.status).toBe(200);
+      expect(res.body.extractedText).toBeDefined();
+    });
+
+    it('/api/send-email should validate required fields', async () => {
+      const res = await request(app)
+        .post('/api/send-email')
+        .set('Origin', 'http://localhost:5173')
+        .send({ recipientEmail: '' });
+
+      expect(res.status).toBe(400);
     });
   });
 });

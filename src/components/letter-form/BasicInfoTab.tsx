@@ -3,7 +3,8 @@ import { motion } from 'motion/react';
 import { Star, Loader2, Sparkles, Mic, MicOff, Camera, Bookmark } from 'lucide-react';
 import { useApp } from '../../contexts/AppContext';
 import { CustomSelect } from '../CustomSelect';
-import { letterTypes, toneOptions, formalityOptions, getLetterTypeData, typeTranslations, subTypeTranslations, toneTranslations, formalityTranslations } from '../../data/templates';
+import { letterTypes, toneOptions, formalityOptions, getLetterTypeData } from '../../data/templateTypes';
+import { typeTranslations, subTypeTranslations, toneTranslations, formalityTranslations } from '../../data/templateTranslations';
 import { checkSpelling, applySpellingFix, SpellingIssue } from '../../utils/spellingLinter';
 
 export const BasicInfoTab: React.FC = () => {

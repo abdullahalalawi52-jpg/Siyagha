@@ -2,7 +2,11 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* ============================================
+ * Design Tokens & CSS Variables
+ * ============================================ */
 :root {
+  /* Logo Brand Colors */
   --color-logo-bg: #fff8f0;
   --color-logo-border: #ffd3a8;
   --color-logo-start: #e86c1a;
@@ -16,38 +20,173 @@
   --color-app-gray-500: #555555;
   --color-app-gray-550: #4b4b4b;
   --color-app-gray-655: #3b3b3b;
+
+  /* Theme Palette - Light Mode */
+  --brown-50:  #fff8f0;
+  --brown-100: #ffecd6;
+  --brown-200: #ffd3a8;
+  --brown-300: #ffb470;
+  --brown-400: #f9883a;
+  --brown-500: #e86c1a;
+  --brown-600: #c8520d;
+  --brown-700: #a33f09;
+  --brown-800: #7a2e08;
+  --brown-900: #4a1a04;
+
+  --cream-50:  #fdfaf6;
+  --cream-100: #faf4eb;
+  --cream-200: #f4e8d4;
+
+  --teal-900: #0a1a24;
+  --teal-800: #142230;
+  --teal-700: #1e3040;
+  --teal-600: #2a4055;
+
+  /* Semantic UI Variables - Light Mode */
+  --app-bg: #fdf7f0;
+  --app-bg-radial-1: rgba(232, 108, 26, 0.10);
+  --app-bg-radial-2: rgba(200, 82, 13, 0.08);
+  --app-orb-1: rgba(232, 108, 26, 0.06);
+  --app-orb-2: rgba(200, 82, 13, 0.05);
+  --app-text: #2d1a08;
+  --app-text-muted: #5d5d5d;
+
+  --card-bg: rgba(253, 250, 246, 0.90);
+  --card-bg-hover: rgba(253, 250, 246, 0.95);
+  --card-border: rgba(200, 82, 13, 0.12);
+  --card-shadow: rgba(74, 26, 4, 0.08);
+
+  --subcard-bg: rgba(255, 255, 255, 0.70);
+  --subcard-bg-hover: rgba(255, 255, 255, 0.85);
+  --subcard-border: rgba(232, 108, 26, 0.08);
+  --subcard-shadow: rgba(200, 82, 13, 0.05);
+
+  --glass-btn-bg: rgba(253, 250, 246, 0.85);
+  --glass-btn-bg-hover: rgba(253, 250, 246, 0.95);
+  --glass-btn-border: rgba(200, 82, 13, 0.15);
+  --glass-btn-border-hover: rgba(232, 108, 26, 0.45);
+  --glass-btn-text: #4a3025;
+  --glass-btn-text-hover: #c8520d;
+
+  --input-bg: #faf4eb;
+  --input-bg-focus: #fdfaf6;
+  --input-border: rgba(200, 82, 13, 0.18);
+  --input-placeholder: #6b6b6b;
+
+  --paper-bg: #fcfbf9;
+  --paper-border: rgba(200, 82, 13, 0.15);
+  --paper-shadow: rgba(74, 26, 4, 0.04);
+
+  --scrollbar-thumb: rgba(200, 82, 13, 0.35);
+  --scrollbar-thumb-hover: rgba(200, 82, 13, 0.60);
+}
+
+.dark {
+  /* Logo Brand Colors - Dark Mode */
+  --color-logo-bg: #0d1520;
+  --color-logo-border: rgba(232, 108, 26, 0.4);
+  --color-logo-start: #e86c1a;
+  --color-logo-end: #c8520d;
+  --color-logo-accent-start: #080e14;
+  --color-logo-accent-end: #000000;
+
+  /* WCAG AA Gray colors - Dark Mode */
+  --color-app-gray-400: #b0b0b0;
+  --color-app-gray-450: #c0c0c0;
+  --color-app-gray-500: #d2d2d2;
+  --color-app-gray-550: #e2e2e2;
+  --color-app-gray-655: #fdfaf6;
+
+  /* Theme Palette - Dark Mode */
+  --brown-50:  rgba(20, 34, 48, 0.6);
+  --brown-100: rgba(232, 108, 26, 0.15);
+  --brown-200: rgba(232, 108, 26, 0.3);
+  --brown-300: #e86c1a;
+  --brown-400: #f9883a;
+  --brown-500: #ffad5c;
+  --brown-600: #e86c1a;
+  --brown-700: #ffbc75;
+  --brown-800: #ffd3a8;
+  --brown-900: #ffffff;
+
+  --cream-50:  rgba(13, 21, 32, 0.45);
+  --cream-100: rgba(13, 21, 32, 0.6);
+  --cream-200: rgba(255, 255, 255, 0.08);
+
+  --teal-900: #080e14;
+  --teal-800: #0a1018;
+  --teal-700: #0e1822;
+  --teal-600: #142230;
+
+  /* Semantic UI Variables - Dark Mode */
+  --app-bg: #080e14;
+  --app-bg-radial-1: rgba(232, 108, 26, 0.07);
+  --app-bg-radial-2: rgba(200, 82, 13, 0.05);
+  --app-orb-1: rgba(232, 108, 26, 0.04);
+  --app-orb-2: rgba(200, 82, 13, 0.03);
+  --app-text: #f0e8dc;
+  --app-text-muted: #d0c8b8;
+
+  --card-bg: rgba(13, 21, 32, 0.45);
+  --card-bg-hover: rgba(18, 28, 42, 0.60);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --card-shadow: rgba(0, 0, 0, 0.3);
+
+  --subcard-bg: rgba(13, 21, 32, 0.3);
+  --subcard-bg-hover: rgba(18, 28, 42, 0.45);
+  --subcard-border: rgba(255, 255, 255, 0.05);
+  --subcard-shadow: rgba(0, 0, 0, 0.2);
+
+  --glass-btn-bg: rgba(255, 255, 255, 0.05);
+  --glass-btn-bg-hover: rgba(255, 255, 255, 0.12);
+  --glass-btn-border: rgba(255, 255, 255, 0.08);
+  --glass-btn-border-hover: rgba(232, 108, 26, 0.3);
+  --glass-btn-text: #e0d8cc;
+  --glass-btn-text-hover: #ffad5c;
+
+  --input-bg: rgba(10, 16, 24, 0.90);
+  --input-bg-focus: rgba(14, 24, 36, 0.98);
+  --input-border: rgba(232, 108, 26, 0.25);
+  --input-placeholder: #8a9ba8;
+
+  --paper-bg: rgba(10, 18, 26, 0.60);
+  --paper-border: rgba(232, 108, 26, 0.15);
+  --paper-shadow: rgba(0, 0, 0, 0.35);
+
+  --scrollbar-thumb: rgba(232, 108, 26, 0.60);
+  --scrollbar-thumb-hover: rgba(232, 108, 26, 0.85);
 }
 
 /* ============================================
- * Design Tokens
+ * Tailwind Theme Mapping
  * ============================================ */
 @theme {
   --font-sans: "Cairo", ui-sans-serif, system-ui, sans-serif;
 
-  /* Primary amber/gold palette */
-  --color-brown-50:  #fff8f0;
-  --color-brown-100: #ffecd6;
-  --color-brown-200: #ffd3a8;
-  --color-brown-300: #ffb470;
-  --color-brown-400: #f9883a;
-  --color-brown-500: #e86c1a;
-  --color-brown-600: #c8520d;
-  --color-brown-700: #a33f09;
-  --color-brown-800: #7a2e08;
-  --color-brown-900: #4a1a04;
+  /* Dynamic Amber/Gold Palette */
+  --color-brown-50:  var(--brown-50);
+  --color-brown-100: var(--brown-100);
+  --color-brown-200: var(--brown-200);
+  --color-brown-300: var(--brown-300);
+  --color-brown-400: var(--brown-400);
+  --color-brown-500: var(--brown-500);
+  --color-brown-600: var(--brown-600);
+  --color-brown-700: var(--brown-700);
+  --color-brown-800: var(--brown-800);
+  --color-brown-900: var(--brown-900);
 
-  /* Warm cream */
-  --color-cream-50:  #fdfaf6;
-  --color-cream-100: #faf4eb;
-  --color-cream-200: #f4e8d4;
+  /* Warm Cream */
+  --color-cream-50:  var(--cream-50);
+  --color-cream-100: var(--cream-100);
+  --color-cream-200: var(--cream-200);
 
-  /* Deep teal */
-  --color-teal-900: #0a1a24;
-  --color-teal-800: #142230;
-  --color-teal-700: #1e3040;
-  --color-teal-600: #2a4055;
+  /* Deep Teal */
+  --color-teal-900: var(--teal-900);
+  --color-teal-800: var(--teal-800);
+  --color-teal-700: var(--teal-700);
+  --color-teal-600: var(--teal-600);
 
-  /* Override standard grays to be WCAG AA compliant automatically */
+  /* WCAG AA Grays */
   --color-gray-400: var(--color-app-gray-400);
   --color-gray-450: var(--color-app-gray-450);
   --color-gray-500: var(--color-app-gray-500);
@@ -56,7 +195,7 @@
 }
 
 /* ============================================
- * Global Reset & Typography
+ * Global Reset & Body Background
  * ============================================ */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -69,7 +208,6 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Respect user motion preferences */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -79,22 +217,17 @@ html {
   }
 }
 
-/* ============================================
- * Animated Gradient Background – Light Mode
- * ============================================ */
 body {
   min-height: 100vh;
-  background-color: #fdf7f0;
+  background-color: var(--app-bg);
   background-image:
-    radial-gradient(ellipse 80% 50% at 10% 0%, rgba(232, 108, 26, 0.10) 0%, transparent 60%),
-    radial-gradient(ellipse 70% 60% at 90% 100%, rgba(200, 82, 13, 0.08) 0%, transparent 60%),
-    linear-gradient(160deg, #fdf7f0 0%, #fdf2e5 40%, #fdf8f2 100%);
-  color: #2d1a08;
+    radial-gradient(ellipse 80% 50% at 10% 0%, var(--app-bg-radial-1) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 60% at 90% 100%, var(--app-bg-radial-2) 0%, transparent 60%);
+  color: var(--app-text);
   font-feature-settings: "kern" 1, "liga" 1;
   overflow-x: hidden;
 }
 
-/* Static decorative orbs for depth - optimized for low-end devices */
 body::before {
   content: '';
   position: fixed;
@@ -103,10 +236,11 @@ body::before {
   width: 40vw;
   height: 40vw;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(232, 108, 26, 0.06) 0%, transparent 70%);
+  background: radial-gradient(circle, var(--app-orb-1) 0%, transparent 70%);
   pointer-events: none;
   z-index: 0;
 }
+
 body::after {
   content: '';
   position: fixed;
@@ -115,12 +249,11 @@ body::after {
   width: 35vw;
   height: 35vw;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(200, 82, 13, 0.05) 0%, transparent 70%);
+  background: radial-gradient(circle, var(--app-orb-2) 0%, transparent 70%);
   pointer-events: none;
   z-index: 0;
 }
 
-/* All content above the orbs */
 #root {
   position: relative;
   z-index: 1;
@@ -132,76 +265,98 @@ body::after {
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-  background: rgba(200, 82, 13, 0.35);
+  background: var(--scrollbar-thumb);
   border-radius: 99px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(200, 82, 13, 0.60);
+  background: var(--scrollbar-thumb-hover);
 }
 
 /* ============================================
- * Cards / Panels - Premium Glassmorphism
+ * Reusable Glassmorphism & UI Utility Classes
  * ============================================ */
 .premium-card {
-  background: rgba(253, 250, 246, 0.90); /* Soft warm off-white (Cream 50) */
+  background: var(--card-bg);
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border: 1.5px solid rgba(200, 82, 13, 0.12);
-  box-shadow: 0 8px 32px rgba(74, 26, 4, 0.08), 0 2px 8px rgba(0, 0, 0, 0.02), inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+  border: 1.5px solid var(--card-border);
+  box-shadow: 0 8px 32px var(--card-shadow), 0 2px 8px rgba(0, 0, 0, 0.02), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform, box-shadow;
 }
 
 .premium-card:hover {
-  background: rgba(253, 250, 246, 0.95);
-  box-shadow: 0 12px 40px rgba(74, 26, 4, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04), inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+  background: var(--card-bg-hover);
+  box-shadow: 0 12px 40px var(--card-shadow), 0 4px 12px rgba(0, 0, 0, 0.04), inset 0 0 0 1px rgba(255, 255, 255, 0.2);
 }
 
-/* Premium Glass Panel Utilities */
-.premium-glass-white-40 {
-  background-color: rgba(250, 244, 235, 0.40); /* Soft cream 100 with 40% opacity */
-}
-.premium-glass-white-50 {
-  background-color: rgba(250, 244, 235, 0.50); /* Soft cream 100 with 50% opacity */
-}
-.premium-glass-white-80 {
-  background-color: rgba(253, 250, 246, 0.80); /* Soft cream 50 with 80% opacity */
-}
-
-/* Custom transparent panels */
-.premium-glass-gray-50 {
-  background-color: rgba(253, 247, 240, 0.4);
+.premium-subcard {
+  background: var(--subcard-bg);
   backdrop-filter: blur(12px) saturate(150%);
   -webkit-backdrop-filter: blur(12px) saturate(150%);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-}
-.premium-glass-gray-100 {
-  background-color: rgba(250, 242, 232, 0.5);
-  backdrop-filter: blur(12px) saturate(150%);
-  -webkit-backdrop-filter: blur(12px) saturate(150%);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  border: 1px solid var(--subcard-border);
+  box-shadow: 0 2px 12px var(--subcard-shadow);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
 }
 
-/* ============================================
- * Form Inputs – Premium Look (Base Styles)
- * ============================================ */
+.premium-subcard:hover {
+  transform: translateY(-2px) scale(1.015);
+  box-shadow: 0 8px 24px var(--subcard-shadow);
+  border-color: var(--card-border);
+}
+
+.glass-btn {
+  background: var(--glass-btn-bg);
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  border: 1.5px solid var(--glass-btn-border);
+  color: var(--glass-btn-text);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06), inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+.glass-btn:hover:not(:disabled) {
+  background: var(--glass-btn-bg-hover);
+  border-color: var(--glass-btn-border-hover);
+  color: var(--glass-btn-text-hover);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+}
+
+.document-paper {
+  background: var(--paper-bg);
+  border: 1px solid var(--paper-border);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.01), 0 10px 30px var(--paper-shadow);
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.tone-pill-active {
+  background: linear-gradient(135deg, var(--brown-500), var(--brown-600)) !important;
+  box-shadow: 0 2px 8px rgba(200, 82, 13, 0.30);
+}
+
+/* Base Form Control Styles */
 @layer base {
   input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), textarea, select {
-    background-color: #faf4eb; /* Soft warm cream (Cream 100) */
-    border: 1.5px solid rgba(200, 82, 13, 0.18);
-    box-shadow: 0 2px 8px rgba(74, 26, 4, 0.03), inset 0 1px 2px rgba(0, 0, 0, 0.02);
+    background-color: var(--input-bg);
+    border: 1.5px solid var(--input-border);
+    color: var(--app-text);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03), inset 0 1px 2px rgba(0, 0, 0, 0.02);
     transition: border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     line-height: 1.6;
   }
 
   input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):focus, textarea:focus, select:focus {
-    border-color: var(--color-brown-500);
+    border-color: var(--brown-500);
     box-shadow: 0 0 0 3px rgba(232, 108, 26, 0.15), 0 2px 8px rgba(232, 108, 26, 0.08);
     outline: none;
-    background-color: #fdfaf6; /* Extremely soft off-white (Cream 50) on focus */
+    background-color: var(--input-bg-focus);
   }
 
-  /* Checkboxes & Radio Buttons */
+  input::placeholder, textarea::placeholder {
+    color: var(--input-placeholder);
+  }
+
   input[type="checkbox"], input[type="radio"] {
     appearance: none;
     -webkit-appearance: none;
@@ -210,8 +365,8 @@ body::after {
     justify-content: center;
     width: 1.25rem;
     height: 1.25rem;
-    border: 2px solid rgba(200, 82, 13, 0.25);
-    background-color: rgba(255, 255, 255, 0.9);
+    border: 2px solid var(--input-border);
+    background-color: var(--input-bg);
     cursor: pointer;
     transition: all 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     padding: 0;
@@ -220,22 +375,12 @@ body::after {
     vertical-align: middle;
   }
 
-  input[type="checkbox"] {
-    border-radius: 6px;
-  }
+  input[type="checkbox"] { border-radius: 6px; }
+  input[type="radio"] { border-radius: 50%; }
 
-  input[type="radio"] {
-    border-radius: 50%;
-  }
-
-  input[type="checkbox"]:checked {
-    background: linear-gradient(135deg, #e86c1a 0%, #c8520d 100%);
-    border-color: #c8520d;
-  }
-
-  input[type="radio"]:checked {
-    background: linear-gradient(135deg, #e86c1a 0%, #c8520d 100%);
-    border-color: #c8520d;
+  input[type="checkbox"]:checked, input[type="radio"]:checked {
+    background: linear-gradient(135deg, var(--brown-500) 0%, var(--brown-600) 100%);
+    border-color: var(--brown-600);
   }
 
   input[type="checkbox"]::after {
@@ -260,21 +405,15 @@ body::after {
     transition: transform 0.15s cubic-bezier(0.12, 0.4, 0.29, 1.46);
   }
 
-  input[type="checkbox"]:checked::after {
-    transform: rotate(45deg) scale(1);
-  }
-
-  input[type="radio"]:checked::after {
-    transform: scale(1);
-  }
+  input[type="checkbox"]:checked::after { transform: rotate(45deg) scale(1); }
+  input[type="radio"]:checked::after { transform: scale(1); }
 
   input[type="checkbox"]:focus-visible, input[type="radio"]:focus-visible {
-    border-color: var(--color-brown-500);
+    border-color: var(--brown-500);
     box-shadow: 0 0 0 3px rgba(232, 108, 26, 0.2);
     outline: none;
   }
 
-  /* Buttons – Rich Interactions */
   button {
     transition: background-color 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1), color 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     will-change: transform;
@@ -289,369 +428,7 @@ body::after {
   }
 }
 
-/* Premium Glassmorphic buttons */
-.glass-btn {
-  background: rgba(253, 250, 246, 0.85); /* Soft cream 50 */
-  backdrop-filter: blur(12px) saturate(160%);
-  -webkit-backdrop-filter: blur(12px) saturate(160%);
-  border: 1.5px solid rgba(200, 82, 13, 0.15);
-  color: #4a3025;
-  box-shadow: 0 4px 10px rgba(74, 26, 4, 0.06), 0 1px 3px rgba(0, 0, 0, 0.03), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
-}
-
-.glass-btn:hover:not(:disabled) {
-  background: rgba(253, 250, 246, 0.95);
-  border-color: rgba(232, 108, 26, 0.45);
-  color: #c8520d;
-  box-shadow: 0 6px 14px rgba(200, 82, 13, 0.15), 0 2px 4px rgba(74, 26, 4, 0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.6);
-}
-
-/* Primary CTA buttons */
-button.bg-brown-600 {
-  background: linear-gradient(135deg, #e86c1a 0%, #c8520d 100%);
-  box-shadow: 0 4px 14px rgba(200, 82, 13, 0.32), 0 2px 4px rgba(74, 26, 4, 0.1);
-}
-
-button.bg-brown-600:hover:not(:disabled) {
-  box-shadow: 0 6px 20px rgba(200, 82, 13, 0.40), 0 3px 8px rgba(74, 26, 4, 0.15);
-  background: linear-gradient(135deg, #f0781f 0%, #d45a10 100%);
-}
-
-/* Template / Quick-access cards */
-.template-card-btn:hover {
-  border-color: rgba(232, 108, 26, 0.4);
-  box-shadow: 0 6px 20px rgba(200, 82, 13, 0.10);
-}
-
-/* ============================================
- * Tone Pills
- * ============================================ */
-.tone-pill-active {
-  background: linear-gradient(135deg, #e86c1a, #c8520d) !important;
-  box-shadow: 0 2px 8px rgba(200, 82, 13, 0.30);
-}
-
-/* ============================================
- * Tab Selector (basic / branding / signature)
- * ============================================ */
-.tab-btn-active {
-  box-shadow: 0 2px 8px rgba(200, 82, 13, 0.08);
-}
-
-/* ============================================
- * Letter Preview Panel
- * ============================================ */
-.shadow-2xl {
-  box-shadow:
-    0 0 0 1px rgba(232, 108, 26, 0.12),
-    0 25px 60px rgba(74, 26, 4, 0.12),
-    0 8px 24px rgba(0, 0, 0, 0.08);
-}
-
-/* ============================================
- * Loading Shimmer Animation
- * ============================================ */
-@keyframes shimmer {
-  0%   { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
-.animate-pulse {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.5; }
-}
-
-/* ============================================
- * Micro-animation: fade-slide in for modals
- * ============================================ */
-@keyframes fadeSlideUp {
-  from { opacity: 0; transform: translateY(16px) scale(0.97); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-/* ============================================
- * Badge / Pill indicators
- * ============================================ */
-.bg-brown-500 {
-  background: linear-gradient(135deg, #e86c1a, #c8520d);
-  box-shadow: 0 2px 6px rgba(200, 82, 13, 0.35);
-}
-
-/* ============================================
- * Dividers (dashed lines)
- * ============================================ */
-hr.border-dashed {
-  border-color: rgba(232, 108, 26, 0.12);
-  border-style: dashed;
-}
-
-/* ============================================
- * Statistics Dashboard Cards
- * ============================================ */
-.premium-subcard {
-  background: rgba(255, 255, 255, 0.70);
-  border: 1px solid rgba(232, 108, 26, 0.08);
-  box-shadow: 0 2px 12px rgba(200, 82, 13, 0.05);
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: transform;
-}
-
-.premium-subcard:hover {
-  transform: translateY(-2px) scale(1.015);
-  box-shadow: 0 8px 24px rgba(200, 82, 13, 0.1);
-  border-color: rgba(232, 108, 26, 0.2);
-}
-
-/* Progress bars */
-.bg-brown-500.rounded-full {
-  background: linear-gradient(90deg, #f9883a, #c8520d);
-}
-
-/* ============================================
- * Selection Highlight
- * ============================================ */
-::selection {
-  background: rgba(232, 108, 26, 0.20);
-  color: #4a1a04;
-}
-
-/* ============================================
- * DARK MODE – Deep Premium Dark
- * ============================================ */
-.dark body,
-.dark {
-  --color-logo-bg: #0d1520;
-  --color-logo-border: rgba(232, 108, 26, 0.4);
-  --color-logo-start: #e86c1a;
-  --color-logo-end: #c8520d;
-  --color-logo-accent-start: #080e14;
-  --color-logo-accent-end: #000000;
-  color: #f0e8dc;
-  background-color: #080e14;
-
-  /* WCAG AA Gray colors - Dark Mode */
-  --color-app-gray-400: #b0b0b0;
-  --color-app-gray-450: #c0c0c0;
-  --color-app-gray-500: #d2d2d2;
-  --color-app-gray-550: #e2e2e2;
-  --color-app-gray-655: #fdfaf6;
-  background-image:
-    radial-gradient(ellipse 80% 50% at 10% 0%, rgba(232, 108, 26, 0.07) 0%, transparent 60%),
-    radial-gradient(ellipse 70% 60% at 90% 100%, rgba(200, 82, 13, 0.05) 0%, transparent 60%),
-    linear-gradient(160deg, #0a1018 0%, #0e1822 40%, #0a1218 100%);
-
-  /* Redefine CSS variables for theme palette in dark mode */
-  --color-brown-50: rgba(20, 34, 48, 0.6);
-  --color-brown-100: rgba(232, 108, 26, 0.15);
-  --color-brown-200: rgba(232, 108, 26, 0.3);
-  --color-brown-300: #e86c1a;
-  --color-brown-400: #f9883a;
-  --color-brown-500: #ffad5c;
-  --color-brown-600: #e86c1a;
-  --color-brown-700: #ffbc75;
-  --color-brown-800: #ffd3a8;
-  --color-brown-900: #ffffff;
-
-  --color-gray-50: rgba(13, 21, 32, 0.45);
-  --color-gray-100: rgba(13, 21, 32, 0.6);
-  --color-gray-200: rgba(255, 255, 255, 0.08);
-  --color-gray-300: rgba(255, 255, 255, 0.15);
-  --color-gray-400: rgba(255, 255, 255, 0.3);
-  --color-gray-500: rgba(255, 255, 255, 0.5);
-  --color-gray-600: rgba(255, 255, 255, 0.7);
-  --color-gray-700: rgba(255, 255, 255, 0.8);
-  --color-gray-800: rgba(255, 255, 255, 0.9);
-  --color-gray-900: #ffffff;
-}
-
-/* Dark cards - Premium Glassmorphism */
-.dark .premium-card {
-  background: rgba(13, 21, 32, 0.45);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border-color: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.03);
-}
-
-.dark .premium-subcard {
-  background: rgba(13, 21, 32, 0.3);
-  backdrop-filter: blur(12px) saturate(150%);
-  -webkit-backdrop-filter: blur(12px) saturate(150%);
-  border-color: rgba(255, 255, 255, 0.05);
-}
-
-/* Dark transparent background custom utility mappings */
-.dark .premium-glass-white-50,
-.dark .premium-glass-white-80 {
-  background-color: rgba(13, 21, 32, 0.45);
-}
-
-.dark .premium-glass-gray-50,
-.dark .premium-glass-gray-100 {
-  background-color: rgba(13, 21, 32, 0.3);
-  backdrop-filter: blur(12px) saturate(150%);
-  -webkit-backdrop-filter: blur(12px) saturate(150%);
-  border-color: rgba(255, 255, 255, 0.05);
-}
-
-/* Dark borders */
-.dark .border-gray-200,
-.dark .border-gray-100 {
-  border-color: rgba(232, 108, 26, 0.10);
-}
-.dark .border-brown-100\/50,
-.dark .border-brown-200 {
-  border-color: rgba(232, 108, 26, 0.25);
-}
-.dark .border-b, .dark .border {
-  border-color: rgba(255, 255, 255, 0.08);
-}
-
-/* Dark text - Improved Contrast */
-.dark .text-gray-900,
-.dark .text-gray-800,
-.dark .text-gray-700 { color: #fdfaf6; } /* Much brighter for primary text */
-.dark .text-gray-600,
-.dark .text-gray-500 { color: #d0c8b8; } /* Lighter for secondary text */
-.dark .text-gray-400,
-.dark .text-gray-300 { color: #b0a898; } /* Less muted for tertiary text */
-.dark .text-brown-900 { color: #ffffff; }
-.dark .text-brown-600 { color: #ffad5c; } /* Brighter orange */
-.dark .text-brown-700 { color: #ffbc75; } /* Brighter orange */
-
-/* Dark inputs base layer */
-@layer base {
-  .dark {
-    input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
-    select,
-    textarea {
-      background-color: rgba(10, 16, 24, 0.90);
-      border-color: rgba(232, 108, 26, 0.25);
-      color: #ffffff;
-    }
-
-    input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):focus,
-    textarea:focus,
-    select:focus {
-      border-color: #ffad5c;
-      box-shadow: 0 0 0 3px rgba(255, 173, 92, 0.2);
-      background-color: rgba(14, 24, 36, 0.98);
-    }
-
-    input[type="checkbox"], input[type="radio"] {
-      background-color: rgba(10, 16, 24, 0.70);
-      border-color: rgba(232, 108, 26, 0.40);
-    }
-
-    input[type="checkbox"]:checked, input[type="radio"]:checked {
-      background: linear-gradient(135deg, #e86c1a 0%, #c8520d 100%);
-      border-color: #ffad5c;
-    }
-
-    input::placeholder,
-    textarea::placeholder { color: #8a9ba8; }
-  }
-}
-
-/* Dark shadow overrides */
-.dark .shadow-sm,
-.dark .shadow-md,
-.dark .shadow-lg,
-.dark .shadow-2xl {
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.50);
-}
-
-/* Dark bg-brown variants */
-.dark .bg-brown-50  { background-color: var(--color-brown-50); }
-.dark .bg-brown-600 {
-  background: linear-gradient(135deg, #e86c1a 0%, #c8520d 100%);
-  box-shadow: 0 4px 16px rgba(232, 108, 26, 0.3);
-}
-.dark .hover\:bg-brown-700:hover {
-  background: linear-gradient(135deg, #f0781f 0%, #d45a10 100%);
-}
-.dark .hover\:bg-gray-50:hover,
-.dark .hover\:bg-gray-100:hover {
-  background-color: rgba(40, 60, 80, 0.8);
-}
-.dark .bg-brown-500 {
-  background: linear-gradient(135deg, #e86c1a, #c8520d);
-}
-
-/* Active template card gradient override for Dark Mode */
-.dark .from-brown-50.to-orange-50 {
-  background: linear-gradient(135deg, rgba(232, 108, 26, 0.18), rgba(74, 26, 4, 0.25));
-  border-color: rgba(232, 108, 26, 0.4);
-}
-
-/* Dark preview textarea */
-.dark textarea.w-full {
-  color: #f0e8dc;
-  background-color: transparent;
-}
-
-/* Dark link */
-.dark a.underline { color: #e0c090; }
-
-/* Dark scrollbar */
-.dark ::-webkit-scrollbar-thumb {
-  background: rgba(232, 108, 26, 0.60); /* Brighter gold/orange */
-}
-.dark ::-webkit-scrollbar-thumb:hover {
-  background: rgba(232, 108, 26, 0.85);
-}
-
-/* ============================================
- * Glassmorphism Modal Overlay – light blur only
- * ============================================ */
-[class*="fixed inset-0"][class*="z-40"] {
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-}
-
-/* ============================================
- * Utility: Glow Ring on active template card
- * ============================================ */
-.ring-2.ring-brown-500\/20 {
-  box-shadow:
-    0 0 0 2px rgba(232, 108, 26, 0.30),
-    0 8px 24px rgba(200, 82, 13, 0.15);
-}
-
-.dark .glass-btn {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(12px) saturate(160%);
-  -webkit-backdrop-filter: blur(12px) saturate(160%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: #e0d8cc;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.02);
-}
-
-.dark .glass-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(232, 108, 26, 0.3);
-  color: #ffad5c;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
-}
-
-.document-paper {
-  background: #fcfbf9;
-  border: 1px solid rgba(200, 82, 13, 0.15);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.01), 0 10px 30px rgba(74, 26, 4, 0.04);
-  position: relative;
-  transition: all 0.3s ease;
-}
-
-.dark .document-paper {
-  background: rgba(10, 18, 26, 0.60);
-  border: 1px solid rgba(232, 108, 26, 0.15);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), 0 10px 30px rgba(0, 0, 0, 0.35);
-}
-
+/* Animations & Logo */
 .logo-container svg {
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -660,4 +437,12 @@ hr.border-dashed {
   filter: drop-shadow(0 2px 8px rgba(232, 108, 26, 0.4));
 }
 
+::selection {
+  background: rgba(232, 108, 26, 0.20);
+  color: var(--brown-900);
+}
 
+[class*="fixed inset-0"][class*="z-40"] {
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
