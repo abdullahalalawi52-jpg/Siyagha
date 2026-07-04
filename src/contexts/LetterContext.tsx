@@ -73,7 +73,7 @@ export interface LetterContextType {
   handleProofread: () => Promise<void>;
   handleCopy: () => void;
   copied: boolean;
-  handleSendEmail: () => Promise<void>;
+  handleSendEmail: (provider?: 'gmail' | 'outlook' | 'default') => void;
   generateLetter: (e?: React.FormEvent) => Promise<void>;
   canvasRef: React.RefObject<HTMLCanvasElement | null>;
   isDrawing: boolean;

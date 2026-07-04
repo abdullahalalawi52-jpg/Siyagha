@@ -378,13 +378,27 @@ export const useLetterApis = ({
   };
 
   // Send Email
-  const handleSendEmail = async () => {
+  const handleSendEmail = (provider: 'gmail' | 'outlook' | 'default' = 'default') => {
     if (!emailForm.to || !emailForm.subject) return;
 
     try {
       const subject = encodeURIComponent(emailForm.subject);
       const body = encodeURIComponent(generatedLetter);
-      window.open(`mailto:${emailForm.to}?subject=${subject}&body=${body}`, '_blank');
+      let url = `mailto:${emailForm.to}?subject=${subject}&body=${body}`;
+
+      if (provider === 'gmail') {
+        url = `https://mail.google.com/mail/?view=cm&fs=1&to=${emailForm.to}&su=${subject}&body=${body}`;
+      } else if (provider === 'outlook') {
+        url = `https://outlook.live.com/mail/0/deeplink/compose?to=${emailForm.to}&subject=${subject}&body=${body}`;
+      }
+
+      if (provider === 'default') {
+        window.location.href = url;
+      } else {
+        // For Gmail and Outlook, opening in a new tab might fail if the URL is too long
+        // but we still try to open it in a new tab.
+        window.open(url, '_blank');
+      }
 
       ui.addToast(ui.appLang === 'ar' ? 'تم فتح تطبيق البريد الإلكتروني!' : 'Email client opened!', 'success');
       ui.setIsEmailModalOpen(false);
