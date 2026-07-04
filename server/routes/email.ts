@@ -1,6 +1,6 @@
 import { Router } from "express";
 import nodemailer from "nodemailer";
-import { emailLimiter } from "../middleware";
+import { emailLimiter } from "../middleware.js";
 
 const router = Router();
 

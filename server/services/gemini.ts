@@ -1,5 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
-import { SAFETY_SETTINGS } from "../config";
+import { SAFETY_SETTINGS } from "../config.js";
 
 export const safeGenerate = async (ai: GoogleGenAI, params: {
   model: string;

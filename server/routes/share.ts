@@ -1,7 +1,7 @@
 import { Router } from "express";
 import crypto from "crypto";
-import { shareLimiter } from "../middleware";
-import { isFirebaseConfigured, firebaseConfig, hashPassword, verifyPassword, esc } from "../config";
+import { shareLimiter } from "../middleware.js";
+import { isFirebaseConfigured, firebaseConfig, hashPassword, verifyPassword, esc } from "../config.js";
 
 const router = Router();
 

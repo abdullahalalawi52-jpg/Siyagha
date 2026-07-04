@@ -2,10 +2,10 @@ import express from "express";
 import helmet from "helmet";
 import dotenv from "dotenv";
 
-import { sanitizeRequestBody, csrfCheck, corsMiddleware } from "./middleware";
-import emailRouter from "./routes/email";
-import aiRouter from "./routes/ai";
-import shareRouter from "./routes/share";
+import { sanitizeRequestBody, csrfCheck, corsMiddleware } from "./middleware.js";
+import emailRouter from "./routes/email.js";
+import aiRouter from "./routes/ai.js";
+import shareRouter from "./routes/share.js";
 
 dotenv.config();
 
