@@ -241,7 +241,8 @@ router.post("/generate-letter", async (req: GoogleAiRequest, res: Response) => {
       resumeInfo,
       isReplyMode,
       replyToText,
-      replyStance
+      replyStance,
+      date
     } = req.body;
     
     const sender = [senderName, senderPhone, senderEmail].filter(Boolean).join(' - ');
@@ -271,6 +272,7 @@ router.post("/generate-letter", async (req: GoogleAiRequest, res: Response) => {
       subType,
       tone,
       lang,
+      date,
       brandVoicePrompt,
       careerProfile,
     });

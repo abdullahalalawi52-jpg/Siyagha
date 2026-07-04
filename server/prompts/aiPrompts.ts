@@ -7,6 +7,7 @@ export interface GenerateLetterParams {
   subType?: string;
   tone?: string;
   lang?: 'ar' | 'en';
+  date?: string;
   brandVoicePrompt?: string;
   careerProfile?: {
     fullName?: string;
@@ -58,7 +59,7 @@ export const getAnalyzeStylePrompt = (sampleText: string, isEn?: boolean): strin
 };
 
 export const getGenerateLetterPrompt = (params: GenerateLetterParams): { mainPrompt: string; correctionPrompt: string } => {
-  const { sender, recipient, subject, details, type, subType, tone, lang, brandVoicePrompt, careerProfile } = params;
+  const { sender, recipient, subject, details, type, subType, tone, lang, date, brandVoicePrompt, careerProfile } = params;
   const isEn = lang === 'en';
 
   let careerContext = "";
@@ -83,6 +84,7 @@ Draft a highly professional official letter with the following criteria:
 - Tone: ${tone || 'Professional & Courteous'}
 - Sender: ${sender || 'N/A'}
 - Recipient: ${recipient || 'N/A'}
+- Date of Letter: ${date || 'Current Date'}
 - Subject/Topic: ${subject || 'N/A'}
 - Core Details / Key Points to include:
 "${details || 'N/A'}"
@@ -92,13 +94,15 @@ ${voiceContext}
 Formatting Guidelines:
 1. Include appropriate formal salutation and sign-off.
 2. Structure in clear paragraphs (Opening, Purpose, Details/Action, Closing).
-3. Output ONLY the complete text of the letter. Do NOT include markdown styling (no # or **) or preamble explanations.
+3. If a specific Date of Letter is provided, ensure it is written at the top of the letter exactly as provided.
+4. Output ONLY the complete text of the letter. Do NOT include markdown styling (no # or **) or preamble explanations.
     `
     : `
 قم بصياغة خطاب رسمي رفيع المستوى ومحكم الصياغة بناءً على البيانات التالية:
 - اللغة: العربية الفصحى
 - تصنيف الخطاب: ${type || 'إداري/رسمي'} - النوع الفرعي: ${subType || 'عام'}
 - النبرة المطلوبة: ${tone || 'رسمية ومحترفة'}
+- تاريخ الخطاب: ${date || 'تاريخ اليوم'}
 - جهة/اسم المرسل: ${sender || 'غير محدد'}
 - جهة/اسم المرسل إليه: ${recipient || 'غير محدد'}
 - موضوع الخطاب: ${subject || 'غير محدد'}
@@ -108,9 +112,10 @@ ${careerContext}
 ${voiceContext}
 
 توجيهات الصياغة:
-1. ابدأ بالتحية الرسمية المناسبة، واختم بالعبارة الختامية الرسمية الملائمة.
-2. قسّم الخطاب إلى فقرات واضحة (الافتتاحية، الغرض الرئيسي، التفاصيل والمطالب، الخاتمة).
-3. أرجع فقط نص الخطاب الكامل والجاهز للطباعة مباشرة دون أي علامات Markdown مثل (# أو **) ودون أي مقدمات أو شروحات جانبية.
+1. ابدأ بالتاريخ (تاريخ الخطاب المدخل) في أعلى الخطاب.
+2. ابدأ بالتحية الرسمية المناسبة، واختم بالعبارة الختامية الرسمية الملائمة.
+3. قسّم الخطاب إلى فقرات واضحة (الافتتاحية، الغرض الرئيسي، التفاصيل والمطالب، الخاتمة).
+4. أرجع فقط نص الخطاب الكامل والجاهز للطباعة مباشرة دون أي علامات Markdown مثل (# أو **) ودون أي مقدمات أو شروحات جانبية.
     `;
 
   const correctionPrompt = (generatedText: string) => isEn
