@@ -80,7 +80,7 @@ export const AiModal: React.FC = () => {
                   <div className="w-8 h-8 rounded-lg bg-brown-100 flex items-center justify-center text-brown-700">
                     {aiPolishing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
                   </div>
-                  <h4 className="font-bold text-sm text-gray-800">{t('تحسين الصياغة', 'Polish Writing')}</h4>
+                  <h4 className="font-bold text-sm text-gray-800 dark:text-gray-200">{t('تحسين الصياغة', 'Polish Writing')}</h4>
                   <p className="text-xs text-gray-500 leading-relaxed">{t('إعادة كتابة الخطاب بأسلوب أكثر بلاغة واحترافية.', 'Rewrite the letter in a more eloquent and professional style.')}</p>
                 </button>
 
@@ -94,7 +94,7 @@ export const AiModal: React.FC = () => {
                   <div className="w-8 h-8 rounded-lg bg-brown-100 flex items-center justify-center text-brown-700">
                     {isProofreading ? <Loader2 className="w-4 h-4 animate-spin" /> : <SpellCheck className="w-4 h-4" />}
                   </div>
-                  <h4 className="font-bold text-sm text-gray-800">{t('التدقيق الإملائي', 'Proofread & Edit')}</h4>
+                  <h4 className="font-bold text-sm text-gray-800 dark:text-gray-200">{t('التدقيق الإملائي', 'Proofread & Edit')}</h4>
                   <p className="text-xs text-gray-500 leading-relaxed">{t('تصحيح الأخطاء النحوية والإملائية وتصويب الصياغة.', 'Correct grammar, spelling, and refine styling.')}</p>
                 </button>
 
@@ -108,7 +108,7 @@ export const AiModal: React.FC = () => {
                   <div className="w-8 h-8 rounded-lg bg-brown-100 flex items-center justify-center text-brown-700">
                     {toneLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <MessageSquare className="w-4 h-4" />}
                   </div>
-                  <h4 className="font-bold text-sm text-gray-800">{t('تحليل النبرة والأسلوب', 'Analyze Tone & Style')}</h4>
+                  <h4 className="font-bold text-sm text-gray-800 dark:text-gray-200">{t('تحليل النبرة والأسلوب', 'Analyze Tone & Style')}</h4>
                   <p className="text-xs text-gray-500 leading-relaxed">{t('تحليل مستوى الرسمية وملاءمة نبرة الخطاب مع تقديم اقتراحات للتحسين.', 'Analyze formality level and tone suitability, providing improvement suggestions.')}</p>
                 </button>
 
@@ -123,7 +123,7 @@ export const AiModal: React.FC = () => {
                   <div className="w-8 h-8 rounded-lg bg-brown-100 flex items-center justify-center text-brown-700">
                     {atsLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4 animate-pulse" />}
                   </div>
-                  <h4 className="font-bold text-sm text-gray-800">{t('فحص ومطابقة ATS', 'ATS Optimizer')}</h4>
+                  <h4 className="font-bold text-sm text-gray-800 dark:text-gray-200">{t('فحص ومطابقة ATS', 'ATS Optimizer')}</h4>
                   <p className="text-xs text-gray-500 leading-relaxed">
                     {!form.jobDescription
                       ? t('يتطلب تعبئة حقل الوصف الوظيفي في نموذج خطاب التوظيف أولاً.', 'Requires filling the target Job Description field first.')
@@ -156,7 +156,7 @@ export const AiModal: React.FC = () => {
                       <div className="space-y-1">
                         <div className="flex justify-between items-center text-xs">
                           <span className="font-bold text-gray-600">{t('مستوى الرسمية:', 'Formality Level:')}</span>
-                          <span className="font-black text-gray-800">{toneResult.formalityScore}%</span>
+                          <span className="font-black text-gray-800 dark:text-gray-200">{toneResult.formalityScore}%</span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-1.5">
                           <div className="bg-brown-600 h-1.5 rounded-full" style={{ width: `${toneResult.formalityScore}%` }} />

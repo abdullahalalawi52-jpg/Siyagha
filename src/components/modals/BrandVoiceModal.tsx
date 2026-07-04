@@ -174,7 +174,7 @@ export const BrandVoiceModal: React.FC = () => {
                           }`}
                         >
                           <div className="flex items-start justify-between">
-                            <span className="text-xs font-bold text-gray-800 flex items-center gap-1.5">
+                            <span className="text-xs font-bold text-gray-800 dark:text-gray-200 flex items-center gap-1.5">
                               {p.name}
                               {isActive && <Check className="w-3.5 h-3.5 text-brown-600" />}
                             </span>

@@ -11,7 +11,7 @@ export const BrandingTab: React.FC = () => {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <label htmlFor="enable-header-checkbox" className="text-sm font-bold text-gray-800 flex items-center gap-2 cursor-pointer">
+        <label htmlFor="enable-header-checkbox" className="text-sm font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2 cursor-pointer">
           {t('تفعيل الترويسة العلوية (Header)', 'Enable Header')}
         </label>
         <input
@@ -24,9 +24,9 @@ export const BrandingTab: React.FC = () => {
       </div>
 
       {branding.enableHeader && (
-        <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="space-y-4 p-4 border border-gray-100 bg-gray-50/50 rounded-xl overflow-hidden text-start">
+        <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="space-y-4 p-4 border border-gray-100 bg-gray-50/50 dark:bg-slate-800/80 dark:border-slate-700 rounded-xl overflow-hidden text-start">
           <div className="space-y-1.5">
-            <span id="header-theme-label" className="text-xs font-semibold text-gray-500 block">{t('شكل وتصميم الترويسة (Theme)', 'Header Theme')}</span>
+            <span id="header-theme-label" className="text-xs font-semibold text-gray-500 dark:text-gray-400 block">{t('شكل وتصميم الترويسة (Theme)', 'Header Theme')}</span>
             <div role="group" aria-labelledby="header-theme-label" className="grid grid-cols-2 gap-2">
               {[
                 { id: 'classic', label: t('كلاسيكي ممركز', 'Classic Centered') },
@@ -50,7 +50,7 @@ export const BrandingTab: React.FC = () => {
             </div>
           </div>
           <div className="space-y-1.5">
-            <label htmlFor="company-name-input" className="text-xs font-semibold text-gray-500 block">{t('اسم الجهة / الشركة', 'Organization / Company Name')}</label>
+            <label htmlFor="company-name-input" className="text-xs font-semibold text-gray-500 dark:text-gray-400 block">{t('اسم الجهة / الشركة', 'Organization / Company Name')}</label>
             <input
               id="company-name-input"
               type="text"
@@ -61,7 +61,7 @@ export const BrandingTab: React.FC = () => {
             />
           </div>
           <div className="space-y-1.5">
-            <label htmlFor="company-details-textarea" className="text-xs font-semibold text-gray-500 block">{t('تفاصيل التواصل والعنوان (سطور متعددة)', 'Contact Details & Address (Multi-line)')}</label>
+            <label htmlFor="company-details-textarea" className="text-xs font-semibold text-gray-500 dark:text-gray-400 block">{t('تفاصيل التواصل والعنوان (سطور متعددة)', 'Contact Details & Address (Multi-line)')}</label>
             <textarea
               id="company-details-textarea"
               rows={3}
@@ -72,13 +72,13 @@ export const BrandingTab: React.FC = () => {
             />
           </div>
           <div className="space-y-1.5">
-            <label htmlFor="logo-file-input" className="text-xs font-semibold text-gray-500 block">{t('شعار الجهة (Logo)', 'Organization Logo')}</label>
+            <label htmlFor="logo-file-input" className="text-xs font-semibold text-gray-500 dark:text-gray-400 block">{t('شعار الجهة (Logo)', 'Organization Logo')}</label>
             <input
               id="logo-file-input"
               type="file"
               accept="image/*"
               onChange={(e) => handleImageUpload(e, 'logo')}
-              className="w-full text-xs text-gray-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-[10px] file:font-bold file:bg-brown-50 file:text-brown-700 hover:file:bg-brown-100 cursor-pointer"
+              className="w-full text-xs text-gray-500 dark:text-gray-400 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-[10px] file:font-bold file:bg-brown-50 file:text-brown-700 hover:file:bg-brown-100 cursor-pointer"
             />
             {branding.logoUrl && (
               <div className="relative mt-2 inline-block">
@@ -100,7 +100,7 @@ export const BrandingTab: React.FC = () => {
       <hr className="border-gray-100 my-4 border-dashed" />
 
       <div className="flex items-center justify-between">
-        <label htmlFor="enable-footer-checkbox" className="text-sm font-bold text-gray-800 flex items-center gap-2 cursor-pointer">
+        <label htmlFor="enable-footer-checkbox" className="text-sm font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2 cursor-pointer">
           {t('تفعيل التذييل السفلي (Footer)', 'Enable Footer')}
         </label>
         <input
@@ -113,9 +113,9 @@ export const BrandingTab: React.FC = () => {
       </div>
 
       {branding.enableFooter && (
-        <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="space-y-4 p-4 border border-gray-100 bg-gray-50/50 rounded-xl text-start">
+        <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="space-y-4 p-4 border border-gray-100 bg-gray-50/50 dark:bg-slate-800/80 dark:border-slate-700 rounded-xl text-start">
           <div className="space-y-1.5">
-            <label htmlFor="footer-text-input" className="text-xs font-semibold text-gray-500 block">{t('نص التذييل (الهامش السفلي)', 'Footer Text')}</label>
+            <label htmlFor="footer-text-input" className="text-xs font-semibold text-gray-500 dark:text-gray-400 block">{t('نص التذييل (الهامش السفلي)', 'Footer Text')}</label>
             <input
               id="footer-text-input"
               type="text"
@@ -126,7 +126,7 @@ export const BrandingTab: React.FC = () => {
             />
           </div>
           <div className="space-y-1.5 mt-3 text-start">
-            <span id="footer-theme-label" className="text-xs font-semibold text-gray-500 block">{t('شكل وتصميم التذييل', 'Footer Layout')}</span>
+            <span id="footer-theme-label" className="text-xs font-semibold text-gray-500 dark:text-gray-400 block">{t('شكل وتصميم التذييل', 'Footer Layout')}</span>
             <div role="group" aria-labelledby="footer-theme-label" className="grid grid-cols-3 gap-2">
               {[
                 { id: 'centered', label: t('ممركز', 'Centered') },

@@ -17,7 +17,7 @@ export const SignatureTab: React.FC = () => {
     <div className="space-y-6">
       {/* Signature Upload / Draw */}
       <div role="group" aria-labelledby="sig-group-label" className="space-y-2">
-        <span id="sig-group-label" className="text-sm font-bold text-gray-800 block">{t('التوقيع الرقمي (Signature)', 'Digital Signature')}</span>
+        <span id="sig-group-label" className="text-sm font-bold text-gray-800 dark:text-gray-200 block">{t('التوقيع الرقمي (Signature)', 'Digital Signature')}</span>
         <div className="flex gap-2">
           <button
             type="button"
@@ -64,7 +64,7 @@ export const SignatureTab: React.FC = () => {
 
       {/* Seal/Stamp Upload */}
       <div className="space-y-2">
-        <label htmlFor="seal-file-upload" className="text-sm font-bold text-gray-800 block cursor-pointer">{t('شعار الختم الرسمي (Stamp/Seal)', 'Official Stamp/Seal')}</label>
+        <label htmlFor="seal-file-upload" className="text-sm font-bold text-gray-800 dark:text-gray-200 block cursor-pointer">{t('شعار الختم الرسمي (Stamp/Seal)', 'Official Stamp/Seal')}</label>
         <div className="relative">
           <input
             type="file"
