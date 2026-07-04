@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { Star, Loader2, Sparkles, Mic, MicOff, Camera, Bookmark } from 'lucide-react';
+import { Star, Loader2, Sparkles, Mic, MicOff, Camera, Bookmark, Briefcase, Settings } from 'lucide-react';
 import { useApp } from '../../contexts/AppContext';
 import { CustomSelect } from '../CustomSelect';
 import { letterTypes, toneOptions, formalityOptions, getLetterTypeData } from '../../data/templateTypes';
@@ -97,16 +97,18 @@ export const BasicInfoTab: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsCareerProfileModalOpen(true)}
-              className="text-[10px] text-brown-700 hover:text-brown-850 bg-brown-100/40 hover:bg-brown-100/80 px-2 py-0.5 rounded transition-colors font-bold cursor-pointer"
+              className="flex items-center gap-1 text-[10px] text-brown-700 hover:text-brown-850 bg-brown-100/40 hover:bg-brown-100/80 px-2 py-0.5 rounded transition-colors font-bold cursor-pointer"
             >
-              {t('الملف المهني 💼', 'Career Profile 💼')}
+              <Briefcase className="w-3 h-3" />
+              {t('الملف المهني', 'Career Profile')}
             </button>
             <button
               type="button"
               onClick={() => setIsBrandVoiceModalOpen(true)}
-              className="text-[10px] text-brown-750 hover:text-brown-850 bg-brown-100/40 hover:bg-brown-100/80 px-2 py-0.5 rounded transition-colors font-bold cursor-pointer"
+              className="flex items-center gap-1 text-[10px] text-brown-750 hover:text-brown-850 bg-brown-100/40 hover:bg-brown-100/80 px-2 py-0.5 rounded transition-colors font-bold cursor-pointer"
             >
-              {t('إدارة البصمات ⚙️', 'Manage Voices ⚙️')}
+              <Settings className="w-3 h-3" />
+              {t('إدارة البصمات', 'Manage Voices')}
             </button>
           </div>
         </div>
