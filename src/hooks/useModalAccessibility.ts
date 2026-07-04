@@ -2,6 +2,11 @@ import { useEffect, useRef } from 'react';
 
 export const useModalAccessibility = (isOpen: boolean, onClose: () => void) => {
   const modalRef = useRef<HTMLDivElement>(null);
+  const onCloseRef = useRef(onClose);
+
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -9,7 +14,7 @@ export const useModalAccessibility = (isOpen: boolean, onClose: () => void) => {
     // Handle escape key
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        onClose();
+        onCloseRef.current();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -20,6 +25,7 @@ export const useModalAccessibility = (isOpen: boolean, onClose: () => void) => {
     
     let firstFocusableElement: HTMLElement | null = null;
     let lastFocusableElement: HTMLElement | null = null;
+    let timer: ReturnType<typeof setTimeout>;
 
     if (modalElement) {
       const focusableContent = modalElement.querySelectorAll(focusableElementsString);
@@ -30,13 +36,9 @@ export const useModalAccessibility = (isOpen: boolean, onClose: () => void) => {
         lastFocusableElement = focusableElements[focusableElements.length - 1];
         
         // Focus the first element initially after standard browser mounting delay
-        const timer = setTimeout(() => {
+        timer = setTimeout(() => {
           firstFocusableElement?.focus();
         }, 50);
-        return () => {
-          clearTimeout(timer);
-          window.removeEventListener('keydown', handleKeyDown);
-        };
       }
     }
 
@@ -59,10 +61,11 @@ export const useModalAccessibility = (isOpen: boolean, onClose: () => void) => {
     window.addEventListener('keydown', handleTabKey);
 
     return () => {
+      if (timer) clearTimeout(timer);
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keydown', handleTabKey);
     };
-  }, [isOpen, onClose]);
+  }, [isOpen]);
 
   return modalRef;
 };
