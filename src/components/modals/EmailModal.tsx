@@ -10,8 +10,6 @@ export const EmailModal: React.FC = () => {
     setIsEmailModalOpen,
     emailForm,
     setEmailForm,
-    emailSuccess,
-    isSendingEmail,
     handleSendEmail,
     appLang,
     t,
@@ -60,21 +58,7 @@ export const EmailModal: React.FC = () => {
                 </button>
               </div>
 
-              {emailSuccess ? (
-                <div className="bg-green-50 text-green-700 p-4 rounded-xl border border-green-100 text-sm font-medium leading-relaxed">
-                  {emailSuccess.includes('Ethereal') ? (
-                    <>
-                      {t('تم الإرسال بنجاح (بيئة تجريبية).', 'Sent successfully (Sandbox environment).')}
-                      <br />
-                      <a href={emailSuccess.split('رابط المعاينة: ')[1]} target="_blank" rel="noopener noreferrer" className="underline font-bold text-green-800">
-                        {t('اضغط هنا لمعاينة الرسالة', 'Click here to preview the message')}
-                      </a>
-                    </>
-                  ) : (
-                    emailSuccess
-                  )}
-                </div>
-              ) : (
+
                 <div className="space-y-4">
                   <div>
                     <label className="text-sm font-bold text-gray-800 block mb-1.5">{t('البريد الإلكتروني للمرسل إليه', 'Recipient Email Address')}</label>
@@ -96,29 +80,17 @@ export const EmailModal: React.FC = () => {
                       className="w-full rounded-xl border-gray-200 border px-3 py-2.5 text-sm focus:ring-2 focus:ring-brown-500 outline-none"
                     />
                   </div>
-                  <label className="flex items-center gap-2 cursor-pointer pt-2 group justify-start">
-                    <input
-                      type="checkbox"
-                      checked={emailForm.attachPdf}
-                      onChange={(e) => setEmailForm({ ...emailForm, attachPdf: e.target.checked })}
-                      className="w-5 h-5 border-2 border-gray-300 rounded text-brown-600 focus:ring-brown-500 cursor-pointer form-checkbox transition-colors"
-                    />
-                    <span className="text-sm font-semibold text-gray-700 select-none group-hover:text-gray-900 transition-colors">
-                      {t('إرفاق الخطاب كـ PDF', 'Attach letter as PDF')}
-                    </span>
-                  </label>
 
                   <button
                     onClick={handleSendEmail}
-                    disabled={isSendingEmail || !emailForm.to || !emailForm.subject}
+                    disabled={!emailForm.to || !emailForm.subject}
                     className="w-full mt-2 bg-brown-600 hover:bg-brown-700 text-white font-semibold py-3 px-6 rounded-xl flex items-center justify-center gap-2 transition-colors disabled:opacity-70 disabled:cursor-not-allowed shadow-lg shadow-brown-200 cursor-pointer"
                     type="button"
                   >
-                    {isSendingEmail ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5 rtl:-scale-x-100" />}
-                    {isSendingEmail ? t('جاري الإرسال...', 'Sending...') : t('إرسال', 'Send')}
+                    <Send className="w-5 h-5 rtl:-scale-x-100" />
+                    {t('إرسال', 'Send')}
                   </button>
                 </div>
-              )}
             </div>
           </motion.div>
         </div>

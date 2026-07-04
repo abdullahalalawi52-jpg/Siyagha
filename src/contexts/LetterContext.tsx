@@ -40,9 +40,7 @@ export interface LetterContextType {
   isSuggestingTitle: boolean;
   emailForm: EmailFormState;
   setEmailForm: React.Dispatch<React.SetStateAction<EmailFormState>>;
-  isSendingEmail: boolean;
-  emailSuccess: string | null;
-  setEmailSuccess: (msg: string | null) => void;
+
   ocrLoading: boolean;
   ocrError: string;
   setOcrError: (err: string) => void;
@@ -321,9 +319,7 @@ export const LetterProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setError: apiState.setError,
         emailForm: apiState.emailForm,
         setEmailForm: apiState.setEmailForm,
-        isSendingEmail: apiState.isSendingEmail,
-        emailSuccess: apiState.emailSuccess,
-        setEmailSuccess: apiState.setEmailSuccess,
+
         isProofreading: apiState.isProofreading,
         isSuggestingTitle: apiState.isSuggestingTitle,
         ocrLoading: apiState.ocrLoading,

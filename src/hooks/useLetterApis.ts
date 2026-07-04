@@ -75,8 +75,7 @@ export const useLetterApis = ({
 
   // Email state
   const [emailForm, setEmailForm] = useState<EmailFormState>({ to: '', subject: '', attachPdf: true });
-  const [isSendingEmail, setIsSendingEmail] = useState(false);
-  const [emailSuccess, setEmailSuccess] = useState<string | null>(null);
+
 
   // Spelling linter status
   const [isProofreading, setIsProofreading] = useState(false);
@@ -382,71 +381,16 @@ export const useLetterApis = ({
   const handleSendEmail = async () => {
     if (!emailForm.to || !emailForm.subject) return;
 
-    setIsSendingEmail(true);
-    setEmailSuccess(null);
-    let pdfAttachmentBase64 = null;
-
     try {
-      if (emailForm.attachPdf) {
-        let parsedFontSize = parseInt(fontSize);
-        if (isNaN(parsedFontSize)) parsedFontSize = 15;
-        const pdfFontSize = parsedFontSize + 2;
+      const subject = encodeURIComponent(emailForm.subject);
+      const body = encodeURIComponent(generatedLetter);
+      window.location.href = `mailto:${emailForm.to}?subject=${subject}&body=${body}`;
 
-        const printElement = buildPrintElement({
-          fontFamily,
-          fontSize: pdfFontSize,
-          isEn: form.language === 'en',
-          subject: form.subject || 'خطاب',
-          letterContent: generatedLetter,
-          branding,
-          signatureImage,
-          sealImage,
-        });
-
-        const opt = {
-          margin: 15,
-          filename: 'letter.pdf',
-          image: { type: 'jpeg', quality: 0.98 },
-          html2canvas: { scale: 2, useCORS: true },
-          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        };
-
-        const html2pdfModule = await import('html2pdf.js') as unknown as { default: any };
-        const html2pdf = html2pdfModule.default;
-        pdfAttachmentBase64 = await html2pdf().set(opt).from(printElement).outputPdf('datauristring');
-      }
-
-      const res = await fetch(getApiUrl('/api/send-email'), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          to: emailForm.to,
-          subject: emailForm.subject,
-          text: generatedLetter,
-          pdfAttachment: pdfAttachmentBase64,
-        }),
-      });
-
-      const data = await handleResponse(res, 'Failed to send email');
-
-      if (data.previewUrl) {
-        setEmailSuccess(`تم الإرسال بنجاح (Ethereal test email). رابط المعاينة: ${data.previewUrl}`);
-      } else {
-        setEmailSuccess('تم إرسال البريد الإلكتروني بنجاح!');
-      }
-
-      ui.addToast('تم إرسال البريد الإلكتروني بنجاح!', 'success');
-
-      setTimeout(() => {
-        ui.setIsEmailModalOpen(false);
-        setEmailSuccess(null);
-      }, 5000);
+      ui.addToast(ui.appLang === 'ar' ? 'تم فتح تطبيق البريد الإلكتروني!' : 'Email client opened!', 'success');
+      ui.setIsEmailModalOpen(false);
     } catch (err: any) {
-      setEmailSuccess(null);
       console.error(err);
-      ui.addToast('حدث خطأ أثناء إرسال البريد الإلكتروني', 'error');
-    } finally {
-      setIsSendingEmail(false);
+      ui.addToast(ui.appLang === 'ar' ? 'حدث خطأ أثناء فتح البريد الإلكتروني' : 'Error opening email client', 'error');
     }
   };
 
@@ -456,9 +400,7 @@ export const useLetterApis = ({
     setError,
     emailForm,
     setEmailForm,
-    isSendingEmail,
-    emailSuccess,
-    setEmailSuccess,
+
     isProofreading,
     isSuggestingTitle,
     ocrLoading,
