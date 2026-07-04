@@ -81,15 +81,38 @@ export const EmailModal: React.FC = () => {
                     />
                   </div>
 
-                  <button
-                    onClick={handleSendEmail}
-                    disabled={!emailForm.to || !emailForm.subject}
-                    className="w-full mt-2 bg-brown-600 hover:bg-brown-700 text-white font-semibold py-3 px-6 rounded-xl flex items-center justify-center gap-2 transition-colors disabled:opacity-70 disabled:cursor-not-allowed shadow-lg shadow-brown-200 cursor-pointer"
-                    type="button"
-                  >
-                    <Send className="w-5 h-5 rtl:-scale-x-100" />
-                    {t('إرسال', 'Send')}
-                  </button>
+                  <div className="grid grid-cols-1 gap-2 mt-4">
+                    <p className="text-sm font-semibold text-gray-700 mb-2">{t('اختر طريقة الإرسال:', 'Choose sending method:')}</p>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        onClick={() => handleSendEmail('gmail')}
+                        disabled={!emailForm.to || !emailForm.subject}
+                        className="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-semibold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                        type="button"
+                      >
+                        <Send className="w-4 h-4 rtl:-scale-x-100" />
+                        Gmail
+                      </button>
+                      <button
+                        onClick={() => handleSendEmail('outlook')}
+                        disabled={!emailForm.to || !emailForm.subject}
+                        className="bg-blue-50 hover:bg-blue-100 text-blue-600 border border-blue-200 font-semibold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                        type="button"
+                      >
+                        <Send className="w-4 h-4 rtl:-scale-x-100" />
+                        Outlook
+                      </button>
+                    </div>
+                    <button
+                      onClick={() => handleSendEmail('default')}
+                      disabled={!emailForm.to || !emailForm.subject}
+                      className="w-full mt-2 bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-200 font-semibold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                      type="button"
+                    >
+                      <Mail className="w-4 h-4" />
+                      {t('تطبيق افتراضي آخر', 'Other Default App')}
+                    </button>
+                  </div>
                 </div>
             </div>
           </motion.div>
