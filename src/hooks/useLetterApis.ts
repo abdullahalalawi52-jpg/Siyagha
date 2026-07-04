@@ -384,7 +384,7 @@ export const useLetterApis = ({
     try {
       const subject = encodeURIComponent(emailForm.subject);
       const body = encodeURIComponent(generatedLetter);
-      window.location.href = `mailto:${emailForm.to}?subject=${subject}&body=${body}`;
+      window.open(`mailto:${emailForm.to}?subject=${subject}&body=${body}`, '_blank');
 
       ui.addToast(ui.appLang === 'ar' ? 'تم فتح تطبيق البريد الإلكتروني!' : 'Email client opened!', 'success');
       ui.setIsEmailModalOpen(false);
