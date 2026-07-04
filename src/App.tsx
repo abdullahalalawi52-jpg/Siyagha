@@ -18,9 +18,7 @@ const BrandVoiceModal = React.lazy(() => import('./components/modals/BrandVoiceM
 const CareerProfileModal = React.lazy(() =>
   import('./components/modals/CareerProfileModal').then((m) => ({ default: m.CareerProfileModal }))
 );
-const CloudStorageModal = React.lazy(() =>
-  import('./components/modals/CloudStorageModal').then((m) => ({ default: m.CloudStorageModal }))
-);
+
 
 function MainAppContent() {
   const {
@@ -57,7 +55,6 @@ function MainAppContent() {
       if (isAboutOpen && !prev.about) updates.about = true;
       if (isBrandVoiceModalOpen && !prev.brandVoice) updates.brandVoice = true;
       if (isCareerProfileModalOpen && !prev.careerProfile) updates.careerProfile = true;
-      if (isCloudStorageOpen && !prev.cloudStorage) updates.cloudStorage = true;
 
       if (Object.keys(updates).length > 0) {
         return { ...prev, ...updates };
@@ -74,7 +71,6 @@ function MainAppContent() {
     isAboutOpen,
     isBrandVoiceModalOpen,
     isCareerProfileModalOpen,
-    isCloudStorageOpen,
   ]);
 
   // Switch to preview tab when a letter is generated
@@ -160,7 +156,6 @@ function MainAppContent() {
         {openedModals.about && <AboutModal />}
         {openedModals.brandVoice && <BrandVoiceModal />}
         {openedModals.careerProfile && <CareerProfileModal />}
-        {openedModals.cloudStorage && <CloudStorageModal />}
       </React.Suspense>
     </div>
   );

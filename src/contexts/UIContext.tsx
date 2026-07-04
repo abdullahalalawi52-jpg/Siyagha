@@ -29,8 +29,6 @@ export interface UIContextType {
   setIsBrandVoiceModalOpen: (open: boolean) => void;
   isCareerProfileModalOpen: boolean;
   setIsCareerProfileModalOpen: (open: boolean) => void;
-  isCloudStorageOpen: boolean;
-  setIsCloudStorageOpen: (open: boolean) => void;
   ocrTargetField: 'details' | 'replyToText' | 'jobDescription' | 'resumeInfo';
   setOcrTargetField: (field: 'details' | 'replyToText' | 'jobDescription' | 'resumeInfo') => void;
   searchQuery: string;
@@ -155,7 +153,6 @@ export const UIProvider: React.FC<{ children: React.ReactNode }> = ({ children }
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isBrandVoiceModalOpen, setIsBrandVoiceModalOpen] = useState(false);
   const [isCareerProfileModalOpen, setIsCareerProfileModalOpen] = useState(false);
-  const [isCloudStorageOpen, setIsCloudStorageOpen] = useState(false);
   const [ocrTargetField, setOcrTargetField] = useState<'details' | 'replyToText' | 'jobDescription' | 'resumeInfo'>('details');
 
   // Archive filters
@@ -214,8 +211,6 @@ export const UIProvider: React.FC<{ children: React.ReactNode }> = ({ children }
         setIsBrandVoiceModalOpen,
         isCareerProfileModalOpen,
         setIsCareerProfileModalOpen,
-        isCloudStorageOpen,
-        setIsCloudStorageOpen,
         ocrTargetField,
         setOcrTargetField,
         searchQuery,

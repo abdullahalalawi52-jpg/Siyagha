@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Undo as UndoIcon, Redo as RedoIcon, Sparkles, Check, Save, FileText, Download, ChevronDown, Cloud, Share2, Send, Mail, Copy } from 'lucide-react';
+import { Undo as UndoIcon, Redo as RedoIcon, Sparkles, Check, Save, FileText, Download, ChevronDown, Share2, Send, Mail, Copy } from 'lucide-react';
 import { useApp } from '../../contexts/AppContext';
 import { CustomSelect } from '../CustomSelect';
 import { fontFamilies, fontSizes } from '../../data/templateTypes';
@@ -32,7 +32,6 @@ export const PreviewToolbar: React.FC = () => {
     handleExportDOCX,
     handleExportPDF,
     setIsEmailModalOpen,
-    setIsCloudStorageOpen,
     t,
   } = useApp();
 
@@ -238,19 +237,7 @@ export const PreviewToolbar: React.FC = () => {
                     <span>{t('تصدير كملف Word', 'Export as Word')}</span>
                   </button>
 
-                  <hr className="border-gray-100 dark:border-gray-700 my-1" />
 
-                  <button
-                    onClick={() => {
-                      setIsCloudStorageOpen(true);
-                      setShowExportMenu(false);
-                    }}
-                    className="w-full text-start text-xs font-bold text-gray-700 dark:text-gray-300 hover:text-brown-600 dark:hover:text-brown-400 hover:bg-gray-50 dark:hover:bg-gray-700 px-3 py-2 rounded-lg flex items-center gap-2 cursor-pointer"
-                    type="button"
-                  >
-                    <Cloud className="w-4 h-4 text-green-600 dark:text-green-400" />
-                    <span>{t('حفظ في السحابة', 'Save to Cloud')}</span>
-                  </button>
                 </motion.div>
               )}
             </AnimatePresence>
