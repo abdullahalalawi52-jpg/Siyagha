@@ -44,13 +44,13 @@ export const OcrModal: React.FC = () => {
           >
             <div className="p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 id="ocr-modal-title" className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                <h3 id="ocr-modal-title" className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
                   <Camera className="w-5 h-5 text-brown-600" />
                   {t('واجهة استخراج النصوص (OCR)', 'Text Extraction Interface (OCR)')}
                 </h3>
                 <button
                   onClick={handleClose}
-                  className="text-gray-400 hover:bg-gray-100 p-1.5 rounded-lg transition-colors cursor-pointer"
+                  className="text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-700 p-1.5 rounded-lg transition-colors cursor-pointer"
                   type="button"
                   aria-label={t('إغلاق النافذة', 'Close window')}
                 >
@@ -59,11 +59,11 @@ export const OcrModal: React.FC = () => {
               </div>
 
               <div className="space-y-4">
-                <p className="text-xs text-gray-500 leading-relaxed">
+                <p className="text-xs text-gray-500 dark:text-gray-300 leading-relaxed">
                   {t('قم بتصوير أو رفع صورة لخطاب رسمي ورقي قديم، وسيقوم الذكاء الاصطناعي باستخراج النص بالكامل لتتمكن من التعديل عليه وإعادة استخدامه.', 'Take a photo or upload an image of an old official paper letter, and AI will extract the full text so you can edit and reuse it.')}
                 </p>
 
-                <div className="border-2 border-dashed border-gray-200 hover:border-brown-400 rounded-xl p-8 text-center bg-gray-50/50 transition-colors relative cursor-pointer group">
+                <div className="border-2 border-dashed border-gray-200 dark:border-slate-600 hover:border-brown-400 rounded-xl p-8 text-center bg-gray-50/50 dark:bg-slate-800 transition-colors relative cursor-pointer group">
                   <input
                     type="file"
                     accept="image/*"
@@ -77,7 +77,7 @@ export const OcrModal: React.FC = () => {
                     ) : (
                       <Upload className="w-10 h-10 text-gray-400 group-hover:text-brown-500 transition-colors" />
                     )}
-                    <span className="text-sm font-bold text-gray-700">
+                    <span className="text-sm font-bold text-gray-700 dark:text-gray-200">
                       {ocrLoading ? t('جاري استخراج النصوص...', 'Extracting text...') : t('اختر صورة الخطاب أو اسحبها هنا', 'Choose letter image or drag it here')}
                     </span>
                     <span className="text-xs text-gray-400">{t('يدعم صيغ JPG, PNG, WEBP', 'Supports JPG, PNG, WEBP formats')}</span>
@@ -96,7 +96,7 @@ export const OcrModal: React.FC = () => {
                   type="button"
                   onClick={() => setIsOcrOpen(false)}
                   disabled={ocrLoading}
-                  className="text-xs font-bold text-gray-500 hover:text-gray-700 px-4 py-2.5 rounded-lg transition-colors border border-gray-200 disabled:opacity-50 cursor-pointer"
+                  className="text-xs font-bold text-gray-500 hover:text-gray-700 dark:text-gray-200 px-4 py-2.5 rounded-lg transition-colors border border-gray-200 dark:border-slate-700 dark:hover:bg-slate-800 disabled:opacity-50 cursor-pointer"
                 >
                   {t('إلغاء', 'Cancel')}
                 </button>
