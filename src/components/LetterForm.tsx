@@ -26,7 +26,7 @@ export const LetterForm: React.FC = () => {
     <div className="lg:col-span-5 premium-card p-6 rounded-2xl shadow-sm border border-brown-100/60 relative overflow-hidden text-start" dir={appLang === 'ar' ? 'rtl' : 'ltr'}>
       {/* decorative top gradient bar */}
       <div className="absolute top-0 left-0 right-0 h-0.5 rounded-t-2xl bg-gradient-to-r from-brown-500 via-brown-400 to-brown-500" />
-      <h2 className="text-base font-black text-gray-900 dark:text-white mb-6 flex items-center gap-2.5 tracking-tight">
+      <h2 className="text-base font-black text-gray-900 dark:text-white dark:text-white mb-6 flex items-center gap-2.5 tracking-tight">
         <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-gradient-to-br from-brown-500 to-brown-600">
           <PenLine className="w-3.5 h-3.5 text-white" />
         </div>
@@ -140,11 +140,11 @@ export const LetterForm: React.FC = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
-            className="mt-4 bg-white border border-gray-200 rounded-xl p-4 shadow-lg absolute bottom-12 left-6 right-6 z-20"
+            className="mt-4 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl p-4 shadow-lg absolute bottom-12 left-6 right-6 z-20"
           >
             <div className="flex items-center justify-between mb-3">
-              <h4 className="text-sm font-bold text-gray-900">{t('تسمية القالب المخصص', 'Name Custom Template')}</h4>
-              <button type="button" onClick={() => setIsSavingTemplate(false)} className="text-gray-400 hover:text-gray-600 cursor-pointer">
+              <h4 className="text-sm font-bold text-gray-900 dark:text-white">{t('تسمية القالب المخصص', 'Name Custom Template')}</h4>
+              <button type="button" onClick={() => setIsSavingTemplate(false)} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 cursor-pointer">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -152,7 +152,7 @@ export const LetterForm: React.FC = () => {
               <input
                 type="text"
                 placeholder={t('مثال: طلب إجازة خاصة', 'e.g., Special Leave Request')}
-                className="flex-1 rounded-lg border-gray-200 border px-3 py-2 text-sm outline-none focus:border-brown-500"
+                className="flex-1 rounded-lg border-gray-200 dark:border-slate-700 border px-3 dark:bg-slate-900 dark:text-white py-2 text-sm outline-none focus:border-brown-500"
                 value={newTemplateName}
                 onChange={(e) => setNewTemplateName(e.target.value)}
               />
