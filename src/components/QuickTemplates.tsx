@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Library, Star } from 'lucide-react';
 import { useApp } from '../contexts/AppContext';
 import { templateNameTranslations, categoryTranslations } from '../data/templateTranslations';
 import { predefinedTemplates } from '../data/predefinedTemplates';
+import { Reorder } from 'motion/react';
 
 export const QuickTemplates: React.FC = () => {
   const {
     activeTemplate,
     favoritePredefined,
     toggleFavoritePredefined,
+    setFavoritePredefined,
     applyTemplate,
     isStatsOpen,
     setIsStatsOpen,
@@ -21,6 +23,25 @@ export const QuickTemplates: React.FC = () => {
     ...predefinedTemplates.filter((t) => favoritePredefined.includes(t.id)),
     ...predefinedTemplates.filter((t) => !favoritePredefined.includes(t.id)),
   ];
+
+  const initialTop4 = sortedTemplates.slice(0, 4);
+  const [displayTemplates, setDisplayTemplates] = useState(initialTop4);
+
+  useEffect(() => {
+    const currentIds = displayTemplates.map((t) => t.id).join(',');
+    const newIds = sortedTemplates.slice(0, 4).map((t) => t.id).join(',');
+    if (currentIds !== newIds) {
+      setDisplayTemplates(sortedTemplates.slice(0, 4));
+    }
+  }, [favoritePredefined]); // we only listen to favoritePredefined changes
+
+  const handleReorder = (newOrder: typeof displayTemplates) => {
+    setDisplayTemplates(newOrder);
+    const newIds = newOrder.map((t) => t.id);
+    const otherFavorites = favoritePredefined.filter((id) => !newIds.includes(id));
+    // We make all top 4 templates as favorites in the new order, to persist their position
+    setFavoritePredefined([...newIds, ...otherFavorites]);
+  };
 
   return (
     <div>
@@ -55,10 +76,16 @@ export const QuickTemplates: React.FC = () => {
       </div>
 
       {/* Render top 4 templates */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        {sortedTemplates.slice(0, 4).map((template) => (
-          <div
+      <Reorder.Group 
+        axis="x" 
+        values={displayTemplates} 
+        onReorder={handleReorder} 
+        className="grid grid-cols-2 sm:grid-cols-4 gap-3 list-none p-0 m-0"
+      >
+        {displayTemplates.map((template) => (
+          <Reorder.Item
             key={template.id}
+            value={template}
             onClick={() => applyTemplate(template.id)}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
@@ -67,10 +94,10 @@ export const QuickTemplates: React.FC = () => {
             }}
             tabIndex={0}
             role="button"
-            className={`group relative flex items-center gap-3 p-4 rounded-2xl border text-start transition-all hover:-translate-y-0.5 active:scale-[0.97] cursor-pointer ${
+            className={`group relative flex items-center gap-3 p-4 rounded-2xl border text-start transition-colors cursor-grab active:cursor-grabbing ${
               activeTemplate === template.id
                 ? 'border-brown-400 bg-gradient-to-br from-brown-50 to-orange-50 text-brown-700 shadow-lg ring-2 ring-brown-400/25'
-                : 'border-gray-200/80 premium-glass-white-80 hover:border-brown-300/70 text-gray-700 shadow-sm template-card-btn'
+                : 'border-gray-200/80 premium-glass-white-80 hover:border-brown-300/70 text-gray-700 shadow-sm template-card-btn bg-white'
             }`}
           >
             <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all ${
@@ -83,20 +110,23 @@ export const QuickTemplates: React.FC = () => {
             {favoritePredefined.includes(template.id) && (
               <button 
                 type="button"
-                onClick={(e) => toggleFavoritePredefined(template.id, e)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleFavoritePredefined(template.id, e);
+                }}
                 className="absolute top-2 left-2 p-1 transition-transform hover:scale-110 z-10 cursor-pointer"
                 title={t('إزالة من المفضلة', 'Remove from Favorites')}
               >
                 <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400 drop-shadow-sm" />
               </button>
             )}
-            <div className="flex flex-col min-w-0 text-start">
+            <div className="flex flex-col min-w-0 text-start select-none pointer-events-none">
               <span className="font-bold text-sm truncate">{t(template.name, templateNameTranslations[template.name] || template.name)}</span>
               <span className="text-[10px] text-gray-400 font-medium">{t(template.category, categoryTranslations[template.category] || template.category)}</span>
             </div>
-          </div>
+          </Reorder.Item>
         ))}
-      </div>
+      </Reorder.Group>
     </div>
   );
 };
