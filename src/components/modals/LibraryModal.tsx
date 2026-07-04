@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Library, X, Star, Bookmark, Search } from 'lucide-react';
+import { Library, X, Star, Bookmark } from 'lucide-react';
 import { useApp } from '../../contexts/AppContext';
 import { templateNameTranslations, categoryTranslations } from '../../data/templateTranslations';
 import { predefinedTemplates } from '../../data/predefinedTemplates';
@@ -22,9 +22,10 @@ export const LibraryModal: React.FC = () => {
     t,
   } = useApp();
 
+  const [searchQuery, setSearchQuery] = React.useState('');
+
   const handleClose = () => setIsLibraryOpen(false);
   const modalRef = useModalAccessibility(isLibraryOpen, handleClose);
-  const [searchQuery, setSearchQuery] = useState('');
 
   const handleKeyDown = (e: React.KeyboardEvent, action: () => void) => {
     if (e.key === 'Enter' || e.key === ' ') {
@@ -41,30 +42,28 @@ export const LibraryModal: React.FC = () => {
     const catMatch = t.category.toLowerCase().includes(safeSearch);
     const transName = (templateNameTranslations[t.name] || t.name).toLowerCase();
     const transCat = (categoryTranslations[t.category] || t.category).toLowerCase();
-    const tagMatch = t.tags?.some(tag => tag.toLowerCase().includes(safeSearch));
-    return nameMatch || catMatch || transName.includes(safeSearch) || transCat.includes(safeSearch) || tagMatch;
+    return nameMatch || catMatch || transName.includes(safeSearch) || transCat.includes(safeSearch);
   });
 
   const categories = Array.from(new Set(filteredPredefined.map((t) => t.category)));
-    if (!safeSearch) return true;
-    const nameMatch = t.name.toLowerCase().includes(safeSearch);
-    const catMatch = t.category.toLowerCase().includes(safeSearch);
-    const transName = (templateNameTranslations[t.name] || t.name).toLowerCase();
-    const transCat = (categoryTranslations[t.category] || t.category).toLowerCase();
-    const tagMatch = t.tags?.some(tag => tag.toLowerCase().includes(safeSearch));
-    return nameMatch || catMatch || transName.includes(safeSearch) || transCat.includes(safeSearch) || tagMatch;
-  });
 
   const filteredCustom = customTemplates.filter(t => {
     if (!safeSearch) return true;
     const nameMatch = t.name.toLowerCase().includes(safeSearch);
-    const subjMatch = t.subject?.toLowerCase().includes(safeSearch) || false;
+    const subjMatch = (t.data?.subject || t.data?.details || '').toLowerCase().includes(safeSearch);
     return nameMatch || subjMatch;
   });
 
-  const filteredFavorites = favoritePredefined
-    .map(id => filteredPredefined.find(t => t.id === id))
-    .filter((t): t is typeof predefinedTemplates[0] => t !== undefined);
+  const filteredFavorites = favoritePredefined.filter(id => {
+    const template = predefinedTemplates.find(t => t.id === id);
+    if (!template) return false;
+    if (!safeSearch) return true;
+    const nameMatch = template.name.toLowerCase().includes(safeSearch);
+    const catMatch = template.category.toLowerCase().includes(safeSearch);
+    const transName = (templateNameTranslations[template.name] || template.name).toLowerCase();
+    const transCat = (categoryTranslations[template.category] || template.category).toLowerCase();
+    return nameMatch || catMatch || transName.includes(safeSearch) || transCat.includes(safeSearch);
+  });
 
   return (
     <AnimatePresence>
@@ -110,9 +109,8 @@ export const LibraryModal: React.FC = () => {
               </button>
             </div>
 
-            {/* Tabs & Search */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-gray-100 dark:border-slate-800 bg-gray-50 dark:bg-slate-900 px-6 sm:px-8 shrink-0 gap-4" role="tablist" aria-label="تبويبات القوالب">
-              <div className="flex gap-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-gray-100 dark:border-slate-800 px-6 sm:px-8 bg-gray-50/50 dark:bg-slate-900/50 gap-4 sm:gap-0">
+              <div className="flex items-center gap-6">
                 <button
                   className={`py-4 font-bold text-sm border-b-2 transition-colors cursor-pointer ${libraryTab === 'system' ? 'border-brown-600 text-brown-700 dark:text-brown-400 dark:border-brown-500' : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
                   onClick={() => setLibraryTab('system')}
@@ -214,7 +212,7 @@ export const LibraryModal: React.FC = () => {
                         {t(category, categoryTranslations[category] || category)}
                       </h4>
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {filteredPredefined.filter((t) => t.category === category).map((template) => (
+                        {predefinedTemplates.filter((t) => t.category === category).map((template) => (
                           <div
                             key={template.id}
                             role="button"
@@ -238,55 +236,17 @@ export const LibraryModal: React.FC = () => {
                               <Star className={`w-4 h-4 ${favoritePredefined.includes(template.id) ? 'fill-yellow-400' : ''}`} />
                             </button>
                             <div className={`p-2.5 rounded-xl shrink-0 transition-all ${activeTemplate === template.id ? 'bg-brown-50 dark:bg-brown-950/40 text-brown-600 dark:text-brown-400' : 'bg-gray-50 dark:bg-slate-800 text-gray-500 dark:text-gray-400 group-hover:bg-brown-50 dark:group-hover:bg-brown-950/40 group-hover:text-brown-500 dark:group-hover:text-brown-400'}`}>
-                  {categories.length === 0 && filteredFavorites.length === 0 ? (
-                    <div className="text-center text-gray-400 mt-20">
-                      <Search className="w-12 h-12 mx-auto mb-3 opacity-20" />
-                      <p className="text-sm font-bold text-gray-600 dark:text-gray-400">{t('لا توجد نتائج مطابقة لبحثك', 'No results match your search')}</p>
-                    </div>
-                  ) : (
-                    categories.map((category) => (
-                      <div key={category}>
-                        <h4 className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2 justify-start">
-                          <span className="w-1.5 h-4 bg-brown-300 rounded-full inline-block"></span>
-                          {t(category, categoryTranslations[category] || category)}
-                        </h4>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                          {filteredPredefined.filter((t) => t.category === category).map((template) => (
-                            <div
-                              key={template.id}
-                              role="button"
-                              tabIndex={0}
-                              onKeyDown={(e) => handleKeyDown(e, () => applyTemplate(template.id, false))}
-                              className={`bg-white dark:bg-slate-800/40 p-4 rounded-xl border transition-all cursor-pointer group flex items-start gap-3.5 relative ${
-                                activeTemplate === template.id
-                                  ? 'border-brown-500 dark:border-brown-500 shadow-md ring-1 ring-brown-500/20'
-                                  : 'border-gray-200 dark:border-slate-800 hover:border-brown-300 dark:hover:border-brown-500/40 hover:shadow-sm template-card-btn'
-                              }`}
-                              onClick={() => applyTemplate(template.id, false)}
-                              aria-label={t(`تطبيق قالب ${template.name}`, `Apply template ${t(template.name, templateNameTranslations[template.name] || template.name)}`)}
-                            >
-                              <button
-                                type="button"
-                                onClick={(e) => toggleFavoritePredefined(template.id, e)}
-                                className={`absolute top-2 left-2 p-1 transition-colors premium-glass-white-80 dark:bg-slate-800/80 rounded-full cursor-pointer z-10 ${favoritePredefined.includes(template.id) ? 'text-yellow-400 hover:text-yellow-500' : 'text-gray-300 dark:text-gray-600 hover:text-yellow-400 dark:hover:text-yellow-550'}`}
-                                title={favoritePredefined.includes(template.id) ? t('إزالة من المفضلة', 'Remove from Favorites') : t('إضافة للمفضلة', 'Add to Favorites')}
-                                aria-label={favoritePredefined.includes(template.id) ? t('إزالة من المفضلة', 'Remove from Favorites') : t('إضافة للمفضلة', 'Add to Favorites')}
-                              >
-                                <Star className={`w-4 h-4 ${favoritePredefined.includes(template.id) ? 'fill-yellow-400' : ''}`} />
-                              </button>
-                              <div className={`p-2.5 rounded-xl shrink-0 transition-all ${activeTemplate === template.id ? 'bg-brown-50 dark:bg-brown-950/40 text-brown-600 dark:text-brown-400' : 'bg-gray-50 dark:bg-slate-800 text-gray-500 dark:text-gray-400 group-hover:bg-brown-50 dark:group-hover:bg-brown-950/40 group-hover:text-brown-500 dark:group-hover:text-brown-400'}`}>
-                                {template.icon}
-                              </div>
-                              <div className={`flex-1 min-w-0 ${appLang === 'ar' ? 'text-right' : 'text-left'}`}>
-                                <h5 className="font-bold text-sm text-gray-800 dark:text-gray-200 group-hover:text-brown-600 dark:group-hover:text-brown-400 transition-colors mb-1 ml-6">{t(template.name, templateNameTranslations[template.name] || template.name)}</h5>
-                                <p className="text-xs text-gray-400 dark:text-gray-500 line-clamp-2 leading-relaxed">{template.data.subject || template.data.details}</p>
-                              </div>
+                              {template.icon}
                             </div>
-                          ))}
-                        </div>
+                            <div className={`flex-1 min-w-0 ${appLang === 'ar' ? 'text-right' : 'text-left'}`}>
+                              <h5 className="font-bold text-sm text-gray-800 dark:text-gray-200 group-hover:text-brown-600 dark:group-hover:text-brown-400 transition-colors mb-1 ml-6">{t(template.name, templateNameTranslations[template.name] || template.name)}</h5>
+                              <p className="text-xs text-gray-400 dark:text-gray-500 line-clamp-2 leading-relaxed">{template.data.subject || template.data.details}</p>
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                    ))
-                  )}
+                    </div>
+                  ))}
                 </div>
               ) : (
                 <div>
@@ -294,16 +254,11 @@ export const LibraryModal: React.FC = () => {
                     <div className="text-center text-gray-400 mt-20">
                       <Bookmark className="w-12 h-12 mx-auto mb-3 opacity-20" />
                       <p className="text-sm font-bold text-gray-600 dark:text-gray-400">{t('لا توجد قوالب مخصصة', 'No custom templates')}</p>
-                      <p className="text-xs text-gray-500 mt-2">{t('قم بإنشاء خطاب جديد وحفظه كقالب', 'Create a new letter and save it as a template')}</p>
-                    </div>
-                  ) : filteredCustom.length === 0 ? (
-                    <div className="text-center text-gray-400 mt-20">
-                      <Search className="w-12 h-12 mx-auto mb-3 opacity-20" />
-                      <p className="text-sm font-bold text-gray-600 dark:text-gray-400">{t('لا توجد نتائج مطابقة لبحثك', 'No results match your search')}</p>
+                      <p className="text-xs mt-2 text-gray-450 dark:text-gray-500">{t('يمكنك حفظ أي خطاب تقوم بإعداده كقالب مخصص لاستخدامه لاحقاً.', 'You can save any letter you prepare as a custom template to use it later.')}</p>
                     </div>
                   ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {filteredCustom.map((template) => (
+                      {customTemplates.map((template) => (
                         <div
                           key={template.id}
                           role="button"
