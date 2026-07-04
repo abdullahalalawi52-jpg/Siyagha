@@ -176,11 +176,11 @@ export const BasicInfoTab: React.FC = () => {
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1.5">
-          <label htmlFor="letter-date" className="text-xs font-semibold text-gray-500 uppercase tracking-wider block">{t('تاريخ الخطاب', 'Letter Date')}</label>
+          <label htmlFor="letter-date" className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider block">{t('تاريخ الخطاب', 'Letter Date')}</label>
           <input
             id="letter-date"
             type="date"
-            className="w-full rounded-xl border-gray-200 border px-3 py-2.5 text-sm focus:ring-2 focus:ring-brown-500 focus:border-brown-500 outline-none transition-all bg-white font-medium text-gray-700"
+            className="w-full rounded-xl border-gray-200 dark:border-slate-700 border px-3 py-2.5 text-sm focus:ring-2 focus:ring-brown-500 dark:focus:ring-brown-400 focus:border-brown-500 dark:focus:border-brown-400 outline-none transition-all bg-white dark:bg-slate-800 font-medium text-gray-700 dark:text-gray-100"
             value={form.date}
             onChange={(e) => setForm({ ...form, date: e.target.value })}
           />
@@ -202,14 +202,14 @@ export const BasicInfoTab: React.FC = () => {
       <hr className="border-gray-100 my-4 border-dashed" />
 
       <div className="space-y-1.5">
-        <label htmlFor="sender-name" className="text-sm font-bold text-gray-800 flex items-center gap-2">
+        <label htmlFor="sender-name" className="text-sm font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2">
           {t('اسم المرسل', 'Sender Name')} <span className="text-red-500">*</span>
         </label>
         <input
           id="sender-name"
           type="text"
           placeholder={t('اسمك أو اسم المؤسسة', 'Your name or organization')}
-          className="w-full rounded-xl border-gray-200 border px-3 py-2.5 text-sm focus:ring-2 focus:ring-brown-500 focus:border-brown-500 outline-none transition-all"
+          className="w-full rounded-xl border-gray-200 dark:border-slate-700 border px-3 py-2.5 text-sm focus:ring-2 focus:ring-brown-500 dark:focus:ring-brown-400 focus:border-brown-500 dark:focus:border-brown-400 outline-none transition-all bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
           value={form.senderName}
           onChange={(e) => setForm({ ...form, senderName: e.target.value })}
         />
@@ -217,28 +217,28 @@ export const BasicInfoTab: React.FC = () => {
 
       <div className="grid grid-cols-2 gap-4 mt-4">
         <div className="space-y-1.5">
-          <label htmlFor="sender-phone" className="text-sm font-bold text-gray-800 flex items-center gap-2">
+          <label htmlFor="sender-phone" className="text-sm font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2">
             {t('رقم الهاتف', 'Phone Number')}
           </label>
           <input
             id="sender-phone"
             type="tel"
             placeholder={t('مثال: 0501234567', 'e.g., 0501234567')}
-            className="w-full rounded-xl border-gray-200 border px-3 py-2.5 text-sm focus:ring-2 focus:ring-brown-500 focus:border-brown-500 outline-none transition-all text-start"
+            className="w-full rounded-xl border-gray-200 dark:border-slate-700 border px-3 py-2.5 text-sm focus:ring-2 focus:ring-brown-500 dark:focus:ring-brown-400 focus:border-brown-500 dark:focus:border-brown-400 outline-none transition-all text-start bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
             dir="ltr"
             value={form.senderPhone || ''}
             onChange={(e) => setForm({ ...form, senderPhone: e.target.value })}
           />
         </div>
         <div className="space-y-1.5">
-          <label htmlFor="sender-email" className="text-sm font-bold text-gray-800 flex items-center gap-2">
+          <label htmlFor="sender-email" className="text-sm font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2">
             {t('البريد الإلكتروني', 'Email Address')}
           </label>
           <input
             id="sender-email"
             type="email"
             placeholder="name@example.com"
-            className="w-full rounded-xl border-gray-200 border px-3 py-2.5 text-sm focus:ring-2 focus:ring-brown-500 focus:border-brown-500 outline-none transition-all text-start"
+            className="w-full rounded-xl border-gray-200 dark:border-slate-700 border px-3 py-2.5 text-sm focus:ring-2 focus:ring-brown-500 dark:focus:ring-brown-400 focus:border-brown-500 dark:focus:border-brown-400 outline-none transition-all text-start bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
             dir="ltr"
             value={form.senderEmail || ''}
             onChange={(e) => setForm({ ...form, senderEmail: e.target.value })}
@@ -248,28 +248,28 @@ export const BasicInfoTab: React.FC = () => {
 
       <div className="grid grid-cols-2 gap-4 mt-4">
         <div className="space-y-1.5">
-          <label htmlFor="recipient-name" className="text-sm font-bold text-gray-800 flex items-center gap-2">
+          <label htmlFor="recipient-name" className="text-sm font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2">
             {t('اسم الموجه إليه', 'Recipient Name')} <span className="text-red-500">*</span>
           </label>
           <input
             id="recipient-name"
             type="text"
             placeholder={t('المؤسسة أو الشخص المتلقي', 'Recipient person or organization')}
-            className="w-full rounded-xl border-gray-200 border px-3 py-2.5 text-sm focus:ring-2 focus:ring-brown-500 focus:border-brown-500 outline-none transition-all"
+            className="w-full rounded-xl border-gray-200 dark:border-slate-700 border px-3 py-2.5 text-sm focus:ring-2 focus:ring-brown-500 dark:focus:ring-brown-400 focus:border-brown-500 dark:focus:border-brown-400 outline-none transition-all bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
             value={form.recipientName}
             onChange={(e) => setForm({ ...form, recipientName: e.target.value })}
           />
         </div>
 
         <div className="space-y-1.5">
-          <label htmlFor="recipient-role" className="text-sm font-bold text-gray-800 flex items-center gap-2">
+          <label htmlFor="recipient-role" className="text-sm font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2">
             {t('صفة الموجه إليه', 'Recipient Role/Title')}
           </label>
           <input
             id="recipient-role"
             type="text"
             placeholder={t('مدير الموارد البشرية', 'e.g., HR Manager')}
-            className="w-full rounded-xl border-gray-200 border px-3 py-2.5 text-sm focus:ring-2 focus:ring-brown-500 focus:border-brown-500 outline-none transition-all"
+            className="w-full rounded-xl border-gray-200 dark:border-slate-700 border px-3 py-2.5 text-sm focus:ring-2 focus:ring-brown-500 dark:focus:ring-brown-400 focus:border-brown-500 dark:focus:border-brown-400 outline-none transition-all bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
             value={form.recipientRole}
             onChange={(e) => setForm({ ...form, recipientRole: e.target.value })}
           />
@@ -281,14 +281,14 @@ export const BasicInfoTab: React.FC = () => {
           <hr className="border-gray-100 my-4 border-dashed" />
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
-              <label htmlFor="letter-subject" className="text-sm font-bold text-gray-800 flex items-center gap-2">
+              <label htmlFor="letter-subject" className="text-sm font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2">
                 {t('موضوع الخطاب / عنوانه', 'Letter Subject / Title')} <span className="text-red-500">*</span>
               </label>
               <button
                 type="button"
                 onClick={handleSuggestTitle}
                 disabled={isSuggestingTitle}
-                className="text-xs text-brown-700 hover:text-brown-800 bg-brown-50 hover:bg-brown-100 flex items-center gap-1.5 px-2 py-1 rounded transition-colors disabled:opacity-50 cursor-pointer"
+                className="text-xs text-brown-700 dark:text-brown-400 hover:text-brown-800 dark:hover:text-brown-300 bg-brown-50 dark:bg-brown-900/40 hover:bg-brown-100 dark:hover:bg-brown-900/60 flex items-center gap-1.5 px-2 py-1 rounded transition-colors disabled:opacity-50 cursor-pointer"
                 title={t('الذكاء الاصطناعي سيقوم باقتراح عنوان مناسب بناءً على التفاصيل', 'AI will suggest a suitable title based on details')}
               >
                 {isSuggestingTitle ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
@@ -299,7 +299,7 @@ export const BasicInfoTab: React.FC = () => {
               id="letter-subject"
               type="text"
               placeholder={t('اتركه فارغاً، أو ادخل مثال: طلب الموافقة على رصيد إجازة', 'Leave blank, or enter e.g., Request for annual leave approval')}
-              className="w-full rounded-xl border-gray-200 border px-3 py-2.5 text-sm focus:ring-2 focus:ring-brown-500 focus:border-brown-500 outline-none transition-all"
+              className="w-full rounded-xl border-gray-200 dark:border-slate-700 border px-3 py-2.5 text-sm focus:ring-2 focus:ring-brown-500 dark:focus:ring-brown-400 focus:border-brown-500 dark:focus:border-brown-400 outline-none transition-all bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
               value={form.subject}
               onChange={(e) => setForm({ ...form, subject: e.target.value })}
             />
@@ -310,7 +310,7 @@ export const BasicInfoTab: React.FC = () => {
       <hr className="border-gray-100 my-4 border-dashed" />
 
       <div className="space-y-2 mt-4">
-        <span id="tone-label" className="text-xs font-semibold text-gray-500 uppercase tracking-wider block">{t('نبرة الخطاب (بنقرة زر)', 'Letter Tone')}</span>
+        <span id="tone-label" className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider block">{t('نبرة الخطاب (بنقرة زر)', 'Letter Tone')}</span>
         <div role="group" aria-labelledby="tone-label" className="flex flex-wrap gap-2 justify-start">
           {toneOptions.map((toneVal) => (
             <button
@@ -320,7 +320,7 @@ export const BasicInfoTab: React.FC = () => {
               className={`px-3 py-1.5 rounded-full text-xs font-bold transition-colors cursor-pointer ${
                 form.tone === toneVal
                   ? 'bg-brown-600 text-white shadow-sm tone-pill-active'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900 border border-gray-200/50'
+                  : 'bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 border border-gray-200/50 dark:border-slate-600/50'
               }`}
             >
               {t(toneVal, toneTranslations[toneVal] || toneVal)}
@@ -370,7 +370,7 @@ export const BasicInfoTab: React.FC = () => {
               id="incoming-letter-textarea"
               rows={4}
               placeholder={t('قم بلصق الخطاب الوارد الذي تريد الرد عليه، أو استخرجه من صورة بالـ OCR بالضغط على الزر بالأعلى...', 'Paste the incoming letter you wish to reply to, or extract it from an image using OCR...')}
-              className="w-full rounded-xl border border-gray-250 p-2.5 text-xs focus:ring-2 focus:ring-brown-500 outline-none resize-none leading-relaxed bg-white text-gray-800"
+              className="w-full rounded-xl border border-gray-250 dark:border-slate-700 p-2.5 text-xs focus:ring-2 focus:ring-brown-500 dark:focus:ring-brown-400 outline-none resize-none leading-relaxed bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100"
               value={form.replyToText}
               onChange={(e) => setForm({ ...form, replyToText: e.target.value })}
             />
@@ -489,7 +489,7 @@ export const BasicInfoTab: React.FC = () => {
 
       <div className="space-y-1.5 mt-4">
         <div className="flex items-center justify-between">
-          <label htmlFor="details-textarea" className="text-sm font-bold text-gray-800">
+          <label htmlFor="details-textarea" className="text-sm font-bold text-gray-800 dark:text-gray-200">
             {form.isReplyMode 
               ? t('ملاحظات وتفاصيل إضافية للرد', 'Additional Details / Notes for Reply') 
               : t('الصياغة الذكية: تفاصيل الخطاب / المبررات', 'Smart Drafting: Letter Details / Reasons')}
@@ -523,8 +523,8 @@ export const BasicInfoTab: React.FC = () => {
           id="details-textarea"
           rows={4}
           placeholder={t('اكتب الغرض، وبعض نقاط القوة أو المبررات ليقوم الذكاء الاصطناعي بكتابة وتنسيق الخطاب بالكامل لك...', 'Write the purpose, key points, or reasons, and the AI will draft and format the entire letter for you...')}
-          className={`w-full rounded-xl border px-3 py-2.5 text-sm focus:ring-2 focus:ring-brown-500 focus:border-brown-500 outline-none transition-all resize-none ${
-            isListening ? 'border-red-300 bg-red-50/30' : 'border-gray-200'
+          className={`w-full rounded-xl border px-3 py-2.5 text-sm focus:ring-2 focus:ring-brown-500 dark:focus:ring-brown-400 focus:border-brown-500 dark:focus:border-brown-400 outline-none transition-all resize-none bg-white dark:bg-slate-800 text-gray-900 dark:text-white ${
+            isListening ? 'border-red-300 bg-red-50/30' : 'border-gray-200 dark:border-slate-700'
           }`}
           value={form.details}
           onChange={(e) => setForm({ ...form, details: e.target.value })}
@@ -585,7 +585,7 @@ export const BasicInfoTab: React.FC = () => {
 
       <div className="mt-6 space-y-4">
         {/* Auto generate toggle */}
-        <div className="flex items-center justify-between text-xs text-gray-550 bg-gray-50/70 p-3 rounded-xl border border-gray-100">
+        <div className="flex items-center justify-between text-xs text-gray-550 dark:text-gray-400 bg-gray-50/70 dark:bg-slate-800 p-3 rounded-xl border border-gray-100 dark:border-slate-700">
           <label htmlFor="auto-generate-checkbox" className="font-semibold cursor-pointer">
             {t('توليد الخطاب تلقائياً أثناء الكتابة', 'Auto-generate letter while typing')}
           </label>
@@ -621,7 +621,7 @@ export const BasicInfoTab: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsSavingTemplate(true)}
-            className="text-xs font-bold text-gray-600 hover:text-brown-600 flex items-center gap-1.5 transition-colors border border-gray-200 hover:border-brown-200 px-3 py-1.5 rounded-lg bg-white shadow-sm cursor-pointer"
+            className="text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-brown-600 dark:hover:text-brown-400 flex items-center gap-1.5 transition-colors border border-gray-200 dark:border-slate-700 hover:border-brown-200 dark:hover:border-slate-500 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 shadow-sm cursor-pointer"
           >
             <Bookmark className="w-4 h-4" />
             {t('حفظ كقالب مخصص', 'Save as Custom Template')}
