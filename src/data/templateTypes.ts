@@ -64,6 +64,15 @@ export const letterTypes = {
       { name: 'طلب تأجيل دراسي', icon: Calendar },
       { name: 'أخرى', icon: FileText }
     ]
+  },
+  'خيري وإنساني': {
+    icon: Heart,
+    subTypes: [
+      { name: 'خطاب طلب مساعدة (علاج، مالية، دراسية)', icon: FileText },
+      { name: 'خطاب استرحام', icon: User },
+      { name: 'خطاب شكر لمتبرع أو جهة خيرية', icon: Heart },
+      { name: 'أخرى', icon: FileText }
+    ]
   }
 };
 
@@ -75,10 +84,11 @@ export const getLetterTypeData = (type: string) => {
   if (type === 'قانوني') return letterTypes['قانوني'];
   if (type === 'طبي') return letterTypes['طبي'];
   if (type === 'أكاديمي/تعليمي') return letterTypes['أكاديمي/تعليمي'];
+  if (type === 'خيري وإنساني') return letterTypes['خيري وإنساني'];
   return letterTypes['إداري/رسمي'];
 };
 
-export const toneOptions = ['رسمي', 'مهني جداً', 'ودود', 'حماسي', 'إقناعي', 'حازم'];
+export const toneOptions = ['رسمي', 'مهني جداً', 'ودود', 'حماسي', 'إقناعي', 'حازم', 'إنساني / تعاطفي'];
 export const formalityOptions = ['رسمي جداً', 'رسمي', 'شبه رسمي', 'ودي (غير رسمي)'];
 
 export const fontFamilies = [

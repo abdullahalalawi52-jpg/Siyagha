@@ -6,6 +6,7 @@ export const typeTranslations: Record<string, string> = {
   'قانوني': 'Legal',
   'طبي': 'Medical',
   'أكاديمي/تعليمي': 'Academic/Educational',
+  'خيري وإنساني': 'Charitable & Humanitarian',
 };
 
 export const subTypeTranslations: Record<string, string> = {
@@ -32,6 +33,9 @@ export const subTypeTranslations: Record<string, string> = {
   'خطاب طلب قبول جامعي': 'University Admission Request',
   'خطاب توصية أكاديمية': 'Academic Recommendation Letter',
   'طلب تأجيل دراسي': 'Academic Deferral Request',
+  'خطاب طلب مساعدة (علاج، مالية، دراسية)': 'Assistance Request (Medical, Financial, Study)',
+  'خطاب استرحام': 'Appeal Letter',
+  'خطاب شكر لمتبرع أو جهة خيرية': 'Donor Thank You Letter',
   'أخرى': 'Other',
 };
 
@@ -47,6 +51,7 @@ export const toneTranslations: Record<string, string> = {
   'حازمة': 'Assertive',
   'ودية': 'Friendly',
   'إقناعية': 'Persuasive',
+  'إنساني / تعاطفي': 'Humanitarian / Empathetic',
 };
 
 export const formalityTranslations: Record<string, string> = {
@@ -67,6 +72,7 @@ export const categoryTranslations: Record<string, string> = {
   'القطاع القانوني': 'Legal Sector',
   'القطاع الطبي': 'Medical Sector',
   'القطاع الأكاديمي': 'Academic Sector',
+  'القطاع الخيري والإنساني': 'Charitable & Humanitarian Sector',
 };
 
 export const templateNameTranslations: Record<string, string> = {
