@@ -50,6 +50,7 @@ export const Header: React.FC = () => {
             </div>
             <h1 className="text-sm sm:text-base font-bold tracking-tight text-brown-950 dark:text-white leading-none">
               {t('صياغة', 'Siyagha')}
+              <span className="sr-only"> - كتابة خطاب رسمي، نموذج خطاب شكوى، خطاب إداري جاهز، مولد خطابات بالذكاء الاصطناعي بانجليزي و عربي</span>
             </h1>
           </div>
 
