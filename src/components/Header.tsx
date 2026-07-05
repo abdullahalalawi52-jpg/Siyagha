@@ -50,7 +50,7 @@ export const Header: React.FC = () => {
             </div>
             <h1 className="text-sm sm:text-base font-bold tracking-tight text-brown-950 dark:text-white leading-none">
               {t('صياغة', 'Siyagha')}
-              <span className="sr-only"> - مجاني بالكامل 100%، كتابة خطاب رسمي، نموذج خطاب شكوى، خطاب إداري جاهز، مولد خطابات بالذكاء الاصطناعي بانجليزي و عربي</span>
+              <span className="sr-only"> - مجاني بالكامل 100%، كتابة خطاب رسمي، نموذج خطاب شكوى، خطاب إداري جاهز، مولد خطابات بالذكاء الاصطناعي بانجليزي و عربي - 100% Free AI Letter Generator, Formal Letter Maker, Complaint Letter Template</span>
             </h1>
           </div>
 
