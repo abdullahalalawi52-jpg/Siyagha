@@ -134,7 +134,7 @@ export const CareerProfileModal: React.FC = () => {
                     type="text"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    placeholder="+966 50 000 0000"
+                    placeholder="+968 9000 0000"
                     className="w-full px-3.5 py-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brown-500/20 focus:border-brown-500 bg-white dark:bg-slate-800 dark:border-slate-700 dark:text-white transition-all text-sm"
                   />
                 </div>
