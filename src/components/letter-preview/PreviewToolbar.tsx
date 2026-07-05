@@ -309,7 +309,7 @@ export const PreviewToolbar: React.FC = () => {
 
       {generatedLetter && !loading && (
         <div className="flex items-center gap-4 mb-6 flex-wrap text-start">
-          <div className="flex items-center gap-2 relative z-20">
+          <div className="flex items-center gap-2 relative z-30">
             <label className="text-xs font-bold text-gray-500">{t('الخط:', 'Font:')}</label>
             <div className="w-48">
               <CustomSelect

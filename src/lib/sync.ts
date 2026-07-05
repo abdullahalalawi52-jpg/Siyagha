@@ -6,9 +6,11 @@ import { UserCloudData } from '../types';
 export const syncUserDataToCloud = async (user: User, localData: Partial<UserCloudData>) => {
   if (!db || !user) return;
   try {
+    // Deeply remove any undefined values which Firestore rejects
+    const cleanData = JSON.parse(JSON.stringify(localData));
     const userRef = doc(db, 'users', user.uid);
     await setDoc(userRef, {
-      data: localData,
+      data: cleanData,
       updatedAt: Date.now()
     }, { merge: true });
   } catch (error) {
