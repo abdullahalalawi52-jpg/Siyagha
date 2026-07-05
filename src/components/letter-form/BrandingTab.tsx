@@ -65,7 +65,7 @@ export const BrandingTab: React.FC = () => {
             <textarea
               id="company-details-textarea"
               rows={3}
-              placeholder={t('مثال:&#10;الرياض، المملكة العربية السعودية&#10;هاتف: 920000000&#10;info@company.com', 'e.g.,&#10;London, UK&#10;Phone: +44 20 7946 0958&#10;info@company.com')}
+              placeholder={t('مثال:&#10;مسقط، سلطنة عمان&#10;هاتف: 920000000&#10;info@company.com', 'e.g.,&#10;London, UK&#10;Phone: +44 20 7946 0958&#10;info@company.com')}
               value={branding.companyDetails}
               onChange={(e) => setBranding((prev) => ({ ...prev, companyDetails: e.target.value }))}
               className="w-full rounded-xl border-gray-200 border px-3 py-2 text-sm focus:ring-2 focus:ring-brown-500 outline-none resize-none"
