@@ -292,15 +292,15 @@ export const useLetterApis = ({
 
           const data = await handleResponse(res, 'فشل استخراج النصوص');
 
-          if (data.text) {
+          if (data.extractedText) {
             if (ui.ocrTargetField === 'replyToText') {
-              setForm((prev) => ({ ...prev, replyToText: data.text }));
+              setForm((prev) => ({ ...prev, replyToText: data.extractedText }));
             } else if (ui.ocrTargetField === 'jobDescription') {
-              setForm((prev) => ({ ...prev, jobDescription: data.text }));
+              setForm((prev) => ({ ...prev, jobDescription: data.extractedText }));
             } else if (ui.ocrTargetField === 'resumeInfo') {
-              setForm((prev) => ({ ...prev, resumeInfo: data.text }));
+              setForm((prev) => ({ ...prev, resumeInfo: data.extractedText }));
             } else {
-              setForm((prev) => ({ ...prev, details: data.text }));
+              setForm((prev) => ({ ...prev, details: data.extractedText }));
             }
             setActiveSection('basic');
             ui.setIsOcrOpen(false);
