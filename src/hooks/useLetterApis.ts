@@ -209,7 +209,7 @@ export const useLetterApis = ({
       const response = await fetch(getApiUrl('/api/analyze-ats'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: generatedLetter, jobDescription: form.jobDescription }),
+        body: JSON.stringify({ letterContent: generatedLetter, jobDescription: form.jobDescription, jobTitle: form.title || form.recipientName, lang: ui.appLang }),
       });
 
       const data = await handleResponse(response, 'فشل تحليل مطابقة ATS');
