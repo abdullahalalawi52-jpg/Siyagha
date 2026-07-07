@@ -163,9 +163,18 @@ export const Header: React.FC = () => {
           {/* Auth Button */}
           {user ? (
             <div className="flex items-center gap-1">
-              <span className="text-[10px] font-bold text-brown-700 dark:text-brown-300 hidden md:block truncate max-w-[150px] px-2 py-1 bg-brown-500/5 dark:bg-teal-950/20 rounded-md">
-                {user.displayName || user.email}
-              </span>
+              <div className="hidden md:flex items-center gap-1.5 px-1.5 py-1 bg-brown-500/5 dark:bg-teal-950/20 rounded-lg">
+                {user.photoURL ? (
+                  <img src={user.photoURL} alt={user.displayName || 'User'} className="w-5 h-5 rounded-full object-cover border border-brown-200/50 dark:border-teal-800/50" />
+                ) : (
+                  <div className="w-5 h-5 rounded-full bg-brown-200/50 dark:bg-teal-800/50 flex items-center justify-center border border-brown-300/30 dark:border-teal-700/30">
+                    <User className="w-3 h-3 text-brown-600 dark:text-teal-300" />
+                  </div>
+                )}
+                <span className="text-[10px] font-bold text-brown-700 dark:text-brown-300 truncate max-w-[130px] pr-1">
+                  {user.displayName || user.email}
+                </span>
+              </div>
               <button
                 onClick={signOut}
                 className="h-7 sm:h-8 px-2 sm:px-2.5 text-[10px] sm:text-xs font-bold rounded-lg text-red-600 dark:text-red-400 hover:bg-red-500/10 dark:hover:bg-red-500/20 transition-all cursor-pointer flex items-center gap-1"
