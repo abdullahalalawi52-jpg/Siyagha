@@ -153,11 +153,11 @@ export const useLetterApis = ({
       const response = await fetch(getApiUrl('/api/polish-letter'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: generatedLetter, language: form.language }),
+        body: JSON.stringify({ letterContent: generatedLetter, targetTone: form.tone, lang: form.language }),
       });
 
       const data = await handleResponse(response, 'فشل تحسين الصياغة');
-      updateLetterContent(data.letter);
+      updateLetterContent(data.polishedText);
       ui.addToast('تم تحسين صياغة الخطاب بنجاح!', 'success');
     } catch (err: any) {
       ui.addToast(err.message || 'حدث خطأ أثناء تحسين الصياغة', 'error');
@@ -179,7 +179,7 @@ export const useLetterApis = ({
       const response = await fetch(getApiUrl('/api/analyze-tone'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: generatedLetter, language: form.language }),
+        body: JSON.stringify({ letterContent: generatedLetter, lang: form.language }),
       });
 
       const data = await handleResponse(response, 'فشل تحليل النبرة');
@@ -380,13 +380,13 @@ export const useLetterApis = ({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          text: generatedLetter,
-          language: form.language,
+          letterContent: generatedLetter,
+          lang: form.language,
         }),
       });
 
       const data = await handleResponse(response, 'حدث خطأ أثناء التدقيق اللغوي');
-      updateLetterContent(data.letter);
+      updateLetterContent(data.proofreadText);
       ui.addToast('تم الانتهاء من التدقيق اللغوي وتحديث النص!', 'success');
     } catch (err) {
       console.error(err);
