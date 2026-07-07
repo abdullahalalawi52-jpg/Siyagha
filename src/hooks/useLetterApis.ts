@@ -258,9 +258,14 @@ export const useLetterApis = ({
     if (!file) return;
 
     // Security: Validate file type
-    const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    const validTypes = [
+      'image/jpeg', 'image/png', 'image/webp',
+      'application/pdf',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'application/msword'
+    ];
     if (!validTypes.includes(file.type)) {
-      setOcrError('صيغة الملف غير مدعومة. يرجى رفع صورة بصيغة JPG أو PNG أو WEBP.');
+      setOcrError('صيغة الملف غير مدعومة. يرجى رفع صورة أو ملف PDF أو Word.');
       return;
     }
 

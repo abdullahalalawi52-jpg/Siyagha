@@ -1,4 +1,5 @@
 import express, { Router, Response } from "express";
+import mammoth from "mammoth";
 import { geminiLimiter, checkGeminiKey } from "../middleware.js";
 import { handleApiError } from "../config.js";
 import { safeGenerate } from "../services/gemini.js";
@@ -167,7 +168,12 @@ router.post("/ocr", express.json({ limit: "50mb" }), async (req: GoogleAiRequest
     }
 
     // Security validation
-    const validMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    const validMimeTypes = [
+      'image/jpeg', 'image/png', 'image/webp',
+      'application/pdf',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'application/msword'
+    ];
     if (mimeType && !validMimeTypes.includes(mimeType)) {
       return res.status(400).json({ error: "صيغة الملف غير مدعومة أمنياً" });
     }
@@ -177,9 +183,16 @@ router.post("/ocr", express.json({ limit: "50mb" }), async (req: GoogleAiRequest
       return res.status(400).json({ error: "حجم الصورة يتجاوز الحد الأقصى المسموح به" });
     }
 
-    const ai = req.ai!;
-    const base64Clean = imageBase64.replace(/^data:image\/\w+;base64,/, "").replace(/^data:application\/pdf;base64,/, "");
+    const isWord = mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || mimeType === 'application/msword';
+    const base64Clean = imageBase64.replace(/^data:(.*?);base64,/, "");
 
+    if (isWord) {
+      const buffer = Buffer.from(base64Clean, 'base64');
+      const { value: extractedText } = await mammoth.extractRawText({ buffer });
+      return res.json({ extractedText });
+    }
+
+    const ai = req.ai!;
     const prompt = "Extract all written text from this image/document accurately with exact formatting and sentence structure, without adding commentary.";
 
     const response = await safeGenerate(ai, {

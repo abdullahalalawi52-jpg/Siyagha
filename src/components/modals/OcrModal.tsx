@@ -60,13 +60,13 @@ export const OcrModal: React.FC = () => {
 
               <div className="space-y-4">
                 <p className="text-xs text-gray-500 dark:text-gray-300 leading-relaxed">
-                  {t('قم بتصوير أو رفع صورة لخطاب رسمي ورقي قديم، وسيقوم الذكاء الاصطناعي باستخراج النص بالكامل لتتمكن من التعديل عليه وإعادة استخدامه.', 'Take a photo or upload an image of an old official paper letter, and AI will extract the full text so you can edit and reuse it.')}
+                  {t('قم برفع صورة أو ملف PDF أو Word لخطاب رسمي أو سيرة ذاتية، وسيقوم الذكاء الاصطناعي باستخراج النص بالكامل لتتمكن من استخدامه.', 'Upload an image, PDF, or Word document, and AI will extract the full text so you can reuse it.')}
                 </p>
 
                 <div className="border-2 border-dashed border-gray-200 dark:border-slate-600 hover:border-brown-400 rounded-xl p-8 text-center bg-gray-50/50 dark:bg-slate-800 transition-colors relative cursor-pointer group">
                   <input
                     type="file"
-                    accept="image/jpeg, image/png, image/webp"
+                    accept="image/jpeg, image/png, image/webp, application/pdf, .doc, .docx"
                     onChange={handleOcrUpload}
                     className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
                     disabled={ocrLoading}
@@ -78,9 +78,9 @@ export const OcrModal: React.FC = () => {
                       <Upload className="w-10 h-10 text-gray-400 group-hover:text-brown-500 transition-colors" />
                     )}
                     <span className="text-sm font-bold text-gray-700 dark:text-gray-200">
-                      {ocrLoading ? t('جاري استخراج النصوص...', 'Extracting text...') : t('اختر صورة الخطاب أو اسحبها هنا', 'Choose letter image or drag it here')}
+                      {ocrLoading ? t('جاري استخراج النصوص...', 'Extracting text...') : t('اختر ملفاً أو اسحبه هنا', 'Choose a file or drag it here')}
                     </span>
-                    <span className="text-xs text-gray-400">{t('يدعم صيغ JPG, PNG, WEBP', 'Supports JPG, PNG, WEBP formats')}</span>
+                    <span className="text-xs text-gray-400">{t('يدعم صور JPG, PNG و ملفات PDF, Word', 'Supports JPG, PNG images and PDF, Word files')}</span>
                   </div>
                 </div>
 
