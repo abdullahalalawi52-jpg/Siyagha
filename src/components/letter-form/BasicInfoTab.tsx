@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { Star, Loader2, Sparkles, Mic, MicOff, Camera, Bookmark, Briefcase, Settings } from 'lucide-react';
 import { useApp } from '../../contexts/AppContext';
 import { CustomSelect } from '../CustomSelect';
-import { letterTypes, toneOptions, formalityOptions, getLetterTypeData } from '../../data/templateTypes';
+import { letterTypes, toneOptions, formalityOptions, lengthOptions, getLetterTypeData } from '../../data/templateTypes';
 import { typeTranslations, subTypeTranslations, toneTranslations, formalityTranslations } from '../../data/templateTranslations';
 import { checkSpelling, applySpellingFix, SpellingIssue } from '../../utils/spellingLinter';
 
@@ -331,7 +331,7 @@ export const BasicInfoTab: React.FC = () => {
 
       <hr className="border-gray-100 my-4 border-dashed" />
 
-      <div className="grid grid-cols-1 gap-4 mt-4">
+      <div className="grid grid-cols-2 gap-4 mt-4">
         <div className="space-y-1.5 relative z-10">
           <CustomSelect
             id="formality-select"
@@ -339,6 +339,18 @@ export const BasicInfoTab: React.FC = () => {
             value={form.formality}
             onChange={(val) => setForm({ ...form, formality: val })}
             options={formalityOptions.map((formalityVal) => ({ value: formalityVal, label: t(formalityVal, formalityTranslations[formalityVal] || formalityVal) }))}
+          />
+        </div>
+        <div className="space-y-1.5 relative z-10">
+          <CustomSelect
+            id="length-select"
+            label={t('طول الخطاب', 'Letter Length')}
+            value={form.letterLength || lengthOptions[1]}
+            onChange={(val) => setForm({ ...form, letterLength: val })}
+            options={lengthOptions.map((lenVal) => ({
+              value: lenVal,
+              label: lenVal === 'قصير' ? t('قصير', 'Short') : lenVal === 'طويل' ? t('طويل', 'Long') : t('متوسط', 'Medium')
+            }))}
           />
         </div>
       </div>

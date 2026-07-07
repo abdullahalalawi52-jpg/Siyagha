@@ -45,6 +45,7 @@ export interface LetterFormState {
   details: string;
   tone: string;
   formality: string;
+  letterLength: string;
   language: string;
   date: string;
   brandVoiceProfile: string;

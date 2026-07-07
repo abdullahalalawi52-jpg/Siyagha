@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useRef } from 'r
 import { useAuth } from './AuthContext';
 import { useUI } from './UIContext';
 import { syncUserDataToCloud } from '../lib/sync';
-import { toneOptions, formalityOptions, letterTypes } from '../data/templateTypes';
+import { toneOptions, formalityOptions, lengthOptions, letterTypes } from '../data/templateTypes';
 import { LetterFormState, CustomTemplate } from '../types';
 
 const ObjectKeys = Object.keys(letterTypes);
@@ -30,6 +30,7 @@ export interface FormContextType {
     details: string;
     tone: string;
     formality: string;
+    letterLength: string;
     language: string;
     date: string;
     brandVoiceProfile: string;
@@ -93,6 +94,7 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
     details: '',
     tone: toneOptions[0],
     formality: formalityOptions[1],
+    letterLength: lengthOptions[1],
     language: 'ar',
     date: new Date().toISOString().split('T')[0],
     brandVoiceProfile: '',

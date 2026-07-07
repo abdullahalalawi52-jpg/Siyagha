@@ -90,6 +90,7 @@ export const getLetterTypeData = (type: string) => {
 
 export const toneOptions = ['رسمي', 'مهني جداً', 'ودود', 'حماسي', 'إقناعي', 'حازم', 'إنساني / تعاطفي'];
 export const formalityOptions = ['رسمي جداً', 'رسمي', 'شبه رسمي', 'ودي (غير رسمي)'];
+export const lengthOptions = ['قصير', 'متوسط', 'طويل'];
 
 export const fontFamilies = [
   { value: 'Cairo', label: 'القاهرة (Cairo)', id: 'Cairo', name: 'القاهرة (Cairo)', labelEn: 'Cairo' },

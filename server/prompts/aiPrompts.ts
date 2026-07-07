@@ -6,6 +6,7 @@ export interface GenerateLetterParams {
   type?: string;
   subType?: string;
   tone?: string;
+  letterLength?: string;
   lang?: 'ar' | 'en';
   date?: string;
   brandVoicePrompt?: string;
@@ -70,7 +71,7 @@ export const getAnalyzeStylePrompt = (sampleText: string, isEn?: boolean): strin
 };
 
 export const getGenerateLetterPrompt = (params: GenerateLetterParams): { mainPrompt: string; correctionPrompt: string } => {
-  const { sender, recipient, subject, details, type, subType, tone, lang, date, brandVoicePrompt, careerProfile } = params;
+  const { sender, recipient, subject, details, type, subType, tone, letterLength, lang, date, brandVoicePrompt, careerProfile } = params;
   const isEn = lang === 'en';
 
   let careerContext = "";
@@ -93,6 +94,7 @@ Draft a highly professional official letter with the following criteria:
 - Language: English
 - Letter Category: ${type || 'Formal'} - Subtype: ${subType || 'General'}
 - Tone: ${tone || 'Professional & Courteous'}
+- Letter Length: ${letterLength || 'Medium'}
 - Sender: ${sender || 'N/A'}
 - Recipient: ${recipient || 'N/A'}
 - Date of Letter: ${date || 'Current Date'}
@@ -113,6 +115,7 @@ Formatting Guidelines:
 - اللغة: العربية الفصحى
 - تصنيف الخطاب: ${type || 'إداري/رسمي'} - النوع الفرعي: ${subType || 'عام'}
 - النبرة المطلوبة: ${tone || 'رسمية ومحترفة'}
+- طول الخطاب المطلوب: ${letterLength || 'متوسط'}
 - تاريخ الخطاب: ${date || 'تاريخ اليوم'}
 - جهة/اسم المرسل: ${sender || 'غير محدد'}
 - جهة/اسم المرسل إليه: ${recipient || 'غير محدد'}
