@@ -163,7 +163,7 @@ export const Header: React.FC = () => {
           {/* Auth Button */}
           {user ? (
             <div className="flex items-center gap-1">
-              <div className="hidden md:flex items-center gap-1.5 px-1.5 py-1 bg-brown-500/5 dark:bg-teal-950/20 rounded-lg">
+              <div className="flex items-center gap-1.5 px-1.5 py-1 bg-brown-500/5 dark:bg-teal-950/20 rounded-lg">
                 {user.photoURL ? (
                   <img src={user.photoURL} alt={user.displayName || 'User'} className="w-5 h-5 rounded-full object-cover border border-brown-200/50 dark:border-teal-800/50" />
                 ) : (
@@ -171,7 +171,7 @@ export const Header: React.FC = () => {
                     <User className="w-3 h-3 text-brown-600 dark:text-teal-300" />
                   </div>
                 )}
-                <span className="text-[10px] font-bold text-brown-700 dark:text-brown-300 truncate max-w-[130px] pr-1">
+                <span className="hidden md:block text-[10px] font-bold text-brown-700 dark:text-brown-300 truncate max-w-[130px] pr-1">
                   {user.displayName || user.email}
                 </span>
               </div>
