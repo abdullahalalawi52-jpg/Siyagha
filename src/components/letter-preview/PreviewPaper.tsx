@@ -78,7 +78,7 @@ export const PreviewPaper: React.FC = () => {
           ) : generatedLetter ? (
             <div className="space-y-6 text-start">
               {/* Document Subject Header */}
-              <h2 className="text-center text-xl font-bold text-gray-900" style={{ fontFamily }}>{form.subject}</h2>
+              <h2 className="text-center text-xl font-bold text-gray-900 dark:text-gray-100" style={{ fontFamily }}>{form.subject}</h2>
 
               <motion.textarea
                 id="preview-textarea"
@@ -93,7 +93,7 @@ export const PreviewPaper: React.FC = () => {
                 spellCheck={true}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`w-full min-h-[400px] resize-none bg-transparent outline-none border-2 border-transparent focus:border-brown-100 rounded-lg p-2 -mx-2 transition-all text-gray-800 leading-relaxed font-medium ${form.language === 'en' ? 'text-left' : 'text-right'}`}
+                className={`w-full min-h-[400px] resize-none bg-transparent outline-none border-2 border-transparent focus:border-brown-100 rounded-lg p-2 -mx-2 transition-all text-gray-800 dark:text-gray-100 leading-relaxed font-medium ${form.language === 'en' ? 'text-left' : 'text-right'}`}
                 dir={form.language === 'en' ? 'ltr' : 'rtl'}
                 style={{ fontFamily, fontSize }}
               />
