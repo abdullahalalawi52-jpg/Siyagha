@@ -66,7 +66,7 @@ export const OcrModal: React.FC = () => {
                 <div className="border-2 border-dashed border-gray-200 dark:border-slate-600 hover:border-brown-400 rounded-xl p-8 text-center bg-gray-50/50 dark:bg-slate-800 transition-colors relative cursor-pointer group">
                   <input
                     type="file"
-                    accept="image/*"
+                    accept="image/jpeg, image/png, image/webp"
                     onChange={handleOcrUpload}
                     className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
                     disabled={ocrLoading}

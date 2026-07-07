@@ -166,6 +166,17 @@ router.post("/ocr", express.json({ limit: "50mb" }), async (req: GoogleAiRequest
       return res.status(400).json({ error: "بيانات الصورة/المستند مطلوبة" });
     }
 
+    // Security validation
+    const validMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (mimeType && !validMimeTypes.includes(mimeType)) {
+      return res.status(400).json({ error: "صيغة الملف غير مدعومة أمنياً" });
+    }
+
+    // Rough check on base64 size (around 5MB max -> ~7MB base64 string length)
+    if (imageBase64.length > 7 * 1024 * 1024) {
+      return res.status(400).json({ error: "حجم الصورة يتجاوز الحد الأقصى المسموح به" });
+    }
+
     const ai = req.ai!;
     const base64Clean = imageBase64.replace(/^data:image\/\w+;base64,/, "").replace(/^data:application\/pdf;base64,/, "");
 

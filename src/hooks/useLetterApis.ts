@@ -257,6 +257,20 @@ export const useLetterApis = ({
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Security: Validate file type
+    const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+      setOcrError('صيغة الملف غير مدعومة. يرجى رفع صورة بصيغة JPG أو PNG أو WEBP.');
+      return;
+    }
+
+    // Security: Validate file size (max 5MB)
+    const MAX_SIZE_MB = 5;
+    if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+      setOcrError(`حجم الصورة كبير جداً. الحد الأقصى هو ${MAX_SIZE_MB} ميجابايت.`);
+      return;
+    }
+
     setOcrLoading(true);
     setOcrError('');
 
@@ -273,7 +287,7 @@ export const useLetterApis = ({
           const res = await fetch(getApiUrl('/api/ocr'), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ image: reader.result }),
+            body: JSON.stringify({ imageBase64: reader.result, mimeType: file.type }),
           });
 
           const data = await handleResponse(res, 'فشل استخراج النصوص');
