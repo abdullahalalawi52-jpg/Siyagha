@@ -280,11 +280,23 @@ export const PreviewToolbar: React.FC = () => {
 
                   <button
                     onClick={() => {
-                      const text = encodeURIComponent((form.subject ? form.subject + ':\n\n' : '') + generatedLetter);
+                      const rawText = (form.subject ? form.subject + ':\n\n' : '') + generatedLetter;
+                      let encodedText = encodeURIComponent(rawText);
+                      
+                      // إذا كان النص طويلاً جداً (بسبب الترميز URL للحروف العربية)،
+                      // سيؤدي إلى ظهور صفحة بيضاء (خطأ 414). 
+                      // لذلك ننسخ النص كاملاً للحافظة، ونمرر جزءاً منه فقط للواتساب مع تنبيه للمستخدم.
+                      if (encodedText.length > 4000) {
+                        handleCopy();
+                        const shortText = rawText.substring(0, 150) + '\n...\n\n[تنبيه: نظراً لطول الخطاب، تم نسخه كاملاً للحافظة. يمكنك النقر على مربع النص هنا واختيار "لصق" لإرساله بالكامل]';
+                        encodedText = encodeURIComponent(shortText);
+                      }
+
                       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
                       const url = isMobile 
-                        ? `https://wa.me/?text=${text}` 
-                        : `https://web.whatsapp.com/send?text=${text}`;
+                        ? `whatsapp://send?text=${encodedText}` 
+                        : `https://web.whatsapp.com/send?text=${encodedText}`;
+                        
                       window.open(url, '_blank', 'noopener,noreferrer');
                       setShowShareMenu(false);
                     }}
