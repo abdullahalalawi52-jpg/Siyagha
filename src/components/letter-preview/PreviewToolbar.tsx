@@ -122,7 +122,7 @@ export const PreviewToolbar: React.FC = () => {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
                   transition={{ duration: 0.15 }}
-                  className="absolute z-30 mt-2 w-72 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 p-4 space-y-4 right-0 origin-top-right rtl:right-auto rtl:left-0 rtl:origin-top-left"
+                  className="absolute z-30 mt-2 w-72 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 p-4 space-y-4 right-0 origin-top-right"
                 >
                   {/* Tags Input */}
                   <div className="space-y-2">
@@ -211,7 +211,7 @@ export const PreviewToolbar: React.FC = () => {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
                   transition={{ duration: 0.15 }}
-                  className="absolute z-30 mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 p-1.5 right-0 origin-top-right rtl:right-auto rtl:left-0 rtl:origin-top-left"
+                  className="absolute z-30 mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 p-1.5 right-0 origin-top-right"
                 >
                   <button
                     onClick={() => {
@@ -263,7 +263,7 @@ export const PreviewToolbar: React.FC = () => {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
                   transition={{ duration: 0.15 }}
-                  className="absolute z-30 mt-2 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 p-1.5 right-0 origin-top-right rtl:right-auto rtl:left-0 rtl:origin-top-left"
+                  className="absolute z-30 mt-2 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 p-1.5 right-0 origin-top-right"
                 >
                   <button
                     onClick={() => {
