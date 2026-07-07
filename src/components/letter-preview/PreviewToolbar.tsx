@@ -104,7 +104,7 @@ export const PreviewToolbar: React.FC = () => {
           </button>
 
           {/* Save Menu */}
-          <div className="relative" ref={saveMenuRef}>
+          <div className="relative z-40" ref={saveMenuRef}>
             <button
               onClick={() => setShowSaveMenu(!showSaveMenu)}
               className="text-xs font-semibold flex items-center gap-1.5 px-3 py-2 rounded-xl shadow-sm glass-btn cursor-pointer shrink-0 h-[36px]"
@@ -192,7 +192,7 @@ export const PreviewToolbar: React.FC = () => {
           </div>
 
           {/* Export Menu */}
-          <div className="relative" ref={exportMenuRef}>
+          <div className="relative z-40" ref={exportMenuRef}>
             <button
               onClick={() => setShowExportMenu(!showExportMenu)}
               disabled={!generatedLetter}
@@ -244,7 +244,7 @@ export const PreviewToolbar: React.FC = () => {
           </div>
 
           {/* Share Menu */}
-          <div className="relative" ref={shareMenuRef}>
+          <div className="relative z-40" ref={shareMenuRef}>
             <button
               onClick={() => setShowShareMenu(!showShareMenu)}
               disabled={!generatedLetter}
