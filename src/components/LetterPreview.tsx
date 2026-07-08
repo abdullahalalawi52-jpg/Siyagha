@@ -11,7 +11,7 @@ export const LetterPreview: React.FC = () => {
       {/* top gradient bar */}
       <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-brown-400 via-brown-500 to-brown-600" />
 
-      <div className="flex flex-col h-full relative z-10 p-8 sm:p-10">
+      <div className="flex flex-col h-full relative z-10 p-2 sm:p-8 lg:p-10">
         <PreviewToolbar />
         <PreviewPaper />
       </div>

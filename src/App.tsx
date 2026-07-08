@@ -103,7 +103,7 @@ function MainAppContent() {
       </a>
       <Header />
       
-      <main id="main-content" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-7 flex flex-col gap-8">
+      <main id="main-content" className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 mt-7 flex flex-col gap-8">
         <QuickTemplates />
         <StatsDashboard />
 

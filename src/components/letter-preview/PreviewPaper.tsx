@@ -29,7 +29,7 @@ export const PreviewPaper: React.FC = () => {
   }, [generatedLetter]);
 
   return (
-    <div className="flex-1 overflow-y-auto relative flex flex-col justify-between p-6 rounded-xl document-paper">
+    <div className="flex-1 overflow-y-auto relative flex flex-col justify-between p-3 sm:p-6 md:p-8 rounded-xl document-paper">
       {/* Header inside Preview */}
       {generatedLetter && !loading && !isProofreading && branding.enableHeader && (
         <div className={`mb-8 w-full ${
