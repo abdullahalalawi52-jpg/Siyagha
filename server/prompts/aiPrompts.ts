@@ -20,11 +20,12 @@ export interface GenerateLetterParams {
 
 export const getSuggestTitlePrompt = (type: string, subType: string, details: string, isEn: boolean): string => {
   return isEn
-    ? `You are an expert formal letter writing assistant. Suggest a concise, highly formal Subject line for a letter based on the following details.
+    ? `You are an expert formal letter writing assistant. Suggest a concise, highly formal Subject line IN ENGLISH for a letter based on the following details.
 Category: ${type}
 Sub-category: ${subType}
 Details: ${details}
 
+IMPORTANT: The generated subject title MUST be entirely in English, regardless of the language used in the details.
 Return ONLY the suggested subject title without quotes, markdown formatting, or preamble.`
     : `أنت خبير في صياغة الخطابات الرسمية باللغة العربية.
 قم باقتراح عنوان موضوع (Subject) قصير ورسمي جداً ومناسب لخطاب بناءً على التفاصيل التالية.
@@ -91,7 +92,7 @@ export const getGenerateLetterPrompt = (params: GenerateLetterParams): { mainPro
   const mainPrompt = isEn
     ? `
 Draft a highly professional official letter with the following criteria:
-- Language: English
+- Language: English (The entire letter MUST be generated in English, regardless of the input language)
 - Letter Category: ${type || 'Formal'} - Subtype: ${subType || 'General'}
 - Tone: ${tone || 'Professional & Courteous'}
 - Letter Length: ${letterLength || 'Medium'}
@@ -109,7 +110,7 @@ Formatting Guidelines:
 2. Structure in clear paragraphs (Opening, Purpose, Details/Action, Closing).
 3. If a specific Date of Letter is provided, ensure it is written at the top of the letter exactly as provided.
 4. Output ONLY the complete text of the letter. Do NOT include markdown styling (no # or **) or preamble explanations.
-    `
+5. IMPORTANT: The generated letter MUST be entirely in English. Translate any Arabic input details to English naturally.`
     : `
 قم بصياغة خطاب رسمي رفيع المستوى ومحكم الصياغة بناءً على البيانات التالية:
 - اللغة: العربية الفصحى
