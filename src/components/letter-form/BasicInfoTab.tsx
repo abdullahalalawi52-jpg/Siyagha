@@ -43,6 +43,16 @@ export const BasicInfoTab: React.FC = () => {
     }
   }, [form.details, form.language]);
 
+  const prevLangRef = React.useRef(form.language);
+  useEffect(() => {
+    if (prevLangRef.current !== form.language) {
+      if (form.subject && form.subject.trim() !== '' && !form.isReplyMode) {
+        handleSuggestTitle();
+      }
+      prevLangRef.current = form.language;
+    }
+  }, [form.language, handleSuggestTitle, form.isReplyMode]);
+
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
