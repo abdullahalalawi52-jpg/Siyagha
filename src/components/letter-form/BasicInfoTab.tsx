@@ -47,7 +47,7 @@ export const BasicInfoTab: React.FC = () => {
   useEffect(() => {
     if (prevLangRef.current !== form.language) {
       if (form.subject && form.subject.trim() !== '' && !form.isReplyMode) {
-        handleSuggestTitle();
+        handleSuggestTitle(true);
       }
       prevLangRef.current = form.language;
     }
@@ -296,7 +296,7 @@ export const BasicInfoTab: React.FC = () => {
               </label>
               <button
                 type="button"
-                onClick={handleSuggestTitle}
+                onClick={() => handleSuggestTitle(false)}
                 disabled={isSuggestingTitle}
                 className="text-xs text-brown-700 dark:text-brown-400 hover:text-brown-800 dark:hover:text-brown-300 bg-brown-50 dark:bg-slate-700 hover:bg-brown-100 dark:hover:bg-slate-600 flex items-center gap-1.5 px-2 py-1 rounded transition-colors disabled:opacity-50 cursor-pointer"
                 title={t('الذكاء الاصطناعي سيقوم باقتراح عنوان مناسب بناءً على التفاصيل', 'AI will suggest a suitable title based on details')}

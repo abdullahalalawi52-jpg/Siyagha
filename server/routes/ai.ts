@@ -28,14 +28,14 @@ const validateInputLength = (text: string | undefined, maxLen = 30000): boolean 
 // 1. Suggest Subject Title
 router.post("/suggest-title", async (req: GoogleAiRequest, res: Response) => {
   try {
-    const { type, subType, details, language } = req.body;
-    if (!type && !details) {
+    const { type, subType, details, language, currentSubject, translateOnly } = req.body;
+    if (!type && !details && !currentSubject) {
       return res.status(400).json({ error: "تفاصيل الخطاب مطلوبة لاقتراح العنوان" });
     }
 
     const isEn = language === 'en';
     const ai = req.ai!;
-    const prompt = getSuggestTitlePrompt(type || 'عام', subType || '', details || '', isEn);
+    const prompt = getSuggestTitlePrompt(type || 'عام', subType || '', details || '', isEn, translateOnly ? currentSubject : undefined);
 
     const response = await safeGenerate(ai, {
       model: "gemini-flash-lite-latest",

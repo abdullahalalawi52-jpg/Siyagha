@@ -18,7 +18,20 @@ export interface GenerateLetterParams {
   };
 }
 
-export const getSuggestTitlePrompt = (type: string, subType: string, details: string, isEn: boolean): string => {
+export const getSuggestTitlePrompt = (type: string, subType: string, details: string, isEn: boolean, currentSubject?: string): string => {
+  if (currentSubject) {
+    return isEn
+      ? `You are an expert translator. Translate the following letter subject/title into English. Keep it concise, formal, and suitable for a letter subject line.
+Original Subject: ${currentSubject}
+
+IMPORTANT: The generated subject title MUST be entirely in English.
+Return ONLY the translated subject title without quotes, markdown formatting, or preamble.`
+      : `أنت خبير في الترجمة إلى العربية الفصحى. قم بترجمة عنوان الخطاب التالي إلى اللغة العربية بحيث يكون رسمياً وموجزاً ومناسباً لعنوان خطاب.
+العنوان الأصلي: ${currentSubject}
+
+هام جداً: يجب أن يكون العنوان باللغة العربية الفصحى.
+أرجع فقط العنوان المترجم بدون علامات تنصيص أو نصوص إضافية.`;
+  }
   return isEn
     ? `You are an expert formal letter writing assistant. Suggest a concise, highly formal Subject line IN ENGLISH for a letter based on the following details.
 Category: ${type}

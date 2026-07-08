@@ -333,7 +333,7 @@ export const useLetterApis = ({
   };
 
   // Suggest title AI
-  const handleSuggestTitle = async () => {
+  const handleSuggestTitle = async (translateOnly = false) => {
     if (!ui.isOnline) {
       ui.addToast('أنت غير متصل بالإنترنت حالياً. لا يمكن اقتراح عنوان للخطاب بدون اتصال.', 'warning');
       return;
@@ -348,6 +348,8 @@ export const useLetterApis = ({
           subType: form.subType,
           details: form.details,
           language: form.language,
+          currentSubject: form.subject,
+          translateOnly,
         }),
       });
 

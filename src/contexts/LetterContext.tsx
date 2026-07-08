@@ -69,7 +69,7 @@ export interface LetterContextType {
   handleSave: () => void;
   handleSaveDraft: () => void;
   handleLoadSaved: (letter: SavedLetter) => void;
-  handleSuggestTitle: () => Promise<void>;
+  handleSuggestTitle: (translateOnly?: boolean) => Promise<void>;
   handleProofread: () => Promise<void>;
   handleCopy: () => void;
   copied: boolean;
