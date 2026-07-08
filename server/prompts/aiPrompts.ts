@@ -26,6 +26,7 @@ Sub-category: ${subType}
 Details: ${details}
 
 IMPORTANT: The generated subject title MUST be entirely in English, regardless of the language used in the details.
+DO NOT use brackets or placeholders like [Name], [Job Title], [Company], etc. If a specific detail is missing, write a generic title (e.g., 'Job Application' instead of 'Application for [Job Title]').
 Return ONLY the suggested subject title without quotes, markdown formatting, or preamble.`
     : `أنت خبير في صياغة الخطابات الرسمية باللغة العربية.
 قم باقتراح عنوان موضوع (Subject) قصير ورسمي جداً ومناسب لخطاب بناءً على التفاصيل التالية.
@@ -33,6 +34,7 @@ Return ONLY the suggested subject title without quotes, markdown formatting, or 
 النوع الفرعي: ${subType}
 التفاصيل: ${details}
 
+هام جداً: لا تستخدم أبداً أي أقواس أو نصوص نائبة مثل [اسم الوظيفة] أو [الاسم] أو [اسم الشركة]. إذا كانت بعض التفاصيل مفقودة، اقترح عنواناً عاماً ومناسباً (مثلاً: 'طلب توظيف' بدلاً من 'طلب توظيف لوظيفة [اسم الوظيفة]').
 الشرط الوحيد: أرجع فقط عنوان الموضوع بدون أي مقدمات أو علامات تنصيص أو نصوص إضافية.`;
 };
 
