@@ -7,6 +7,10 @@ export const typeTranslations: Record<string, string> = {
   'طبي': 'Medical',
   'أكاديمي/تعليمي': 'Academic/Educational',
   'خيري وإنساني': 'Charitable & Humanitarian',
+  'العقارات والإسكان': 'Real Estate & Housing',
+  'الخدمات البنكية والمالية': 'Banking & Financial',
+  'القطاع الدبلوماسي والسفر': 'Diplomatic & Travel',
+  'التقنية والخدمات الرقمية': 'Tech & Digital Services',
 };
 
 export const subTypeTranslations: Record<string, string> = {
@@ -36,6 +40,24 @@ export const subTypeTranslations: Record<string, string> = {
   'خطاب طلب مساعدة (علاج، مالية، دراسية)': 'Assistance Request (Medical, Financial, Study)',
   'خطاب استرحام': 'Appeal Letter',
   'خطاب شكر لمتبرع أو جهة خيرية': 'Donor Thank You Letter',
+  'خطاب تفويض رسمي': 'Official Authorization Letter',
+  'خطاب تذكير بدفع مستحقات متأخرة': 'Late Payment Reminder',
+  'خطاب استقالة رسمي': 'Official Resignation Letter',
+  'خطاب طلب ترقية أو زيادة راتب': 'Promotion or Salary Increase Request',
+  'خطاب إنهاء عقد إيجار': 'Lease Termination Letter',
+  'خطاب طلب صيانة عقار': 'Property Maintenance Request',
+  'خطاب طلب تمديد/تجديد عقد إيجار': 'Lease Extension/Renewal Request',
+  'شكوى لإدارة العمارة أو البلدية': 'Complaint to Building Management or Municipality',
+  'خطاب طلب إغلاق حساب بنكي': 'Bank Account Closure Request',
+  'خطاب تظلم على رسوم بنكية أو خطأ مالي': 'Complaint on Bank Fees or Financial Error',
+  'خطاب طلب إعادة جدولة قرض': 'Loan Rescheduling Request',
+  'خطاب إبراء ذمة مالية': 'Financial Clearance Letter',
+  'خطاب تغطية لطلب تأشيرة (Visa Cover Letter)': 'Visa Cover Letter',
+  'خطاب كفالة/دعوة زيارة (Sponsorship/Invitation Letter)': 'Sponsorship/Invitation Letter',
+  'خطاب اعتراض على رفض تأشيرة (Appeal Letter)': 'Visa Refusal Appeal Letter',
+  'خطاب طلب إزالة محتوى (DMCA / Takedown)': 'DMCA / Content Takedown Request',
+  'خطاب استرجاع حساب محظور (Account Appeal)': 'Banned Account Appeal',
+  'شكوى لمزود خدمة الاتصالات/الإنترنت': 'Complaint to Telecom/ISP',
   'أخرى': 'Other',
 };
 
@@ -73,6 +95,10 @@ export const categoryTranslations: Record<string, string> = {
   'القطاع الطبي': 'Medical Sector',
   'القطاع الأكاديمي': 'Academic Sector',
   'القطاع الخيري والإنساني': 'Charitable & Humanitarian Sector',
+  'العقارات والإسكان': 'Real Estate & Housing',
+  'الخدمات البنكية والمالية': 'Banking & Financial',
+  'القطاع الدبلوماسي والسفر': 'Diplomatic & Travel',
+  'التقنية والخدمات الرقمية': 'Tech & Digital Services',
 };
 
 export const templateNameTranslations: Record<string, string> = {

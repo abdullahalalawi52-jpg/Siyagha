@@ -1,4 +1,4 @@
-import { Building2, Briefcase, AlertCircle, MessageSquare, FileText, User, Heart, Sparkles, Calendar, Mail, Scale, Stethoscope, GraduationCap } from 'lucide-react';
+import { Building2, Briefcase, AlertCircle, MessageSquare, FileText, User, Heart, Sparkles, Calendar, Mail, Scale, Stethoscope, GraduationCap, Home, CreditCard, Plane, Monitor } from 'lucide-react';
 
 export const letterTypes = {
   'إداري/رسمي': {
@@ -7,6 +7,7 @@ export const letterTypes = {
       { name: 'خطاب طلب (وظيفة، إجازة، مساعدة)', icon: Briefcase },
       { name: 'خطاب شكوى (تظلم، إبلاغ عن مشكلة)', icon: AlertCircle },
       { name: 'خطاب استفسار', icon: MessageSquare },
+      { name: 'خطاب تفويض رسمي', icon: User },
       { name: 'أخرى', icon: FileText }
     ]
   },
@@ -16,6 +17,7 @@ export const letterTypes = {
       { name: 'خطاب عرض سعر', icon: FileText },
       { name: 'خطاب شراكة', icon: User },
       { name: 'خطاب تعريف بالشركة', icon: Building2 },
+      { name: 'خطاب تذكير بدفع مستحقات متأخرة', icon: AlertCircle },
       { name: 'أخرى', icon: FileText }
     ]
   },
@@ -35,7 +37,9 @@ export const letterTypes = {
       { name: 'رسالة متابعة طلب توظيف', icon: Mail },
       { name: 'رسالة تواصل LinkedIn', icon: User },
       { name: 'رسالة شكر بعد المقابلة', icon: Heart },
-      { name: 'رسالة قبول/اعتذار عن عرض عمل', icon: AlertCircle }
+      { name: 'رسالة قبول/اعتذار عن عرض عمل', icon: AlertCircle },
+      { name: 'خطاب استقالة رسمي', icon: FileText },
+      { name: 'خطاب طلب ترقية أو زيادة راتب', icon: Briefcase }
     ]
   },
   'قانوني': {
@@ -73,6 +77,44 @@ export const letterTypes = {
       { name: 'خطاب شكر لمتبرع أو جهة خيرية', icon: Heart },
       { name: 'أخرى', icon: FileText }
     ]
+  },
+  'العقارات والإسكان': {
+    icon: Home,
+    subTypes: [
+      { name: 'خطاب إنهاء عقد إيجار', icon: FileText },
+      { name: 'خطاب طلب صيانة عقار', icon: Building2 },
+      { name: 'خطاب طلب تمديد/تجديد عقد إيجار', icon: Calendar },
+      { name: 'شكوى لإدارة العمارة أو البلدية', icon: AlertCircle },
+      { name: 'أخرى', icon: FileText }
+    ]
+  },
+  'الخدمات البنكية والمالية': {
+    icon: CreditCard,
+    subTypes: [
+      { name: 'خطاب طلب إغلاق حساب بنكي', icon: Briefcase },
+      { name: 'خطاب تظلم على رسوم بنكية أو خطأ مالي', icon: AlertCircle },
+      { name: 'خطاب طلب إعادة جدولة قرض', icon: Calendar },
+      { name: 'خطاب إبراء ذمة مالية', icon: FileText },
+      { name: 'أخرى', icon: FileText }
+    ]
+  },
+  'القطاع الدبلوماسي والسفر': {
+    icon: Plane,
+    subTypes: [
+      { name: 'خطاب تغطية لطلب تأشيرة (Visa Cover Letter)', icon: FileText },
+      { name: 'خطاب كفالة/دعوة زيارة (Sponsorship/Invitation Letter)', icon: User },
+      { name: 'خطاب اعتراض على رفض تأشيرة (Appeal Letter)', icon: AlertCircle },
+      { name: 'أخرى', icon: FileText }
+    ]
+  },
+  'التقنية والخدمات الرقمية': {
+    icon: Monitor,
+    subTypes: [
+      { name: 'خطاب طلب إزالة محتوى (DMCA / Takedown)', icon: AlertCircle },
+      { name: 'خطاب استرجاع حساب محظور (Account Appeal)', icon: User },
+      { name: 'شكوى لمزود خدمة الاتصالات/الإنترنت', icon: MessageSquare },
+      { name: 'أخرى', icon: FileText }
+    ]
   }
 };
 
@@ -85,6 +127,10 @@ export const getLetterTypeData = (type: string) => {
   if (type === 'طبي') return letterTypes['طبي'];
   if (type === 'أكاديمي/تعليمي') return letterTypes['أكاديمي/تعليمي'];
   if (type === 'خيري وإنساني') return letterTypes['خيري وإنساني'];
+  if (type === 'العقارات والإسكان') return letterTypes['العقارات والإسكان'];
+  if (type === 'الخدمات البنكية والمالية') return letterTypes['الخدمات البنكية والمالية'];
+  if (type === 'القطاع الدبلوماسي والسفر') return letterTypes['القطاع الدبلوماسي والسفر'];
+  if (type === 'التقنية والخدمات الرقمية') return letterTypes['التقنية والخدمات الرقمية'];
   return letterTypes['إداري/رسمي'];
 };
 
