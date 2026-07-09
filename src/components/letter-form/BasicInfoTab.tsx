@@ -233,10 +233,13 @@ export const BasicInfoTab: React.FC = () => {
           id="sender-name"
           type="text"
           placeholder={t('اسمك أو اسم المؤسسة', 'Your name or organization')}
-          className="w-full rounded-xl border-gray-200 dark:border-slate-700 border px-3 py-2.5 text-sm focus:ring-2 focus:ring-brown-500 dark:focus:ring-brown-400 focus:border-brown-500 dark:focus:border-brown-400 outline-none transition-all bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+          className={`w-full rounded-xl border px-3 py-2.5 text-sm outline-none transition-all bg-white dark:bg-slate-800 text-gray-900 dark:text-white ${!form.senderName ? 'border-red-400 focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-red-50/10' : 'border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-brown-500 dark:focus:ring-brown-400 focus:border-brown-500 dark:focus:border-brown-400'}`}
           value={form.senderName}
           onChange={(e) => setForm({ ...form, senderName: e.target.value })}
         />
+        {!form.senderName && (
+          <p className="text-xs text-red-500 animate-pulse">{t('هذا الحقل مطلوب لتكوين الخطاب', 'This field is required to generate the letter')}</p>
+        )}
       </div>
 
       <div className="grid grid-cols-2 gap-4 mt-4">
@@ -279,10 +282,13 @@ export const BasicInfoTab: React.FC = () => {
             id="recipient-name"
             type="text"
             placeholder={t('المؤسسة أو الشخص المتلقي', 'Recipient person or organization')}
-            className="w-full rounded-xl border-gray-200 dark:border-slate-700 border px-3 py-2.5 text-sm focus:ring-2 focus:ring-brown-500 dark:focus:ring-brown-400 focus:border-brown-500 dark:focus:border-brown-400 outline-none transition-all bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+            className={`w-full rounded-xl border px-3 py-2.5 text-sm outline-none transition-all bg-white dark:bg-slate-800 text-gray-900 dark:text-white ${!form.recipientName ? 'border-red-400 focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-red-50/10' : 'border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-brown-500 dark:focus:ring-brown-400 focus:border-brown-500 dark:focus:border-brown-400'}`}
             value={form.recipientName}
             onChange={(e) => setForm({ ...form, recipientName: e.target.value })}
           />
+          {!form.recipientName && (
+            <p className="text-xs text-red-500 animate-pulse">{t('هذا الحقل مطلوب لتكوين الخطاب', 'This field is required to generate the letter')}</p>
+          )}
         </div>
 
         <div className="space-y-1.5">
@@ -322,11 +328,14 @@ export const BasicInfoTab: React.FC = () => {
             <input
               id="letter-subject"
               type="text"
-              placeholder={t('اتركه فارغاً، أو ادخل مثال: طلب الموافقة على رصيد إجازة', 'Leave blank, or enter e.g., Request for annual leave approval')}
-              className="w-full rounded-xl border-gray-200 dark:border-slate-700 border px-3 py-2.5 text-sm focus:ring-2 focus:ring-brown-500 dark:focus:ring-brown-400 focus:border-brown-500 dark:focus:border-brown-400 outline-none transition-all bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+              placeholder={t('أدخل موضوع الخطاب ليكون السياق واضحاً', 'Enter the letter subject so the context is clear')}
+              className={`w-full rounded-xl border px-3 py-2.5 text-sm outline-none transition-all bg-white dark:bg-slate-800 text-gray-900 dark:text-white ${!form.subject && !form.isReplyMode ? 'border-red-400 focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-red-50/10' : 'border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-brown-500 dark:focus:ring-brown-400 focus:border-brown-500 dark:focus:border-brown-400'}`}
               value={form.subject}
               onChange={(e) => setForm({ ...form, subject: e.target.value })}
             />
+            {!form.subject && !form.isReplyMode && (
+              <p className="text-xs text-red-500 animate-pulse">{t('موضوع الخطاب ضروري لتوليد المحتوى', 'Letter subject is required to generate content')}</p>
+            )}
           </div>
         </>
       )}
@@ -406,10 +415,13 @@ export const BasicInfoTab: React.FC = () => {
               id="incoming-letter-textarea"
               rows={4}
               placeholder={t('قم بلصق الخطاب الوارد الذي تريد الرد عليه، أو استخرجه من صورة بالـ OCR بالضغط على الزر بالأعلى...', 'Paste the incoming letter you wish to reply to, or extract it from an image using OCR...')}
-              className="w-full rounded-xl border border-gray-250 dark:border-slate-700 p-2.5 text-xs focus:ring-2 focus:ring-brown-500 dark:focus:ring-brown-400 outline-none resize-none leading-relaxed bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100"
+              className={`w-full rounded-xl border p-2.5 text-xs outline-none resize-none leading-relaxed bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100 ${!form.replyToText && form.isReplyMode ? 'border-red-400 focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-red-50/10' : 'border-gray-250 dark:border-slate-700 focus:ring-2 focus:ring-brown-500 dark:focus:ring-brown-400'}`}
               value={form.replyToText}
               onChange={(e) => setForm({ ...form, replyToText: e.target.value })}
             />
+            {!form.replyToText && form.isReplyMode && (
+              <p className="text-xs text-red-500 animate-pulse">{t('يجب إدخال نص الخطاب الوارد للرد عليه', 'Incoming letter text is required for a reply')}</p>
+            )}
           </div>
 
           <div className="space-y-2">
