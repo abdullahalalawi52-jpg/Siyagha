@@ -53,6 +53,20 @@ export const BasicInfoTab: React.FC = () => {
     }
   }, [form.language, handleSuggestTitle, form.isReplyMode]);
 
+  useEffect(() => {
+    if (form.type === 'توظيف وتطوير مهني') {
+      const hasCareerData = careerProfile.fullName || careerProfile.email || careerProfile.phone;
+      if (hasCareerData) {
+        setForm((prev) => ({
+          ...prev,
+          senderName: prev.senderName || careerProfile.fullName || '',
+          senderEmail: prev.senderEmail || careerProfile.email || '',
+          senderPhone: prev.senderPhone || careerProfile.phone || '',
+        }));
+      }
+    }
+  }, [form.type, careerProfile.fullName, careerProfile.email, careerProfile.phone, setForm]);
+
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
