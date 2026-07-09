@@ -65,6 +65,8 @@ export interface FormContextType {
   brandVoiceProfiles: { id: string; name: string; profile: string }[];
   saveBrandVoiceProfile: (name: string, profile: string) => void;
   deleteBrandVoiceProfile: (id: string) => void;
+  showValidationErrors: boolean;
+  setShowValidationErrors: (val: boolean) => void;
 }
 
 const FormContext = createContext<FormContextType | undefined>(undefined);
@@ -162,6 +164,9 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [favoriteTemplates, setFavoriteTemplates] = useState<{ type: string; subType: string }[]>([]);
   const [favoritePredefined, setFavoritePredefined] = useState<string[]>([]);
   const [activeTemplate, setActiveTemplate] = useState<string | null>(null);
+
+  // Validation state
+  const [showValidationErrors, setShowValidationErrors] = useState(false);
 
   // Auto Generate state
   const [autoGenerate, setAutoGenerateState] = useState(() => {
@@ -429,6 +434,8 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
         deleteBrandVoiceProfile,
         careerProfile,
         setCareerProfile,
+        showValidationErrors,
+        setShowValidationErrors,
       }}
     >
       {children}

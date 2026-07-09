@@ -107,6 +107,7 @@ export const LetterProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setFavoriteTemplates,
     setFavoritePredefined,
     autoGenerate,
+    setShowValidationErrors,
   } = useForm();
 
   // 1. History Hook
@@ -136,6 +137,7 @@ export const LetterProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     fontSize: brandingState.fontSize,
     setActiveSection: brandingState.setActiveSection,
     autoGenerate,
+    setShowValidationErrors,
   });
 
   // 5. Persistence Hook

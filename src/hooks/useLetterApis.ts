@@ -17,6 +17,7 @@ export interface UseLetterApisProps {
   fontSize: string;
   setActiveSection: (sec: 'basic' | 'branding' | 'signature') => void;
   autoGenerate: boolean;
+  setShowValidationErrors: (val: boolean) => void;
 }
 
 const handleResponse = async (res: Response, defaultError: string) => {
@@ -69,6 +70,7 @@ export const useLetterApis = ({
   fontSize,
   setActiveSection,
   autoGenerate,
+  setShowValidationErrors,
 }: UseLetterApisProps) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>('');
@@ -101,7 +103,8 @@ export const useLetterApis = ({
   // Generate Letter fetch call
   const generateLetter = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    if (!form.senderName || !form.recipientName || !form.subject) {
+    setShowValidationErrors(true);
+    if (!form.senderName || !form.recipientName || (!form.isReplyMode && !form.subject) || (form.isReplyMode && !form.replyToText)) {
       setError('يرجى تعبئة الحقول الإلزامية الأساسية');
       return;
     }
