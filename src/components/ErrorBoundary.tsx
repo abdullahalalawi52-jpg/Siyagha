@@ -23,6 +23,11 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    if (error.message && error.message.includes('Connection to Indexed Database server lost')) {
+      window.location.reload();
+      return;
+    }
+
     this.setState({
       error,
       errorInfo,
